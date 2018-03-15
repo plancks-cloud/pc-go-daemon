@@ -5,22 +5,14 @@ import (
 	"fmt"
 	"html"
 	"net/http"
+
+	"git.amabanana.com/plancks-cloud/pc-go-daemon/controller"
 )
-
-type messageOK struct {
-	Ok bool `json:"ok"`
-}
-
-func (message *messageOK) String() string {
-	if message.Ok == true {
-		return "true"
-	}
-	return "false"
-}
 
 //CreateContract creates a new contract
 func CreateContract(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hello creator, %q", html.EscapeString(r.URL.Path))
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(controller.CreateContract())
 }
 
 //CreateWallet creates a new wallet
@@ -40,14 +32,14 @@ func ForceSync(w http.ResponseWriter, r *http.Request) {
 
 //GetContract returns a contract by the ID given
 func GetContract(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hello GetContract GET, %q", html.EscapeString(r.URL.Path))
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(controller.GetContract())
 }
 
 //Ping perform a health check
 func Ping(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	okMessage := messageOK{Ok: true}
-	json.NewEncoder(w).Encode(okMessage)
+	json.NewEncoder(w).Encode(controller.HealthCheck())
 }
 
 //SetCurrentWallet sets the currently used wallet
