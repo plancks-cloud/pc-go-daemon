@@ -3,7 +3,7 @@ package model
 //Contract represents a contract issues to run a container
 type Contract struct {
 	//Audit & admin
-	ID        string `db:"id"`
+	ID        string `db:"_id" json:"_id"`
 	Account   string
 	Signature string
 	Timestamp int64
