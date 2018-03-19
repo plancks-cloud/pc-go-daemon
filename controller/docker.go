@@ -57,7 +57,7 @@ func AllDockerServices() {
 		info := TotalReplicas(services, nodes, tasks)
 
 		for _, item := range info {
-			fmt.Printf("ID: %s\n", item.ID)
+			fmt.Printf("\nID: %s\n", item.ID)
 			fmt.Printf("Service: %s, Replicas: %d/%d", item.Name, item.ReplicasRunning, item.ReplicasRequired)
 		}
 	}
