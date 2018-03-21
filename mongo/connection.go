@@ -15,9 +15,9 @@ var (
 
 //Init connects to the mongodb and populates the Session object
 func Init() {
-	session, err := mgo.Dial("localhost")
+	session, err := mgo.Dial("mongo")
 	if err != nil {
-		panic("Could not connect to DB")
+		panic(fmt.Sprintf("Could not connect to DB: %s", err))
 	}
 	Session = session
 }
