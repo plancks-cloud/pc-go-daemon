@@ -51,5 +51,5 @@ func Push(obj interface{}) error {
 //GetCollection returns a collections object named by the parameter
 func GetCollection(obj interface{}) *mgo.Collection {
 	name := util.GetType(obj)
-	return &mgo.Collection{Database: Session.DB(name), Name: name, FullName: name}
+	return &mgo.Collection{Database: Session.DB(name), Name: name, FullName: name + "." + name}
 }

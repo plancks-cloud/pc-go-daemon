@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"net/http"
 
+	"git.amabanana.com/plancks-cloud/pc-go-daemon/mongo"
+
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/model"
 )
 
@@ -28,6 +30,6 @@ func CreateContract(r *http.Request) model.MessageOK {
 //GetContract returns all contracts stored in the datastore
 func GetContract() []model.Contract {
 	var contracts []model.Contract
-	contracts = append(contracts, model.Contract{})
+	mongo.GetCollection(model.Contract{}).Find(nil).All(&contracts)
 	return contracts
 }
