@@ -1,9 +1,11 @@
 package model
 
-//Contract represents a contract issues to run a container
+import "git.amabanana.com/plancks-cloud/pc-go-daemon/mongo"
+
+//Contract represents a contract issued to run a container
 type Contract struct {
 	//Audit & admin
-	ID        string `db:"_id" json:"_id"`
+	ID        string `db:"_id" json:"_id" bson:"_id"`
 	Account   string
 	Signature string
 	Timestamp int64
@@ -17,4 +19,10 @@ type Contract struct {
 	AllowSuicide     int64
 
 	StartStrategy string
+}
+
+//Push saves a contract to MongoDB
+func (contract Contract) Push() error {
+	err := mongo.Push(contract)
+	return err
 }

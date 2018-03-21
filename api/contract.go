@@ -10,7 +10,7 @@ import (
 //CreateContract creates a new contract
 func CreateContract(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(controller.CreateContract())
+	json.NewEncoder(w).Encode(controller.CreateContract(r))
 }
 
 //GetContract returns a contract by the ID given
