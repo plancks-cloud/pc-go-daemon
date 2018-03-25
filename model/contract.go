@@ -24,8 +24,6 @@ type Contract struct {
 	StartStrategy string
 }
 
-const index = "_id"
-
 //Push saves a contract to MongoDB
 func (contract Contract) Push() error {
 	err := mongo.Push(contract)

@@ -6,8 +6,8 @@ import (
 	"github.com/globalsign/mgo/bson"
 
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/util"
-
 	"github.com/globalsign/mgo"
+	log "github.com/sirupsen/logrus"
 )
 
 var (
@@ -17,10 +17,12 @@ var (
 
 //Init connects to the mongodb and populates the Session object
 func Init() {
+	log.Infoln("Dialing mongo")
 	session, err := mgo.Dial("mongo")
 	if err != nil {
 		panic(fmt.Sprintf("Could not connect to DB: %s", err))
 	}
+	log.Infoln("Mongo connected")
 	Session = session
 }
 
@@ -28,7 +30,7 @@ func Init() {
 func Push(obj interface{}) error {
 	err := (GetCollection(obj)).Insert(obj)
 	if err != nil {
-		fmt.Println(fmt.Sprintf("Error pushing to mongo: %s", err))
+		log.Errorln(fmt.Sprintf("Error pushing to mongo: %s", err))
 	}
 	return err
 }

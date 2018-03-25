@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"net/http"
 
+	log "github.com/sirupsen/logrus"
+
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/controller"
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/model"
 )
@@ -16,7 +18,7 @@ func CreateContract(w http.ResponseWriter, r *http.Request) {
 	var contract model.Contract
 	err := decoder.Decode(&contract)
 	if err != nil {
-		fmt.Println(fmt.Sprintf("There was a problem decoding the post message: %s", err))
+		log.Errorln(fmt.Sprintf("There was a problem decoding the post message: %s", err))
 		json.NewEncoder(w).Encode(model.OkMessage(false))
 	}
 	json.NewEncoder(w).Encode(controller.CreateContract(&contract))
@@ -34,7 +36,7 @@ func GetOneContract(w http.ResponseWriter, r *http.Request) {
 	item := r.URL.Query().Get("id")
 	contract, err := controller.GetOneContract(item)
 	if err != nil {
-		fmt.Println(fmt.Sprintf("Error getting contract (%s): %s", item, err))
+		log.Errorln(fmt.Sprintf("Error getting contract (%s): %s", item, err))
 	}
 	json.NewEncoder(w).Encode(contract)
 }

@@ -2,18 +2,20 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 
-	"git.amabanana.com/plancks-cloud/pc-go-daemon/mongo"
-
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/api"
+	"git.amabanana.com/plancks-cloud/pc-go-daemon/mongo"
 	"github.com/gorilla/mux"
+	log "github.com/sirupsen/logrus"
 )
 
 const port = 8080
 
 func main() {
+	log.SetFormatter(&log.JSONFormatter{})
+
+	log.Info("Starting")
 
 	initAll()
 
@@ -27,7 +29,7 @@ func main() {
 	router.HandleFunc("/setCurrentWallet", api.CorsHandler(api.SetCurrentWallet)).Methods("POST", "OPTIONS")
 	router.HandleFunc("/getOneContract", api.CorsHandler(api.GetOneContract)).Methods("GET", "OPTIONS")
 
-	fmt.Printf("Listening [:%v]", port)
+	log.Info(fmt.Sprintf("READY: Listening [:%v]", port))
 	log.Fatal(http.ListenAndServe(fmt.Sprint(":", port), router))
 }
 
