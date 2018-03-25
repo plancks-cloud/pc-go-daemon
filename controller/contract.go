@@ -37,6 +37,5 @@ func GetOneContract(id string) (model.Contract, error) {
 	if err != nil {
 		log.Errorln(fmt.Sprintf("Error getting contract: %s", err))
 	}
-	// err := mongo.GetByID(&contract, id)
 	return contract, err
 }

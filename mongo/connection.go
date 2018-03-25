@@ -3,8 +3,6 @@ package mongo
 import (
 	"fmt"
 
-	"github.com/globalsign/mgo/bson"
-
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/util"
 	"github.com/globalsign/mgo"
 	log "github.com/sirupsen/logrus"
@@ -33,22 +31,6 @@ func Push(obj interface{}) error {
 		log.Errorln(fmt.Sprintf("Error pushing to mongo: %s", err))
 	}
 	return err
-}
-
-//Get returns a single instance of an object from the database
-func Get(result interface{}, query bson.M) error {
-	return GetCollection(util.GetType(result)).Find(query).One(&result)
-}
-
-//GetByID returns a single instance of an object from the database
-func GetByID(result interface{}, queryVal string) error {
-
-	//mongo.GetCollection(&contract).Find(bson.M{"_id": bson.ObjectIdHex(id)}).One(&contract)
-
-	// queryObj := GetCollection(util.GetType(result)).FindId(query)
-	queryObj := GetCollection(util.GetType(result))
-	query := queryObj.Find(bson.M{"_id": bson.ObjectIdHex(queryVal)})
-	return query.One(&result)
 }
 
 //GetCollection returns a collections object named by the parameter
