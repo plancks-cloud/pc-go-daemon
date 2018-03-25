@@ -41,9 +41,14 @@ func Get(result interface{}, query bson.M) error {
 }
 
 //GetByID returns a single instance of an object from the database
-func GetByID(result interface{}, query string) error {
-	queryObj := GetCollection(util.GetType(result)).FindId(query)
-	return queryObj.One(&result)
+func GetByID(result interface{}, queryVal string) error {
+
+	//mongo.GetCollection(&contract).Find(bson.M{"_id": bson.ObjectIdHex(id)}).One(&contract)
+
+	// queryObj := GetCollection(util.GetType(result)).FindId(query)
+	queryObj := GetCollection(util.GetType(result))
+	query := queryObj.Find(bson.M{"_id": bson.ObjectIdHex(queryVal)})
+	return query.One(&result)
 }
 
 //GetCollection returns a collections object named by the parameter

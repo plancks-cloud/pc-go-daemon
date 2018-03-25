@@ -33,7 +33,10 @@ func GetContract() []model.Contract {
 //GetOneContract returns a single contract
 func GetOneContract(id string) (model.Contract, error) {
 	var contract model.Contract
-	log.Infoln(fmt.Sprintf("Horrors! %s", bson.ObjectIdHex(id)))
-	err := mongo.GetByID(&contract, id)
+	err := mongo.GetCollection(&contract).Find(bson.M{"_id": bson.ObjectIdHex(id)}).One(&contract)
+	if err != nil {
+		log.Errorln(fmt.Sprintf("Error getting contract: %s", err))
+	}
+	// err := mongo.GetByID(&contract, id)
 	return contract, err
 }
