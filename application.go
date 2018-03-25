@@ -13,9 +13,6 @@ import (
 const port = 8080
 
 func main() {
-	log.SetFormatter(&log.JSONFormatter{})
-
-	log.Info("Starting")
 
 	initAll()
 
@@ -34,5 +31,7 @@ func main() {
 }
 
 func initAll() {
+	log.SetFormatter(&log.JSONFormatter{})
+	log.Info("Starting")
 	mongo.Init()
 }
