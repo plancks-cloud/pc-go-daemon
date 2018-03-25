@@ -1,9 +1,9 @@
 package controller
 
 import (
-	"encoding/json"
 	"fmt"
-	"net/http"
+
+	"github.com/globalsign/mgo/bson"
 
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/mongo"
 
@@ -11,15 +11,8 @@ import (
 )
 
 //CreateContract creates a new contract
-func CreateContract(r *http.Request) model.MessageOK {
-	decoder := json.NewDecoder(r.Body)
-	var contract model.Contract
-	err := decoder.Decode(&contract)
-	if err != nil {
-		fmt.Println(fmt.Sprintf("There was a massive issue decoding the post message: %s", err))
-		return model.OkMessage(false)
-	}
-	err = contract.Push()
+func CreateContract(contract *model.Contract) model.MessageOK {
+	err := contract.Push()
 	if err != nil {
 		fmt.Println(fmt.Sprintf("Error saving contract: %s", err))
 		return model.OkMessage(false)
@@ -31,5 +24,16 @@ func CreateContract(r *http.Request) model.MessageOK {
 func GetContract() []model.Contract {
 	var contracts []model.Contract
 	mongo.GetCollection(model.Contract{}).Find(nil).All(&contracts)
+	for _, contract := range contracts {
+		fmt.Println(fmt.Sprintf("Contract Acccount: %s - ID: %s", contract.Account, contract.ID))
+	}
 	return contracts
+}
+
+//GetOneContract returns a single contract
+func GetOneContract(id string) (model.Contract, error) {
+	var contract model.Contract
+	fmt.Println(fmt.Sprintf("Horrors! %s", bson.ObjectIdHex(id)))
+	err := mongo.GetByID(&contract, id)
+	return contract, err
 }

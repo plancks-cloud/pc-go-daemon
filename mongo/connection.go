@@ -3,6 +3,8 @@ package mongo
 import (
 	"fmt"
 
+	"github.com/globalsign/mgo/bson"
+
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/util"
 
 	"github.com/globalsign/mgo"
@@ -31,22 +33,16 @@ func Push(obj interface{}) error {
 	return err
 }
 
-// //Upsert saves an object into a collection
-// func Upsert(obj interface{}) {
-// 	name := util.GetType(obj)
-// 	err := (GetCollection(obj)).Insert(obj)
-// 	if err != nil {
-// 		panic(fmt.Sprintf("Error inserting into collection %s: %s", name, err))
-// 	}
+//Get returns a single instance of an object from the database
+func Get(result interface{}, query bson.M) error {
+	return GetCollection(util.GetType(result)).Find(query).One(&result)
+}
 
-// 	// err := GetCollection(obj).Upsert(bson.M())
-
-// }
-
-// //Get returns a single instance of an object from the database
-// func Get(query interface{}, result *interface{}) {
-// 	GetCollection(util.GetType(result)).Find(query).One(&result)
-// }
+//GetByID returns a single instance of an object from the database
+func GetByID(result interface{}, query string) error {
+	queryObj := GetCollection(util.GetType(result)).FindId(query)
+	return queryObj.One(&result)
+}
 
 //GetCollection returns a collections object named by the parameter
 func GetCollection(obj interface{}) *mgo.Collection {

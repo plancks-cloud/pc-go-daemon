@@ -2,12 +2,13 @@ package model
 
 import (
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/mongo"
+	"github.com/globalsign/mgo/bson"
 )
 
 //Contract represents a contract issued to run a container
 type Contract struct {
 	//Audit & admin
-	ID        string `json:"id,omitempty" bson:"_id,omitempty"`
+	ID        bson.ObjectId `json:"id,omitempty" bson:"_id,omitempty"`
 	Account   string
 	Signature string
 	Timestamp int64
