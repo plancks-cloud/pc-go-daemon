@@ -8,10 +8,10 @@ import (
 //Win object represents bid document in DB
 type Win struct {
 	ID            string `json:"_id,omitempty" bson:"_id,omitempty"`
-	ContractID    string `json:"contractId"`
-	WinnerAccount string
-	timestamp     int64
-	signature     string
+	ContractID    string `json:"contractId" bson:"contractId,omitempty"`
+	WinnerAccount string `json:"winnerAccount" bson:"winnerAccount,omitempty"`
+	Timestamp     int64  `json:"timestamp" bson:"timestamp,omitempty"`
+	Signature     string `json:"signature" bson:"signature,omitempty"`
 }
 
 //Push persists the win to the database
