@@ -19,7 +19,6 @@ func PushAll() {
 func PushAllWallets() {
 	wallets := GetWallet()
 	var body = model.WalletSyncable{"Wallet", "_id", nil, wallets}
-	jsonBytes := body.ToJson()
-	util.Post(getDbSyncURL(), jsonBytes)
+	util.Post(getDbSyncURL(), body.ToJson())
 
 }
