@@ -28,7 +28,7 @@ type Contract struct {
 	AllowSuicide     int64  `json:"allowSuicide" bson:"allowSuicide,omitempty"`
 	StartStrategy    string `json:"startStrategy" bson:"startStrategy,omitempty"`
 	ServiceName      string `json:"serviceName" bson:"serviceName,omitempty"`
-} //`json:"" bson:",omitempty"`
+}
 
 //Push saves a contract to MongoDB
 func (contract Contract) Push() error {
