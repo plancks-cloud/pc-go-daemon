@@ -2,7 +2,6 @@ package controller
 
 import (
 	"bytes"
-	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -19,23 +18,18 @@ func PushAll() {
 
 //PushAllWallets pushes all wallets to cloud
 func PushAllWallets() {
-
-	var body = model.WalletSyncable{}
-
 	wallets := GetWallet()
-	body.Collection = "Wallet"
-	body.Index = "_id"
-	body.Rows = wallets
+	var body = model.WalletSyncable{"Wallet", "_id", nil, wallets}
+	jsonBytes := body.ToJson()
+	Post(jsonBytes)
 
+}
+
+//Post method does a simple post
+func Post(jsonBytes []byte) {
 	url := "https://us-central1-plancks-cloud.cloudfunctions.net/pc-function-db-sync-v1"
 
-	jsonString, jsonError := json.Marshal(body)
-	if jsonError != nil {
-		log.Errorln(fmt.Sprintf("Error converting wallets to json: %s", jsonError))
-		panic(jsonError)
-	}
-
-	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonString))
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonBytes))
 	req.Header.Set("Content-Type", "application/json")
 
 	client := &http.Client{}
