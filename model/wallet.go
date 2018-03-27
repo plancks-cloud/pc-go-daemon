@@ -13,6 +13,14 @@ type Wallet struct {
 	Signature  string `json:"signature" bson:"signature,omitempty"`
 }
 
+//WalletSyncable is a wrapper for what get posted to the cloud
+type WalletSyncable struct {
+	Collection string   `json:"collection" bson:"collection"`
+	Index      string   `json:"index" bson:"index"`
+	Indexes    []string `json:"indexes" bson:"indexes"`
+	Rows       []Wallet `json:"rows" bson:"rows"`
+}
+
 //Push persists the wallet to the database
 func (wallet Wallet) Push() error {
 	if len(wallet.ID) == 0 {
