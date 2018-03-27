@@ -1,6 +1,9 @@
 package model
 
-import "git.amabanana.com/plancks-cloud/pc-go-daemon/mongo"
+import (
+	"git.amabanana.com/plancks-cloud/pc-go-daemon/mongo"
+	uuid "github.com/nu7hatch/gouuid"
+)
 
 //Bid object represents bid document in DB
 type Bid struct {
@@ -14,6 +17,10 @@ type Bid struct {
 
 //Push saves a bid to MongoDB
 func (bid Bid) Push() error {
+	if len(bid.ID) == 0 {
+		u, _ := uuid.NewV4()
+		bid.ID = u.String()
+	}
 	err := mongo.Push(bid)
 	return err
 }

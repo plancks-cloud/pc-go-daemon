@@ -2,6 +2,7 @@ package model
 
 import (
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/mongo"
+	uuid "github.com/nu7hatch/gouuid"
 )
 
 //Wallet is the issuing party, as well as a node running a container
@@ -13,6 +14,10 @@ type Wallet struct {
 
 //Push persists the wallet to the database
 func (wallet Wallet) Push() error {
+	if len(wallet.ID) == 0 {
+		u, _ := uuid.NewV4()
+		wallet.ID = u.String()
+	}
 	err := mongo.Push(wallet)
 	return err
 }
