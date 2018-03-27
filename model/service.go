@@ -31,6 +31,11 @@ func (service Service) Push() {
 	mongo.Push(service)
 }
 
+//Upsert updates a document if it exists, otherwise inserts
+func (service Service) Upsert() error {
+	return mongo.UpsertWithID(service.ID, service)
+}
+
 //ServiceState models the current running state of a service
 type ServiceState struct {
 	ID               string
