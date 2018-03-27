@@ -15,18 +15,13 @@ func SetCurrentWallet() model.MessageOK {
 }
 
 //CreateWallet takes a wallet id, and marks it as the current wallet to use
-<<<<<<< HEAD
 func CreateWallet(wallet *model.Wallet) model.MessageOK {
 	err := wallet.Push()
 	if err != nil {
 		log.Errorln(fmt.Sprintf("Error saving wallet: %s", err))
-		return model.OkMessage(false)
+		return model.OkMessage(false, err.Error())
 	}
-	return model.OkMessage(true)
-=======
-func CreateWallet() model.MessageOK {
 	return model.Ok(true)
->>>>>>> origin/master
 }
 
 //GetWallet returns all wallets stored in the datastore
