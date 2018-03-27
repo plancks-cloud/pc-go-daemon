@@ -9,3 +9,4 @@ export GOOS=linux
 go build
 
 docker build -t daemony:latest .
+

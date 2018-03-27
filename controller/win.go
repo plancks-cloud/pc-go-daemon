@@ -11,7 +11,7 @@ import (
 
 //CreateWin saves a win
 func CreateWin(item *model.Win) model.MessageOK {
-	err := win.Push()
+	err := item.Push()
 	if err != nil {
 		log.Errorln(fmt.Sprintf("Error saving win: %s", err))
 		return model.OkMessage(false, err.Error())
