@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/mongo"
-
 	"github.com/docker/docker/api/types/swarm"
 	uuid "github.com/nu7hatch/gouuid"
 	"vbom.ml/util/sortorder"
@@ -21,6 +20,15 @@ type Service struct {
 	HealthyManaged bool   `json:"healthyManaged" bson:"healthyManaged,omitempty"`
 	Replicas       int    `json:"replicas" bson:"replicas,omitempty"`
 	ContractID     string `json:"contractId" bson:"contractId"`
+}
+
+//Push saves the service object into MongoDB
+func (service Service) Push() {
+	if len(service.ID) == 0 {
+		u, _ := uuid.NewV4()
+		service.ID = u.String()
+	}
+	mongo.Push(service)
 }
 
 //ServiceState models the current running state of a service
@@ -41,12 +49,3 @@ type ByName []swarm.Service
 func (n ByName) Len() int           { return len(n) }
 func (n ByName) Swap(i, j int)      { n[i], n[j] = n[j], n[i] }
 func (n ByName) Less(i, j int) bool { return sortorder.NaturalLess(n[i].Spec.Name, n[j].Spec.Name) }
-
-//Push saves the service object into MongoDB
-func (service Service) Push() {
-	if len(service.ID) == 0 {
-		u, _ := uuid.NewV4()
-		service.ID = u.String()
-	}
-	mongo.Push(service)
-}
