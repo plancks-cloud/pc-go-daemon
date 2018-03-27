@@ -11,7 +11,7 @@ import (
 
 //Service represents a Docker service
 type Service struct {
-	ID             string `db:"_id" json:"_id"`
+	ID             string `json:"_id,omitempty" bson:"_id,omitempty"`
 	Name           string
 	Image          string
 	HasWorked      bool
@@ -19,7 +19,7 @@ type Service struct {
 	Network        string
 	HealthyManaged bool
 	Replicas       int
-	ContractID     string
+	ContractID     string `json:"contractId" bson:"contractId"`
 }
 
 //ServiceState models the current running state of a service
