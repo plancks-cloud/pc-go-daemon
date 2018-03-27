@@ -6,5 +6,5 @@ import (
 
 //ForceSync syncs databases
 func ForceSync() model.MessageOK {
-	return model.OkMessage(true)
+	return model.Ok(true)
 }
