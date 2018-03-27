@@ -19,9 +19,9 @@ func CreateWallet(wallet *model.Wallet) model.MessageOK {
 	err := wallet.Push()
 	if err != nil {
 		log.Errorln(fmt.Sprintf("Error saving wallet: %s", err))
-		return model.OkMessage(false)
+		return model.OkMessage(false, err.Error())
 	}
-	return model.OkMessage(true)
+	return model.Ok(true)
 }
 
 //GetWallet returns all wallets stored in the datastore
