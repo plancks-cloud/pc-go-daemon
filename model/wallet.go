@@ -25,7 +25,8 @@ type WalletSyncable struct {
 	Rows       []Wallet `json:"rows" bson:"rows"`
 }
 
-func (walletSyncable WalletSyncable) ToJson() []byte {
+//ToJSON converst object o json
+func (walletSyncable WalletSyncable) ToJSON() []byte {
 	jsonBytes, jsonError := json.Marshal(walletSyncable)
 	if jsonError != nil {
 		log.Errorln(fmt.Sprintf("Error converting walletSyncable to json: %s", jsonError.Error))
