@@ -9,5 +9,5 @@ func GetType(obj interface{}) (res string) {
 	for t.Kind() == reflect.Ptr {
 		t = t.Elem()
 	}
-	return res + t.Name()
+	return t.Name()
 }

@@ -3,6 +3,8 @@ package mongo
 import (
 	"fmt"
 
+	"github.com/globalsign/mgo/bson"
+
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/util"
 	"github.com/globalsign/mgo"
 	log "github.com/sirupsen/logrus"
@@ -37,4 +39,16 @@ func Push(obj interface{}) error {
 func GetCollection(obj interface{}) *mgo.Collection {
 	name := util.GetType(obj)
 	return &mgo.Collection{Database: Session.DB(name), Name: name, FullName: name + "." + name}
+}
+
+//Upsert saves a document if it exists, otherwise inserts it
+func Upsert(obj IDableObjectID) error {
+	_, err := (GetCollection(obj)).Upsert(bson.M{"_id": obj.DbID()}, obj)
+	return err
+}
+
+//UpsertWithID saves a document if it exists, otherwise inserts it
+func UpsertWithID(id interface{}, obj interface{}) error {
+	_, err := (GetCollection(obj)).Upsert(bson.M{"_id": id}, obj)
+	return err
 }

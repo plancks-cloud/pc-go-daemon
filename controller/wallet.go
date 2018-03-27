@@ -11,10 +11,11 @@ import (
 
 //SetCurrentWallet takes a wallet id, and marks it as the current wallet to use
 func SetCurrentWallet() model.MessageOK {
-	return model.OkMessage(true)
+	return model.Ok(true)
 }
 
 //CreateWallet takes a wallet id, and marks it as the current wallet to use
+<<<<<<< HEAD
 func CreateWallet(wallet *model.Wallet) model.MessageOK {
 	err := wallet.Push()
 	if err != nil {
@@ -22,6 +23,10 @@ func CreateWallet(wallet *model.Wallet) model.MessageOK {
 		return model.OkMessage(false)
 	}
 	return model.OkMessage(true)
+=======
+func CreateWallet() model.MessageOK {
+	return model.Ok(true)
+>>>>>>> origin/master
 }
 
 //GetWallet returns all wallets stored in the datastore

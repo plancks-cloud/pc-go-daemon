@@ -19,7 +19,7 @@ func CreateContract(w http.ResponseWriter, r *http.Request) {
 	err := decoder.Decode(&contract)
 	if err != nil {
 		log.Errorln(fmt.Sprintf("There was a problem decoding the post message: %s", err))
-		json.NewEncoder(w).Encode(model.OkMessage(false))
+		json.NewEncoder(w).Encode(model.OkMessage(false, err.Error()))
 	}
 	json.NewEncoder(w).Encode(controller.CreateContract(&contract))
 }
@@ -39,4 +39,25 @@ func GetOneContract(w http.ResponseWriter, r *http.Request) {
 		log.Errorln(fmt.Sprintf("Error getting contract (%s): %s", item, err))
 	}
 	json.NewEncoder(w).Encode(contract)
+}
+
+//UpdateContract upserts a new contract
+func UpdateContract(w http.ResponseWriter, r *http.Request) {
+	encoder := json.NewEncoder(w)
+	w.Header().Set("Content-Type", "application/json")
+	decoder := json.NewDecoder(r.Body)
+	var contract model.Contract
+	err := decoder.Decode(&contract)
+	if err != nil {
+		log.Errorln(fmt.Sprintf("There was a problem decoding the post message: %s", err))
+		encoder.Encode(model.OkMessage(false, err.Error()))
+		return
+	}
+	err = controller.UpdateContract(&contract)
+	if err != nil {
+		log.Errorln(fmt.Sprintf("There was a problem updating the document: %s", err))
+		encoder.Encode(model.OkMessage(false, err.Error()))
+		return
+	}
+	json.NewEncoder(w).Encode(encoder.Encode(model.Ok(true)))
 }

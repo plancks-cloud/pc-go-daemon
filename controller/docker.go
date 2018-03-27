@@ -21,8 +21,15 @@ func DockerListServices() []model.Service {
 	return services
 }
 
+//DockerListRunningServices lists all running Docker services
+func DockerListRunningServices() []model.ServiceState {
+	return AllDockerServices()
+}
+
 //AllDockerServices gets all running docker services
-func AllDockerServices() {
+func AllDockerServices() []model.ServiceState {
+
+	var serviceStates []model.ServiceState
 
 	cli, err := client.NewEnvClient()
 
@@ -59,10 +66,11 @@ func AllDockerServices() {
 		info := TotalReplicas(services, nodes, tasks)
 
 		for _, item := range info {
-			log.Infoln(fmt.Sprintf("\nID: %s\n", item.ID))
-			log.Infoln(fmt.Sprintf("Service: %s, Replicas: %d/%d", item.Name, item.ReplicasRunning, item.ReplicasRequired))
+			serviceStates = append(serviceStates, item)
 		}
 	}
+
+	return serviceStates
 }
 
 //TotalReplicas returns the total number of replicas running for a service

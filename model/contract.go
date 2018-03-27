@@ -29,3 +29,14 @@ func (contract Contract) Push() error {
 	err := mongo.Push(contract)
 	return err
 }
+
+//DbID returns the ID of the contract
+func (contract Contract) DbID() bson.ObjectId {
+	return contract.ID
+}
+
+//Upsert ..
+func (contract Contract) Upsert() error {
+	err := mongo.Upsert(contract)
+	return err
+}
