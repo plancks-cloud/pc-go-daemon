@@ -17,7 +17,7 @@ services:
                 window: 380s
     daemon:
         ports:
-            - 8085:8080
+            - 6109:8080
         image: daemony:latest
         depends_on:
             - "pc_mongo"
