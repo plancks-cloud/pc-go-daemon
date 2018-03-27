@@ -13,13 +13,13 @@ import (
 //Service represents a Docker service
 type Service struct {
 	ID             string `json:"_id,omitempty" bson:"_id,omitempty"`
-	Name           string
-	Image          string
-	HasWorked      bool
-	EffectiveDate  int64
-	Network        string
-	HealthyManaged bool
-	Replicas       int
+	Name           string `json:"name" bson:"name,omitempty"`
+	Image          string `json:"image" bson:"image,omitempty"`
+	HasWorked      bool   `json:"hasWorked" bson:"hasWorked,omitempty"`
+	EffectiveDate  int64  `json:"effectiveDate" bson:"effectiveDate,omitempty"`
+	Network        string `json:"network" bson:"network,omitempty"`
+	HealthyManaged bool   `json:"healthyManaged" bson:"healthyManaged,omitempty"`
+	Replicas       int    `json:"replicas" bson:"replicas,omitempty"`
 	ContractID     string `json:"contractId" bson:"contractId"`
 }
 
