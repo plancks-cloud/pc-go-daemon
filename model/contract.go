@@ -31,29 +31,27 @@ type Contract struct {
 }
 
 //Push saves a contract to MongoDB
-func (contract Contract) Push() error {
-	if len(contract.ID) == 0 {
+func (item Contract) Push() error {
+	if len(item.ID) == 0 {
 		u, _ := uuid.NewV4()
-		contract.ID = u.String()
+		item.ID = u.String()
 	}
-	err := mongo.Push(contract)
+	err := mongo.Push(item)
 	return err
 }
 
 //DbID returns the ID of the contract
-// func (contract Contract) DbID() bson.ObjectId {
-func (contract Contract) DbID() string {
-	return contract.ID
+func (item Contract) DbID() string {
+	return item.ID
 }
 
 //Upsert ..
-func (contract Contract) Upsert() error {
-	// err := mongo.Upsert(contract)
-	err := mongo.UpsertWithID(contract.ID, contract)
+func (item Contract) Upsert() error {
+	err := mongo.UpsertWithID(item.ID, item)
 	return err
 }
 
 //ServiceName returns the service name to be used by this contract
-func (contract Contract) ServiceName() string {
-	return fmt.Sprintf("service_%s", strings.Replace(contract.ID, "-", "", -1))
+func (item Contract) ServiceName() string {
+	return fmt.Sprintf("service_%s", strings.Replace(item.ID, "-", "", -1))
 }
