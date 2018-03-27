@@ -22,13 +22,14 @@ type Service struct {
 	ContractID     string `json:"contractId" bson:"contractId"`
 }
 
-//Push saves the service object into MongoDB
-func (service Service) Push() {
+//Push saves a bid to MongoDB
+func (service Service) Push() error {
 	if len(service.ID) == 0 {
 		u, _ := uuid.NewV4()
 		service.ID = u.String()
 	}
-	mongo.Push(service)
+	err := mongo.Push(service)
+	return err
 }
 
 //Upsert updates a document if it exists, otherwise inserts
