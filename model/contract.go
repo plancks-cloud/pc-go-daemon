@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/nu7hatch/gouuid"
+
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/mongo"
 )
 
@@ -30,6 +32,10 @@ type Contract struct {
 
 //Push saves a contract to MongoDB
 func (contract Contract) Push() error {
+	if len(contract.ID) == 0 {
+		u, _ := uuid.NewV4()
+		contract.ID = u.String()
+	}
 	err := mongo.Push(contract)
 	return err
 }

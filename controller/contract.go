@@ -24,7 +24,7 @@ func GetContract() []model.Contract {
 	var contracts []model.Contract
 	mongo.GetCollection(model.Contract{}).Find(nil).All(&contracts)
 	for _, contract := range contracts {
-		log.Infoln(fmt.Sprintf("Contract Acccount: %s - ID: %s", contract.Account, string(contract.ID.Hex())))
+		log.Infoln(fmt.Sprintf("Contract Acccount: %s - ID: %s", contract.Account, contract.ID))
 	}
 	return contracts
 }
@@ -32,7 +32,7 @@ func GetContract() []model.Contract {
 //GetOneContract returns a single contract
 func GetOneContract(id string) (model.Contract, error) {
 	var contract model.Contract
-	err := mongo.GetCollection(&contract).Find(bson.M{"_id": bson.ObjectIdHex(id)}).One(&contract)
+	err := mongo.GetCollection(&contract).Find(bson.M{"_id": id}).One(&contract)
 	if err != nil {
 		log.Errorln(fmt.Sprintf("Error getting contract: %s", err))
 	}
