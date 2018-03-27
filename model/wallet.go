@@ -7,7 +7,7 @@ import (
 
 //Wallet is the issuing party, as well as a node running a container
 type Wallet struct {
-	ID         string `json:"id,omitempty" bson:"_id,omitempty"`
+	ID         string `json:"_id,omitempty" bson:"_id,omitempty"`
 	PublicKey  string `json:"publicKey" bson:"publicKey,omitempty"`
 	PrivateKey string `json:"privateKey" bson:"privateKey,omitempty"`
 	Signature  string `json:"signature" bson:"signature,omitempty"`
