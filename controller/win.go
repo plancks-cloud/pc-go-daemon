@@ -32,9 +32,6 @@ func GetWin() []model.Win {
 func GetWinsByContractID(contractID string) []model.Win {
 	var wins []model.Win
 	mongo.GetCollection(model.Bid{}).Find(bson.M{"contractId": contractID}).All(&wins)
-	for _, row := range wins {
-		log.Infoln(fmt.Sprintf("Item: %s", row.ID))
-	}
 	return wins
 }
 
