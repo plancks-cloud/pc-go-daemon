@@ -9,11 +9,6 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-//getDbSyncURL contains the location of the PUSH endpoint
-func getDbSyncURL() string {
-	return "https://us-central1-plancks-cloud.cloudfunctions.net/pc-function-db-sync-v1"
-}
-
 //PushAll gets all rows in DB and pushes to DB
 func PushAll() {
 	PushAllWallets()
@@ -26,7 +21,7 @@ func PushAll() {
 func PushAllWallets() {
 	wallets := GetWallet()
 	body := model.WalletSyncable{Collection: "Wallet", Index: "_id", Indexes: nil, Rows: wallets}
-	util.Post(getDbSyncURL(), body.ToJSON())
+	util.Post(model.DBSyncURL, body.ToJSON())
 
 }
 
@@ -34,7 +29,7 @@ func PushAllWallets() {
 func PushAllContracts() {
 	contracts := GetContract()
 	body := model.ContractSyncable{Collection: "Contract", Index: "_id", Indexes: nil, Rows: contracts}
-	util.Post(getDbSyncURL(), body.ToJSON())
+	util.Post(model.DBSyncURL, body.ToJSON())
 
 }
 
@@ -42,7 +37,7 @@ func PushAllContracts() {
 func PushAllBids() {
 	bids := GetBid()
 	body := model.BidSyncable{Collection: "Bid", Index: "_id", Indexes: nil, Rows: bids}
-	util.Post(getDbSyncURL(), body.ToJSON())
+	util.Post(model.DBSyncURL, body.ToJSON())
 
 }
 
@@ -50,7 +45,7 @@ func PushAllBids() {
 func PushAllWins() {
 	wins := GetWin()
 	body := model.WinSyncable{Collection: "Win", Index: "_id", Indexes: nil, Rows: wins}
-	util.Post(getDbSyncURL(), body.ToJSON())
+	util.Post(model.DBSyncURL, body.ToJSON())
 
 }
 
@@ -79,7 +74,7 @@ func PullAll() {
 //PullAllContracts gets all contracts in the cloud DB
 func PullAllContracts() (contracts []model.Contract) {
 	typeName := util.GetType(model.Contract{})
-	url := fmt.Sprintf("%s?collection=%s", getDbSyncURL(), typeName)
+	url := fmt.Sprintf("%s?collection=%s", model.DBSyncURL, typeName)
 	resp, err := util.Get(url)
 	if err != nil {
 		log.Errorln(fmt.Sprintf("Error getting contacts during sync: %s", err))
@@ -97,7 +92,7 @@ func PullAllContracts() (contracts []model.Contract) {
 //PullAllWallets gets all wallets in the cloud DB
 func PullAllWallets() (wallets []model.Wallet) {
 	typeName := util.GetType(model.Wallet{})
-	url := fmt.Sprintf("%s?collection=%s", getDbSyncURL(), typeName)
+	url := fmt.Sprintf("%s?collection=%s", model.DBSyncURL, typeName)
 	resp, err := util.Get(url)
 	if err != nil {
 		log.Errorln(fmt.Sprintf("Error getting wallets during sync: %s", err))
@@ -115,7 +110,7 @@ func PullAllWallets() (wallets []model.Wallet) {
 //PullAllBids gets all bids in the cloud DB
 func PullAllBids() (bids []model.Bid) {
 	typeName := util.GetType(model.Bid{})
-	url := fmt.Sprintf("%s?collection=%s", getDbSyncURL(), typeName)
+	url := fmt.Sprintf("%s?collection=%s", model.DBSyncURL, typeName)
 	resp, err := util.Get(url)
 	if err != nil {
 		log.Errorln(fmt.Sprintf("Error getting bids during sync: %s", err))
@@ -133,7 +128,7 @@ func PullAllBids() (bids []model.Bid) {
 //PullAllWins gets all wins in the cloud DB
 func PullAllWins() (wins []model.Win) {
 	typeName := util.GetType(model.Win{})
-	url := fmt.Sprintf("%s?collection=%s", getDbSyncURL(), typeName)
+	url := fmt.Sprintf("%s?collection=%s", model.DBSyncURL, typeName)
 	resp, err := util.Get(url)
 	if err != nil {
 		log.Errorln(fmt.Sprintf("Error getting wins during sync: %s", err))
