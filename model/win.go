@@ -31,7 +31,6 @@ func (winSyncable WinSyncable) ToJSON() []byte {
 	jsonBytes, jsonError := json.Marshal(winSyncable)
 	if jsonError != nil {
 		log.Fatalln(fmt.Sprintf("Error converting winSyncable to json: %s", jsonError))
-		panic(jsonError)
 	}
 	return jsonBytes
 
