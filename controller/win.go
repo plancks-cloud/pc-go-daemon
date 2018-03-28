@@ -2,6 +2,7 @@ package controller
 
 import (
 	"fmt"
+	"time"
 
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/model"
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/mongo"
@@ -43,6 +44,14 @@ func GetOneWin(id string) (model.Win, error) {
 		log.Errorln(fmt.Sprintf("Error getting win: %s", err))
 	}
 	return win, err
+}
+
+//CheckForWinsLater announces winners where relavant
+func CheckForWinsLater(contract model.Contract) {
+	time.Sleep(1 * time.Minute)
+	PullAll()
+	CheckForWins(contract)
+
 }
 
 //CheckForWins announces winners where relavant

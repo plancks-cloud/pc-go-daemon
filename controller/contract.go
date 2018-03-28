@@ -114,6 +114,11 @@ func considerContract(contract model.Contract) {
 
 	if canHandle {
 		CreateBidFromContract(contract)
+		PushAll()
+		//Check for wins in a minute
+		go func() {
+			CheckForWinsLater(contract)
+		}()
 	}
 
 }
