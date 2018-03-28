@@ -14,6 +14,7 @@ import (
 //CreateContract creates a new contract
 func CreateContract(contract *model.Contract) model.MessageOK {
 	err := contract.Push()
+	CallbackContractAsync(*contract)
 	if err != nil {
 		log.Errorln(fmt.Sprintf("Error saving contract: %s", err))
 		return model.OkMessage(false, err.Error())
@@ -100,6 +101,8 @@ func callbackContract(contract model.Contract) {
 		log.Infoln(fmt.Sprintf("Someone already one - move on: %s", contract.ID))
 		return
 	}
+
+	considerContract(contract)
 
 }
 
