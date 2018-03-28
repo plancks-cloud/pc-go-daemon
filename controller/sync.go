@@ -59,6 +59,7 @@ func PullAll() {
 	contracts := PullAllContracts()
 	for _, contract := range contracts {
 		contract.Upsert()
+		CallbackContractAsync(contract)
 	}
 	wallets := PullAllWallets()
 	for _, item := range wallets {
