@@ -31,8 +31,7 @@ type BidSyncable struct {
 func (bidSyncable BidSyncable) ToJSON() []byte {
 	jsonBytes, jsonError := json.Marshal(bidSyncable)
 	if jsonError != nil {
-		log.Errorln(fmt.Sprintf("Error converting bidSyncable to json: %s", jsonError.Error))
-		panic(jsonError)
+		log.Fatalln(fmt.Sprintf("Error converting bidSyncable to json: %s", jsonError))
 	}
 	return jsonBytes
 
