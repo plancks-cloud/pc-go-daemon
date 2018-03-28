@@ -61,13 +61,10 @@ func callbackContract(contract model.Contract) {
 	//Sleep for 5 seconds incase I have bid in past life
 	time.Sleep(5 * time.Second)
 
-	//Need to get current wallet
-	wallet := GetCurrentWallet()
-
 	bids := GetBidsByContractID(contract.ID)
 	found := false
 	for _, b := range bids {
-		if b.FromAccount == wallet.ID {
+		if b.FromAccount == model.SystemWallet.ID {
 			found = true
 			break
 		}
@@ -96,7 +93,6 @@ func callbackContract(contract model.Contract) {
 func considerContract(contract model.Contract) {
 
 	//Need to get current wallet
-	wallet := GetCurrentWallet()
 
 	//Check if I can run this spec
 	//TODO
@@ -105,10 +101,10 @@ func considerContract(contract model.Contract) {
 	if canHandle {
 		bid := model.Bid{}
 		bid.ContractID = contract.ID
-		bid.FromAccount = wallet.ID
+		bid.FromAccount = model.SystemWallet.ID
 		bid.Votes = rand.Intn(100000)
 		bid.Timestamp = util.MakeTimestamp()
-		bid.Signature = wallet.GetSignature()
+		bid.Signature = model.SystemWallet.GetSignature()
 		bid.Push()
 	}
 
