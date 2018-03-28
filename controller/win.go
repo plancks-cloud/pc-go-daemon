@@ -89,5 +89,7 @@ func CreateWinFromContract(winnerID string, contract model.Contract) {
 
 //CheckIfIWon if I won will take the next steps if needed
 func CheckIfIWon(win model.Win) {
-
+	if model.SystemWallet.ID == win.WinnerAccount {
+		CreateServiceFromWin(&win)
+	}
 }
