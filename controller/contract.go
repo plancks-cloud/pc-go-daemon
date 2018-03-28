@@ -28,6 +28,19 @@ func GetContract() []model.Contract {
 	return contracts
 }
 
+//GetContractResult returns all contracts results stored in the datastore
+func GetContractResult() []model.ContractResult {
+	contracts := GetContract()
+	var results = []model.ContractResult{}
+	for _, element := range contracts {
+		item := model.ContractResult{Contract: element}
+		item.Bids = GetBidsByContractID(element.ID)
+		item.Wins = GetWinsByContractID(element.ID)
+		results = append(results, item)
+	}
+	return results
+}
+
 //GetOneContract returns a single contract
 func GetOneContract(id string) (model.Contract, error) {
 	var contract model.Contract

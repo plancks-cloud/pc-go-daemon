@@ -30,6 +30,12 @@ func GetContract(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(controller.GetContract())
 }
 
+//GetContractResult returns a contract by the ID given
+func GetContractResult(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(controller.GetContractResult())
+}
+
 //GetOneContract returns a contract by the ID given
 func GetOneContract(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
