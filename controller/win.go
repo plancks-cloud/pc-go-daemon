@@ -48,9 +48,8 @@ func GetOneWin(id string) (model.Win, error) {
 
 //CheckForWinsLater announces winners where relavant
 func CheckForWinsLater(contract model.Contract) {
-	log.Infoln(fmt.Sprintf("> Going to check for wins in a minute: %s ", contract.ID))
+	log.Infoln(fmt.Sprintf("> Going to check for wins in two minutes: %s ", contract.ID))
 	time.Sleep(2 * time.Minute)
-	PullAll()
 	CheckForWins(contract)
 
 }
@@ -62,13 +61,15 @@ func CheckForWins(contract model.Contract) {
 	now := util.MakeTimestamp()
 
 	if now < twoMinutesAfterContractCreated {
-		log.Infoln(fmt.Sprintf("> To early to find a winner. Stopping: %s ", contract.ID))
+		log.Infoln(fmt.Sprintf("> Too early to find a winner. Stopping: %s ", contract.ID))
 		return
 	}
+	log.Infoln(fmt.Sprintf("> Its been more than two minutes. We can announce a winner. ID: %s ", contract.ID))
 
-	bids := GetBid()
+	bids := GetBidsByContractID(contract.ID)
 	if len(bids) == 0 {
 		//No bids - no winner
+		log.Infoln(fmt.Sprintf("> No bids found. For now, no winner on contract, ID: %s ", contract.ID))
 		return
 	}
 
@@ -86,6 +87,9 @@ func CheckForWins(contract model.Contract) {
 	if winnerVotes != -1 {
 		log.Infoln(fmt.Sprintf("> Going to say the winner was: %s", winnerID))
 		CreateWinFromContract(winnerID, contract)
+	} else {
+		log.Infoln(fmt.Sprintf("> This should never happen. No highest bid: %s ", contract.ID))
+
 	}
 
 }

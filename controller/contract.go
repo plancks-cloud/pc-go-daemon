@@ -69,46 +69,44 @@ func callbackContract(contract model.Contract) {
 
 	//Check if died of old age
 	if contract.RunUntil != 0 && util.MakeTimestamp() > contract.RunUntil {
-		// log.Infoln(fmt.Sprintf("Contract has died of old age: %s", contract.ID))
+		log.Infoln(fmt.Sprintf("Thinking: Contract is ancient. Ignoring, ID: %s", contract.ID))
 		return
 	}
 
-	//Sleep for 5 seconds incase I have bid in past life
-	time.Sleep(5 * time.Second)
+	//Sleep for 10 seconds incase I have bid in past life
+	time.Sleep(10 * time.Second)
 
 	bids := GetBidsByContractID(contract.ID)
 	for _, b := range bids {
 		if b.FromAccount == model.SystemWallet.ID {
+			log.Infoln(fmt.Sprintf("Thinking: I've already voted. Not voting for contract again, ID: %s", contract.ID))
 			return //Already voted..
 		}
 	}
-
-	//Sleep for 5 seconds incase I have bid in past life
-	time.Sleep(5 * time.Second)
 
 	//For now sleep for 10.. this should allow wins to come through
 	time.Sleep(10 * time.Second)
 
 	wins := GetWinsByContractID(contract.ID)
 	if len(wins) > 0 {
-		log.Infoln(fmt.Sprintf("Someone already one - move on: %s", contract.ID))
+		log.Infoln(fmt.Sprintf("Thinking: Contract has been won. Ignoring, ID: %s", contract.ID))
 		return
 	}
 
-	log.Infoln(fmt.Sprintf("> Going to consider bidding on this contract: %s ", contract.ID))
+	log.Infoln(fmt.Sprintf("Thinking: I'd like to bid on this contract, ID: %s", contract.ID))
 	considerContract(contract)
 
 }
 
 //considerContract checks an incoming DB row to see if I can run it and vote for it
 func considerContract(contract model.Contract) {
+	log.Infoln(fmt.Sprintf("> Going to consider bidding on this contract: %s ", contract.ID))
 
 	//Check if I can run this spec
 	canHandle := true //TODO
 
 	if canHandle {
 		CreateBidFromContract(contract)
-		PushAll()
 		//Check for wins in a minute
 		go func() {
 			CheckForWinsLater(contract)
