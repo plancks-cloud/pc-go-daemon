@@ -68,7 +68,7 @@ func callbackContract(contract model.Contract) {
 
 	//Check if died of old age
 	if contract.RunUntil != 0 && util.MakeTimestamp() > contract.RunUntil {
-		log.Infoln(fmt.Sprintf("Contract has died of old age: %s", contract.ID))
+		// log.Infoln(fmt.Sprintf("Contract has died of old age: %s", contract.ID))
 		return
 	}
 
