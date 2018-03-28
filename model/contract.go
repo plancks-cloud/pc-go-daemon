@@ -25,7 +25,7 @@ type Contract struct {
 	RequiredMBMemory int    `json:"requiredMBMemory" bson:"requiredMBMemory,omitempty"`
 	RequiredCPUCores int    `json:"requiredCPUCores" bson:"requiredCPUCores,omitempty"`
 	RunUntil         int64  `json:"runUntil" bson:"runUntil,omitempty"`
-	AllowSuicide     int64  `json:"allowSuicide" bson:"allowSuicide,omitempty"`
+	AllowSuicide     bool   `json:"allowSuicide" bson:"allowSuicide,omitempty"`
 	StartStrategy    string `json:"startStrategy" bson:"startStrategy,omitempty"`
 	ServiceName      string `json:"serviceName" bson:"serviceName,omitempty"`
 }
