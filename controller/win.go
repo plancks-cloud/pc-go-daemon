@@ -5,7 +5,9 @@ import (
 
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/model"
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/mongo"
+	"git.amabanana.com/plancks-cloud/pc-go-daemon/util"
 	"github.com/globalsign/mgo/bson"
+	"github.com/nu7hatch/gouuid"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -44,4 +46,48 @@ func GetOneWin(id string) (model.Win, error) {
 		log.Errorln(fmt.Sprintf("Error getting win: %s", err))
 	}
 	return win, err
+}
+
+//CheckForWins announces winners where relavant
+func CheckForWins(contract model.Contract) {
+	bids := GetBid()
+	if len(bids) == 0 {
+		//No bids - no winner
+		return
+	}
+
+	//TODO: better impl
+	winnerVotes := -1
+	winnerID := ""
+
+	for _, element := range bids {
+		if element.Votes > winnerVotes {
+			winnerVotes = element.Votes
+			winnerID = element.ID
+		}
+	}
+
+	if winnerVotes != -1 {
+		CreateWinFromContract(winnerID, contract)
+	}
+
+}
+
+//CreateWinFromContract creates win
+func CreateWinFromContract(winnerID string, contract model.Contract) {
+	uuidString, _ := uuid.NewV4()
+	win := model.Win{
+		ID:            uuidString.String(),
+		ContractID:    contract.ID,
+		WinnerAccount: winnerID,
+		Timestamp:     util.MakeTimestamp(),
+		Signature:     winnerID}
+	win.Upsert()
+	CheckIfIWon(win)
+
+}
+
+//CheckIfIWon if I won will take the next steps if needed
+func CheckIfIWon(win model.Win) {
+
 }
