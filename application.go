@@ -6,7 +6,6 @@ import (
 
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/controller"
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/model"
-	"git.amabanana.com/plancks-cloud/pc-go-daemon/repo"
 
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/api"
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/mongo"
@@ -43,7 +42,7 @@ func initAll() {
 
 	log.Info("Starting")
 	mongo.Init()
-	repo.Init()
+	model.InitRepo()
 
 	controller.PullAll()
 }
