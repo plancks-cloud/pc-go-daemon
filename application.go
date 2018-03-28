@@ -53,6 +53,7 @@ func initAll() {
 		util.Options(model.DBSyncURL)
 		for {
 			//Sync and sleep
+			log.Infoln(fmt.Sprintf("> Time to sync"))
 			controller.PullAll()
 			controller.PushAll()
 			time.Sleep(1 * time.Minute)
