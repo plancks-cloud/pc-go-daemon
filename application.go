@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"time"
 
+	"git.amabanana.com/plancks-cloud/pc-go-daemon/controller"
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/model"
 
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/api"
@@ -43,8 +44,6 @@ func initAll() {
 	log.Info("Starting")
 	mongo.Init()
 	model.InitRepo()
-<<<<<<< HEAD
-=======
 
 	go func() {
 		for {
@@ -54,5 +53,4 @@ func initAll() {
 		}
 	}()
 
->>>>>>> b3ce51c33445f4d0d07d1face30c4cffbf7e4d00
 }
