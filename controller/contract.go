@@ -14,6 +14,7 @@ import (
 //CreateContract creates a new contract
 func CreateContract(contract *model.Contract) model.MessageOK {
 	err := contract.Push()
+	CallbackContractAsync(*contract)
 	if err != nil {
 		log.Errorln(fmt.Sprintf("Error saving contract: %s", err))
 		return model.OkMessage(false, err.Error())
@@ -26,6 +27,19 @@ func GetContract() []model.Contract {
 	var contracts []model.Contract
 	mongo.GetCollection(model.Contract{}).Find(nil).All(&contracts)
 	return contracts
+}
+
+//GetContractResult returns all contracts results stored in the datastore
+func GetContractResult() []model.ContractResult {
+	contracts := GetContract()
+	var results = []model.ContractResult{}
+	for _, element := range contracts {
+		item := model.ContractResult{Contract: element}
+		item.Bids = GetBidsByContractID(element.ID)
+		item.Wins = GetWinsByContractID(element.ID)
+		results = append(results, item)
+	}
+	return results
 }
 
 //GetOneContract returns a single contract
@@ -55,7 +69,7 @@ func callbackContract(contract model.Contract) {
 
 	//Check if died of old age
 	if contract.RunUntil != 0 && util.MakeTimestamp() > contract.RunUntil {
-		log.Infoln(fmt.Sprintf("Contract has died of old age: %s", contract.ID))
+		// log.Infoln(fmt.Sprintf("Contract has died of old age: %s", contract.ID))
 		return
 	}
 
@@ -88,6 +102,8 @@ func callbackContract(contract model.Contract) {
 		return
 	}
 
+	considerContract(contract)
+
 }
 
 //considerContract checks an incoming DB row to see if I can run it and vote for it
@@ -98,6 +114,11 @@ func considerContract(contract model.Contract) {
 
 	if canHandle {
 		CreateBidFromContract(contract)
+		PushAll()
+		//Check for wins in a minute
+		go func() {
+			CheckForWinsLater(contract)
+		}()
 	}
 
 }

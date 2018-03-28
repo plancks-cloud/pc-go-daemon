@@ -17,6 +17,11 @@ func Ping(w http.ResponseWriter, r *http.Request) {
 //CorsHandler does cors check
 func CorsHandler(f http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-type")
+		w.Header().Set("Allow", "GET,POST,OPTIONS")
+
 		if r.Method == "OPTIONS" {
 			fmt.Fprintf(w, "Options")
 		} else {

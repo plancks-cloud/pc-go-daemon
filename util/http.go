@@ -36,3 +36,14 @@ func Get(url string) (*http.Response, error) {
 
 	return client.Do(req)
 }
+
+//Options sends a request to a URL using method OPTIONS
+func Options(url string) {
+	req, err := http.NewRequest("OPTIONS", url, nil)
+	if err != nil {
+		log.Errorln(fmt.Sprintf("Error creating request during sync: %s", err))
+		return
+	}
+	client := &http.Client{}
+	client.Do(req)
+}

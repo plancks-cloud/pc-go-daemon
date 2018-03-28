@@ -2,10 +2,13 @@ package controller
 
 import (
 	"fmt"
+	"time"
 
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/model"
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/mongo"
+	"git.amabanana.com/plancks-cloud/pc-go-daemon/util"
 	"github.com/globalsign/mgo/bson"
+	"github.com/nu7hatch/gouuid"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -29,19 +32,75 @@ func GetWin() []model.Win {
 //GetWinsByContractID returns all wins for a contract
 func GetWinsByContractID(contractID string) []model.Win {
 	var wins []model.Win
-	mongo.GetCollection(model.Bid{}).Find(bson.M{"contractId": bson.ObjectIdHex(contractID)}).All(&wins)
-	for _, row := range wins {
-		log.Infoln(fmt.Sprintf("Item: %s", row.ID))
-	}
+	mongo.GetCollection(model.Bid{}).Find(bson.M{"contractId": contractID}).All(&wins)
 	return wins
 }
 
 //GetOneWin returns a single win
 func GetOneWin(id string) (model.Win, error) {
 	var win model.Win
-	err := mongo.GetCollection(&win).Find(bson.M{"_id": bson.ObjectIdHex(id)}).One(&win)
+	err := mongo.GetCollection(&win).Find(bson.M{"_id": id}).One(&win)
 	if err != nil {
 		log.Errorln(fmt.Sprintf("Error getting win: %s", err))
 	}
 	return win, err
+}
+
+//CheckForWinsLater announces winners where relavant
+func CheckForWinsLater(contract model.Contract) {
+	time.Sleep(1 * time.Minute)
+	PullAll()
+	CheckForWins(contract)
+
+}
+
+//CheckForWins announces winners where relavant
+func CheckForWins(contract model.Contract) {
+	bids := GetBid()
+	if len(bids) == 0 {
+		//No bids - no winner
+		return
+	}
+
+	//TODO: better impl
+	winnerVotes := -1
+	winnerID := ""
+
+	for _, element := range bids {
+		if element.Votes > winnerVotes {
+			winnerVotes = element.Votes
+			winnerID = element.FromAccount
+		}
+	}
+
+	if winnerVotes != -1 {
+		CreateWinFromContract(winnerID, contract)
+	}
+
+}
+
+//CreateWinFromContract creates win
+func CreateWinFromContract(winnerID string, contract model.Contract) {
+	uuidString, _ := uuid.NewV4()
+	win := model.Win{
+		ID:            uuidString.String(),
+		ContractID:    contract.ID,
+		WinnerAccount: winnerID,
+		Timestamp:     util.MakeTimestamp(),
+		Signature:     winnerID}
+	win.Upsert()
+	CheckIfIWon(win)
+
+}
+
+//CallbackWinAsync checks an incoming DB row to see if it is interesting
+func CallbackWinAsync(win model.Win) {
+	go CheckIfIWon(win)
+}
+
+//CheckIfIWon if I won will take the next steps if needed
+func CheckIfIWon(win model.Win) {
+	if model.SystemWallet.ID == win.WinnerAccount {
+		CreateServiceFromWin(&win)
+	}
 }

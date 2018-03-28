@@ -31,14 +31,14 @@ func GetBid() []model.Bid {
 //GetBidsByContractID returns all bids for a contract
 func GetBidsByContractID(contractID string) []model.Bid {
 	var bids []model.Bid
-	mongo.GetCollection(model.Bid{}).Find(bson.M{"contractId": bson.ObjectIdHex(contractID)}).All(&bids)
+	mongo.GetCollection(model.Bid{}).Find(bson.M{"contractId": contractID}).All(&bids)
 	return bids
 }
 
 //GetOneBid returns a single contract
 func GetOneBid(id string) (model.Bid, error) {
 	var bid model.Bid
-	err := mongo.GetCollection(&bid).Find(bson.M{"_id": bson.ObjectIdHex(id)}).One(&bid)
+	err := mongo.GetCollection(&bid).Find(bson.M{"_id": id}).One(&bid)
 	if err != nil {
 		log.Errorln(fmt.Sprintf("Error getting bid: %s", err))
 	}

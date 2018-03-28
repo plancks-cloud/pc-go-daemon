@@ -7,6 +7,7 @@ import (
 
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/controller"
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/model"
+	"git.amabanana.com/plancks-cloud/pc-go-daemon/util"
 
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/api"
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/mongo"
@@ -21,16 +22,18 @@ func main() {
 	initAll()
 
 	router := mux.NewRouter().StrictSlash(true)
-	router.HandleFunc("/createContract", api.CorsHandler(api.CreateContract)).Methods("POST", "OPTIONS")
-	router.HandleFunc("/updateContract", api.CorsHandler(api.UpdateContract)).Methods("POST", "OPTIONS")
-	router.HandleFunc("/createWallet", api.CorsHandler(api.CreateWallet)).Methods("POST", "OPTIONS")
-	router.HandleFunc("/dockerListServices", api.CorsHandler(api.DockerListServices)).Methods("GET", "OPTIONS")               //ADD JSON RETURN
-	router.HandleFunc("/dockerListRunningServices", api.CorsHandler(api.DockerListRunningServices)).Methods("GET", "OPTIONS") //ADD JSON RETURN
-	router.HandleFunc("/forceSync", api.CorsHandler(api.ForceSync)).Methods("GET", "OPTIONS")
-	router.HandleFunc("/getContract", api.CorsHandler(api.GetContract)).Methods("GET", "OPTIONS")
-	router.HandleFunc("/ping", api.CorsHandler(api.Ping)).Methods("GET", "OPTIONS")
-	router.HandleFunc("/setCurrentWallet", api.CorsHandler(api.SetCurrentWallet)).Methods("POST", "OPTIONS")
-	router.HandleFunc("/getOneContract", api.CorsHandler(api.GetOneContract)).Methods("GET", "OPTIONS")
+	router.HandleFunc("/api/createContract", api.CorsHandler(api.CreateContract)).Methods("POST", "OPTIONS")
+	router.HandleFunc("/api/updateContract", api.CorsHandler(api.UpdateContract)).Methods("POST", "OPTIONS")
+	router.HandleFunc("/api/createWallet", api.CorsHandler(api.CreateWallet)).Methods("POST", "OPTIONS")
+	router.HandleFunc("/api/dockerListServices", api.CorsHandler(api.DockerListServices)).Methods("GET", "OPTIONS")               //ADD JSON RETURN
+	router.HandleFunc("/api/dockerListRunningServices", api.CorsHandler(api.DockerListRunningServices)).Methods("GET", "OPTIONS") //ADD JSON RETURN
+	router.HandleFunc("/api/forceSync", api.CorsHandler(api.ForceSync)).Methods("GET", "OPTIONS")
+	router.HandleFunc("/api/getContract", api.CorsHandler(api.GetContract)).Methods("GET", "OPTIONS")
+	router.HandleFunc("/api/ping", api.CorsHandler(api.Ping)).Methods("GET", "OPTIONS")
+	router.HandleFunc("/api/setCurrentWallet", api.CorsHandler(api.SetCurrentWallet)).Methods("POST", "OPTIONS")
+	router.HandleFunc("/api/getOneContract", api.CorsHandler(api.GetOneContract)).Methods("GET", "OPTIONS")
+	router.HandleFunc("/api/getContractResult", api.CorsHandler(api.GetContractResult)).Methods("GET", "OPTIONS")
+	router.HandleFunc("/api/getServiceState", api.CorsHandler(api.GetServiceState)).Methods("GET", "OPTIONS")
 
 	log.Info(fmt.Sprintf("READY: Listening [:%v]", port))
 	log.Fatal(http.ListenAndServe(fmt.Sprint(":", port), router))
@@ -46,9 +49,12 @@ func initAll() {
 	model.InitRepo()
 
 	go func() {
+		//Wake up the function
+		util.Options(model.DBSyncURL)
 		for {
+			//Sync and sleep
 			controller.PullAll()
-			controller.PushAll()
+			// controller.PushAll()
 			time.Sleep(1 * time.Minute)
 		}
 	}()

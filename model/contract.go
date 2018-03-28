@@ -40,6 +40,13 @@ type ContractSyncable struct {
 	Rows       []Contract `json:"rows" bson:"rows"`
 }
 
+//ContractResult helps the client see the state of a contract
+type ContractResult struct {
+	Contract `json:"contract"`
+	Bids     []Bid
+	Wins     []Win
+}
+
 //ToJSON converts an object to json
 func (contractSyncable ContractSyncable) ToJSON() []byte {
 	jsonBytes, jsonError := json.Marshal(contractSyncable)
