@@ -48,6 +48,11 @@ func UpdateContract(contract *model.Contract) error {
 	return err
 }
 
+//CallbackContractAsync checks an incoming DB row to see if it is interesting
+func CallbackContractAsync(contract model.Contract) {
+	go callbackContract(contract)
+}
+
 //callbackContract checks an incoming DB row to see if it is interesting
 // This method is long running and should be callled asynchronously!
 func callbackContract(contract model.Contract) {
@@ -95,8 +100,7 @@ func considerContract(contract model.Contract) {
 	//Need to get current wallet
 
 	//Check if I can run this spec
-	//TODO
-	canHandle := true
+	canHandle := true //TODO
 
 	if canHandle {
 		bid := model.Bid{}
