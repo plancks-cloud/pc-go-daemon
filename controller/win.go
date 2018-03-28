@@ -119,7 +119,7 @@ func CallbackWinAsync(win model.Win) {
 func CheckIfIWon(win model.Win) {
 	log.Infoln("win controller: Checking if I won")
 	if model.SystemWallet.ID == win.WinnerAccount {
-		log.Infoln("win controller: I won!")
+		log.Infoln("win controller: I'm the winner of this contract %s", win.ContractID)
 		CreateServiceFromWin(&win)
 	}
 }

@@ -163,6 +163,7 @@ func createServices(services []model.Service) {
 		for _, runningService := range existingServices {
 			if service.Name == runningService.Name {
 				found = true
+				log.Infoln(fmt.Sprintf("> Will not need to create docker service %s", service.Name))
 				break SearchRunningServicesLoop
 			}
 		}
