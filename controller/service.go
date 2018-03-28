@@ -3,6 +3,7 @@ package controller
 import (
 	"context"
 	"fmt"
+	"strconv"
 
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/model"
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/mongo"
@@ -152,11 +153,12 @@ func compareRunningServicesToDB() (
 }
 
 func createServices(services []model.Service) {
+	log.Infoln(fmt.Sprintf("createServices method.."))
 	existingServices := DockerListRunningServices()
 	found := false
 
 	for _, service := range services {
-
+		found = false
 	SearchRunningServicesLoop:
 		for _, runningService := range existingServices {
 			if service.Name == runningService.Name {
@@ -164,6 +166,8 @@ func createServices(services []model.Service) {
 				break SearchRunningServicesLoop
 			}
 		}
+		log.Infoln(fmt.Sprintf("createServices method.. and for %s was found? %s", service.Name, strconv.FormatBool(found)))
+
 		if !found {
 			contract, err := GetOneContract(service.ContractID)
 			if err != nil {
@@ -171,6 +175,7 @@ func createServices(services []model.Service) {
 					fmt.Sprintf("Error getting contract for service with contractID %s, %s",
 						service.ContractID, err))
 			}
+			log.Infoln(fmt.Sprintf("GOING TO CREATE SERVICE!!!: %s", service.ID))
 			createService(&service, &contract)
 		}
 	}
@@ -178,6 +183,8 @@ func createServices(services []model.Service) {
 }
 
 func createService(service *model.Service, contract *model.Contract) {
+	log.Infoln(fmt.Sprintf("createService method!"))
+
 	cli, err := client.NewEnvClient()
 	ctx := context.Background()
 	if err != nil {
