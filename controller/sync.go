@@ -72,6 +72,7 @@ func PullAll() {
 	wins := PullAllWins()
 	for _, item := range wins {
 		item.Upsert()
+		CallbackWinAsync(item)
 	}
 }
 
