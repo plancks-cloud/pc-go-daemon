@@ -22,7 +22,7 @@ func main() {
 	router := mux.NewRouter().StrictSlash(true)
 	router.HandleFunc("/api/createContract", api.CorsHandler(api.CreateContract)).Methods("POST", "OPTIONS")
 	router.HandleFunc("/api/updateContract", api.CorsHandler(api.UpdateContract)).Methods("POST", "OPTIONS")
-	router.HandleFunc("/api/createWallet", api.CorsHandler(api.CreateWallet)).Methods("POST", "OPTIONS")
+	// router.HandleFunc("/api/createWallet", api.CorsHandler(api.CreateWallet)).Methods("POST", "OPTIONS")
 	router.HandleFunc("/api/dockerListServices", api.CorsHandler(api.DockerListServices)).Methods("GET", "OPTIONS")               //ADD JSON RETURN
 	router.HandleFunc("/api/dockerListRunningServices", api.CorsHandler(api.DockerListRunningServices)).Methods("GET", "OPTIONS") //ADD JSON RETURN
 	router.HandleFunc("/api/forceSync", api.CorsHandler(api.ForceSync)).Methods("GET", "OPTIONS")
