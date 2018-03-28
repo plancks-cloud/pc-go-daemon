@@ -54,7 +54,7 @@ func initAll() {
 		for {
 			//Sync and sleep
 			controller.PullAll()
-			// controller.PushAll()
+			controller.PushAll()
 			time.Sleep(1 * time.Minute)
 		}
 	}()
