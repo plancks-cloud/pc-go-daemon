@@ -77,17 +77,10 @@ func callbackContract(contract model.Contract) {
 	time.Sleep(5 * time.Second)
 
 	bids := GetBidsByContractID(contract.ID)
-	found := false
 	for _, b := range bids {
 		if b.FromAccount == model.SystemWallet.ID {
-			found = true
-			break
+			return //Already voted..
 		}
-	}
-
-	if found {
-		log.Infoln(fmt.Sprintf("I have voted on this contract: %s", contract.ID))
-		return
 	}
 
 	//Sleep for 5 seconds incase I have bid in past life
