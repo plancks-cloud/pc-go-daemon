@@ -2,7 +2,6 @@ package controller
 
 import (
 	"fmt"
-	"math/rand"
 	"time"
 
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/model"
@@ -97,19 +96,11 @@ func callbackContract(contract model.Contract) {
 //considerContract checks an incoming DB row to see if I can run it and vote for it
 func considerContract(contract model.Contract) {
 
-	//Need to get current wallet
-
 	//Check if I can run this spec
 	canHandle := true //TODO
 
 	if canHandle {
-		bid := model.Bid{}
-		bid.ContractID = contract.ID
-		bid.FromAccount = model.SystemWallet.ID
-		bid.Votes = rand.Intn(100000)
-		bid.Timestamp = util.MakeTimestamp()
-		bid.Signature = model.SystemWallet.GetSignature()
-		bid.Push()
+		CreateBidFromContract(contract)
 	}
 
 }

@@ -2,9 +2,11 @@ package controller
 
 import (
 	"fmt"
+	"math/rand"
 
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/model"
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/mongo"
+	"git.amabanana.com/plancks-cloud/pc-go-daemon/util"
 	"github.com/globalsign/mgo/bson"
 	log "github.com/sirupsen/logrus"
 )
@@ -53,4 +55,16 @@ func GetOneBid(id string) (model.Bid, error) {
 func UpdateBid(bid *model.Bid) error {
 	err := bid.Upsert()
 	return err
+}
+
+//CreateBidFromContract inserts a new bid for a contract
+func CreateBidFromContract(contract model.Contract) {
+	bid := model.Bid{}
+	bid.ContractID = contract.ID
+	bid.FromAccount = model.SystemWallet.ID
+	bid.Votes = rand.Intn(100000)
+	bid.Timestamp = util.MakeTimestamp()
+	bid.Signature = model.SystemWallet.GetSignature()
+	bid.Push()
+
 }
