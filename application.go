@@ -6,6 +6,7 @@ import (
 
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/controller"
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/model"
+	"git.amabanana.com/plancks-cloud/pc-go-daemon/repo"
 
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/api"
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/mongo"
@@ -42,16 +43,7 @@ func initAll() {
 
 	log.Info("Starting")
 	mongo.Init()
-
-	log.Info(fmt.Sprintf("Wallet: %s", model.GetEnvWallet()))
-
-	//Instantiate wallet if not there - just so that there is an object in the DB
-	walletName := model.GetEnvWallet()
-	if len(walletName) == 0 {
-		log.Fatalln("Could not find env varable for wallet: WALLET")
-	}
-	wallet := model.Wallet{ID: walletName, PrivateKey: walletName, PublicKey: walletName, Signature: walletName}
-	wallet.Upsert()
+	repo.Init()
 
 	controller.PullAll()
 }
