@@ -29,8 +29,7 @@ type WalletSyncable struct {
 func (walletSyncable WalletSyncable) ToJSON() []byte {
 	jsonBytes, jsonError := json.Marshal(walletSyncable)
 	if jsonError != nil {
-		log.Errorln(fmt.Sprintf("Error converting walletSyncable to json: %s", jsonError.Error))
-		panic(jsonError)
+		log.Fatalln(fmt.Sprintf("Error converting walletSyncable to json: %s", jsonError))
 	}
 	return jsonBytes
 

@@ -44,8 +44,7 @@ type ContractSyncable struct {
 func (contractSyncable ContractSyncable) ToJSON() []byte {
 	jsonBytes, jsonError := json.Marshal(contractSyncable)
 	if jsonError != nil {
-		log.Errorln(fmt.Sprintf("Error converting contractSyncable to json: %s", jsonError.Error))
-		panic(jsonError)
+		log.Fatalln(fmt.Sprintf("Error converting contractSyncable to json: %s", jsonError))
 	}
 	return jsonBytes
 
