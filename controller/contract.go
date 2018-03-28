@@ -2,9 +2,12 @@ package controller
 
 import (
 	"fmt"
+	"math/rand"
+	"time"
 
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/model"
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/mongo"
+	"git.amabanana.com/plancks-cloud/pc-go-daemon/util"
 	"github.com/globalsign/mgo/bson"
 	log "github.com/sirupsen/logrus"
 )
@@ -43,4 +46,70 @@ func GetOneContract(id string) (model.Contract, error) {
 func UpdateContract(contract *model.Contract) error {
 	err := contract.Upsert()
 	return err
+}
+
+//callbackContract checks an incoming DB row to see if it is interesting
+// This method is long running and should be callled asynchronously!
+func callbackContract(contract model.Contract) {
+
+	//Check if died of old age
+	if contract.RunUntil != 0 && util.MakeTimestamp() > contract.RunUntil {
+		log.Infoln(fmt.Sprintf("Contract has died of old age: %s", contract.ID))
+		return
+	}
+
+	//Sleep for 5 seconds incase I have bid in past life
+	time.Sleep(5 * time.Second)
+
+	//Need to get current wallet
+	wallet := GetCurrentWallet()
+
+	bids := GetBidsByContractID(contract.ID)
+	found := false
+	for _, b := range bids {
+		if b.FromAccount == wallet.ID {
+			found = true
+			break
+		}
+	}
+
+	if found {
+		log.Infoln(fmt.Sprintf("I have voted on this contract: %s", contract.ID))
+		return
+	}
+
+	//Sleep for 5 seconds incase I have bid in past life
+	time.Sleep(5 * time.Second)
+
+	//For now sleep for 10.. this should allow wins to come through
+	time.Sleep(10 * time.Second)
+
+	wins := GetWinsByContractID(contract.ID)
+	if len(wins) > 0 {
+		log.Infoln(fmt.Sprintf("Someone already one - move on: %s", contract.ID))
+		return
+	}
+
+}
+
+//considerContract checks an incoming DB row to see if I can run it and vote for it
+func considerContract(contract model.Contract) {
+
+	//Need to get current wallet
+	wallet := GetCurrentWallet()
+
+	//Check if I can run this spec
+	//TODO
+	canHandle := true
+
+	if canHandle {
+		bid := model.Bid{}
+		bid.ContractID = contract.ID
+		bid.FromAccount = wallet.ID
+		bid.Votes = rand.Intn(100000)
+		bid.Timestamp = util.MakeTimestamp()
+		bid.Signature = wallet.GetSignature()
+		bid.Push()
+	}
+
 }
