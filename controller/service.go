@@ -49,6 +49,21 @@ func GetService() []model.Service {
 	return services
 }
 
+//GetServiceState returns all services stored in the datastore
+func GetServiceState() []model.ServiceState {
+	services := GetService()
+	var results = []model.ServiceState{}
+	for _, element := range services {
+		item := model.ServiceState{ID: element.ID, Name: element.Name}
+		//TODO
+		item.ReplicasRequired = 1
+		item.ReplicasRunning = 1
+		results = append(results, item)
+	}
+	return results
+
+}
+
 //GetOneService returns a single contract
 func GetOneService(id string) (model.Service, error) {
 	var service model.Service
