@@ -29,6 +29,16 @@ func GetBid() []model.Bid {
 	return bids
 }
 
+//GetBidsByContractID returns all bids for a contract
+func GetBidsByContractID(contractID string) []model.Bid {
+	var bids []model.Bid
+	mongo.GetCollection(model.Bid{}).Find(bson.M{"contractId": bson.ObjectIdHex(contractID)}).All(&bids)
+	for _, bid := range bids {
+		log.Infoln(fmt.Sprintf("Bid: %s", bid.ID))
+	}
+	return bids
+}
+
 //GetOneBid returns a single contract
 func GetOneBid(id string) (model.Bid, error) {
 	var bid model.Bid

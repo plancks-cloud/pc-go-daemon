@@ -40,6 +40,15 @@ func initAll() {
 		log.SetFormatter(&log.JSONFormatter{})
 	}
 	log.Info(fmt.Sprintf("Wallet: %s", model.GetEnvWallet()))
+
+	//Instantiate wallet if not there - just so that there is an object in the DB
+	walletName := model.GetEnvWallet()
+	if len(walletName) == 0 {
+		panic("Could not find env varable for wallet: WALLET")
+	}
+	wallet := model.Wallet{ID: walletName, PrivateKey: walletName, PublicKey: walletName, Signature: walletName}
+	wallet.Upsert()
+
 	log.Info("Starting")
 	mongo.Init()
 	controller.DBPullDown()

@@ -34,6 +34,17 @@ func GetWallet() []model.Wallet {
 	return wallets
 }
 
+//GetCurrentWallet returns all wallets stored in the datastore
+func GetCurrentWallet() model.Wallet {
+	walletName := model.GetEnvWallet()
+	wallet, err := GetOneWallet(walletName)
+	if err != nil {
+		panic(err.Error)
+		//Not sure if this is correct - maybe should not
+	}
+	return wallet
+}
+
 //GetOneWallet returns a single contract
 func GetOneWallet(id string) (model.Wallet, error) {
 	var wallet model.Wallet
