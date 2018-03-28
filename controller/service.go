@@ -27,7 +27,7 @@ func CreateService(service *model.Service) model.MessageOK {
 //CreateServiceFromWin creates a service instance and saves it to the local database. This service
 //is created from a win item
 func CreateServiceFromWin(win *model.Win) {
-	contract, err := GetOneContract(win.ID)
+	contract, err := GetOneContract(win.ContractID)
 	if err != nil {
 		log.Fatalln("Error getting contract of the win: %s", err)
 	}
