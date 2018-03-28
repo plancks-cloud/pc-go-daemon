@@ -1,0 +1,1 @@
+docker stack deploy pc --compose-file docker-compose.yml
