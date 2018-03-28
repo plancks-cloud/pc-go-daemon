@@ -1,10 +1,12 @@
 package model
 
 import (
+	"encoding/json"
 	"fmt"
 	"strings"
 
 	"github.com/nu7hatch/gouuid"
+	log "github.com/sirupsen/logrus"
 
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/mongo"
 )
@@ -28,6 +30,25 @@ type Contract struct {
 	AllowSuicide     bool   `json:"allowSuicide" bson:"allowSuicide,omitempty"`
 	StartStrategy    string `json:"startStrategy" bson:"startStrategy,omitempty"`
 	ServiceName      string `json:"serviceName" bson:"serviceName,omitempty"`
+}
+
+//ContractSyncable holds info for syncing with the cloud
+type ContractSyncable struct {
+	Collection string     `json:"collection" bson:"collection"`
+	Index      string     `json:"index" bson:"index"`
+	Indexes    []string   `json:"indexes" bson:"indexes"`
+	Rows       []Contract `json:"rows" bson:"rows"`
+}
+
+//ToJSON converts an object to json
+func (contractSyncable ContractSyncable) ToJSON() []byte {
+	jsonBytes, jsonError := json.Marshal(contractSyncable)
+	if jsonError != nil {
+		log.Errorln(fmt.Sprintf("Error converting contractSyncable to json: %s", jsonError.Error))
+		panic(jsonError)
+	}
+	return jsonBytes
+
 }
 
 //Push saves a contract to MongoDB

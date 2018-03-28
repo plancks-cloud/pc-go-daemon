@@ -1,8 +1,12 @@
 package model
 
 import (
+	"encoding/json"
+	"fmt"
+
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/mongo"
 	uuid "github.com/nu7hatch/gouuid"
+	log "github.com/sirupsen/logrus"
 )
 
 //Wallet is the issuing party, as well as a node running a container
@@ -11,6 +15,25 @@ type Wallet struct {
 	PublicKey  string `json:"publicKey" bson:"publicKey,omitempty"`
 	PrivateKey string `json:"privateKey" bson:"privateKey,omitempty"`
 	Signature  string `json:"signature" bson:"signature,omitempty"`
+}
+
+//WalletSyncable is a wrapper for what get posted to the cloud
+type WalletSyncable struct {
+	Collection string   `json:"collection" bson:"collection"`
+	Index      string   `json:"index" bson:"index"`
+	Indexes    []string `json:"indexes" bson:"indexes"`
+	Rows       []Wallet `json:"rows" bson:"rows"`
+}
+
+//ToJSON converst object o json
+func (walletSyncable WalletSyncable) ToJSON() []byte {
+	jsonBytes, jsonError := json.Marshal(walletSyncable)
+	if jsonError != nil {
+		log.Errorln(fmt.Sprintf("Error converting walletSyncable to json: %s", jsonError.Error))
+		panic(jsonError)
+	}
+	return jsonBytes
+
 }
 
 //Push persists the wallet to the database

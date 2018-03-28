@@ -1,8 +1,12 @@
 package model
 
 import (
+	"encoding/json"
+	"fmt"
+
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/mongo"
 	uuid "github.com/nu7hatch/gouuid"
+	log "github.com/sirupsen/logrus"
 )
 
 //Bid object represents bid document in DB
@@ -13,6 +17,25 @@ type Bid struct {
 	FromAccount string `json:"fromAccount" bson:"fromAccount,omitempty"`
 	Timestamp   int64  `json:"timestamp" bson:"timestamp,omitempty"`
 	Signature   string `json:"signature" bson:"signature,omitempty"`
+}
+
+//BidSyncable is a wrapper for what get posted to the cloud
+type BidSyncable struct {
+	Collection string   `json:"collection" bson:"collection"`
+	Index      string   `json:"index" bson:"index"`
+	Indexes    []string `json:"indexes" bson:"indexes"`
+	Rows       []Bid    `json:"rows" bson:"rows"`
+}
+
+//ToJSON converst object o json
+func (bidSyncable BidSyncable) ToJSON() []byte {
+	jsonBytes, jsonError := json.Marshal(bidSyncable)
+	if jsonError != nil {
+		log.Errorln(fmt.Sprintf("Error converting bidSyncable to json: %s", jsonError.Error))
+		panic(jsonError)
+	}
+	return jsonBytes
+
 }
 
 //Push saves a bid to MongoDB
