@@ -23,9 +23,6 @@ func CreateWin(item *model.Win) model.MessageOK {
 func GetWin() []model.Win {
 	var wins []model.Win
 	mongo.GetCollection(model.Win{}).Find(nil).All(&wins)
-	for _, win := range wins {
-		log.Infoln(fmt.Sprintf("Win: %s", win.ID))
-	}
 	return wins
 }
 

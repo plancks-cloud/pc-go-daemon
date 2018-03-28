@@ -9,15 +9,8 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-//Post comment
+//Post sends byte payload to an endpoint
 func Post(url string, jsonBytes []byte) {
-	log.Infoln(fmt.Sprintf("Posting to: %s", url))
-	log.Infoln(fmt.Sprintln(string(jsonBytes)))
-
-}
-
-//Post2 sends byte payload to an endpoint
-func Post2(url string, jsonBytes []byte) {
 
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonBytes))
 	req.Header.Set("Content-Type", "application/json")
@@ -29,11 +22,7 @@ func Post2(url string, jsonBytes []byte) {
 		panic(err)
 	}
 	defer resp.Body.Close()
-
-	log.Infoln(fmt.Sprintf("Response status: %s", resp.Status))
-	r, _ := ioutil.ReadAll(resp.Body)
-	log.Infoln(fmt.Sprintf("Response body: %s", string(r)))
-
+	ioutil.ReadAll(resp.Body)
 }
 
 //Get sends a request to a URL and returns the response

@@ -25,9 +25,6 @@ func CreateBid(bid *model.Bid) model.MessageOK {
 func GetBid() []model.Bid {
 	var bids []model.Bid
 	mongo.GetCollection(model.Bid{}).Find(nil).All(&bids)
-	for _, bid := range bids {
-		log.Infoln(fmt.Sprintf("Bid: %s", bid.ID))
-	}
 	return bids
 }
 
@@ -35,9 +32,6 @@ func GetBid() []model.Bid {
 func GetBidsByContractID(contractID string) []model.Bid {
 	var bids []model.Bid
 	mongo.GetCollection(model.Bid{}).Find(bson.M{"contractId": bson.ObjectIdHex(contractID)}).All(&bids)
-	for _, bid := range bids {
-		log.Infoln(fmt.Sprintf("Bid: %s", bid.ID))
-	}
 	return bids
 }
 

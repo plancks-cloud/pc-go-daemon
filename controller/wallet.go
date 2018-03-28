@@ -28,9 +28,6 @@ func CreateWallet(wallet *model.Wallet) model.MessageOK {
 func GetWallet() []model.Wallet {
 	var wallets []model.Wallet
 	mongo.GetCollection(model.Wallet{}).Find(nil).All(&wallets)
-	for _, wallet := range wallets {
-		log.Infoln(fmt.Sprintf("Wallet: %s", wallet.ID))
-	}
 	return wallets
 }
 

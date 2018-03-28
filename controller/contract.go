@@ -25,9 +25,6 @@ func CreateContract(contract *model.Contract) model.MessageOK {
 func GetContract() []model.Contract {
 	var contracts []model.Contract
 	mongo.GetCollection(model.Contract{}).Find(nil).All(&contracts)
-	for _, contract := range contracts {
-		log.Infoln(fmt.Sprintf("Contract Acccount: %s - ID: %s", contract.Account, contract.ID))
-	}
 	return contracts
 }
 
