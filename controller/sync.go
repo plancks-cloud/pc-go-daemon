@@ -3,11 +3,38 @@ package controller
 import (
 	"encoding/json"
 	"fmt"
+	"time"
 
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/model"
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/util"
 	log "github.com/sirupsen/logrus"
 )
+
+//SyncDatabase sets up scheduler to sync up databases
+func SyncDatabase() {
+	go func() {
+		//Wake up the function
+		util.Options(model.DBSyncURL)
+		for {
+			//Sync and sleep
+			log.Infoln(fmt.Sprintf("> Time to sync"))
+			PullAll()
+			PushAll()
+			time.Sleep(1 * time.Minute)
+		}
+	}()
+}
+
+//ReconServices sets up scheduler to recon docker services running
+func ReconServices() {
+	go func() {
+		for {
+			log.Infoln(fmt.Sprintf("> Reconning services"))
+			reconServices()
+			time.Sleep(33 * time.Second)
+		}
+	}()
+}
 
 //PushAll gets all rows in DB and pushes to DB
 func PushAll() {

@@ -3,11 +3,9 @@ package main
 import (
 	"fmt"
 	"net/http"
-	"time"
 
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/controller"
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/model"
-	"git.amabanana.com/plancks-cloud/pc-go-daemon/util"
 
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/api"
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/mongo"
@@ -48,16 +46,18 @@ func initAll() {
 	mongo.Init()
 	model.InitRepo()
 
-	go func() {
-		//Wake up the function
-		util.Options(model.DBSyncURL)
-		for {
-			//Sync and sleep
-			log.Infoln(fmt.Sprintf("> Time to sync"))
-			controller.PullAll()
-			controller.PushAll()
-			time.Sleep(1 * time.Minute)
-		}
-	}()
+	// go func() {
+	// 	//Wake up the function
+	// 	util.Options(model.DBSyncURL)
+	// 	for {
+	// 		//Sync and sleep
+	// 		log.Infoln(fmt.Sprintf("> Time to sync"))
+	// 		controller.PullAll()
+	// 		controller.PushAll()
+	// 		time.Sleep(1 * time.Minute)
+	// 	}
+	// }()
 
+	controller.SyncDatabase()
+	controller.ReconServices()
 }
