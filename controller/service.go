@@ -33,7 +33,6 @@ func CreateServiceFromWin(win *model.Win) {
 	if possibleError != nil {
 		log.Infoln(fmt.Sprintf("Could not find service for contractID: %s", win.ContractID))
 	} else {
-		log.Infoln(fmt.Sprintf("Service already exists.. dont need to create: %s", win.ID))
 		return
 	}
 
@@ -51,6 +50,7 @@ func CreateServiceFromWin(win *model.Win) {
 		Replicas:       contract.Replicas,
 		ContractID:     contract.ID}
 
+	log.Infoln(fmt.Sprintf("Creating service for contractID: %s", win.ContractID))
 	CreateService(&service)
 }
 
