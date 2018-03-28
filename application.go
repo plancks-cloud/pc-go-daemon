@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"net/http"
 
-	"git.amabanana.com/plancks-cloud/pc-go-daemon/controller"
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/model"
 
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/api"
@@ -43,6 +42,4 @@ func initAll() {
 	log.Info("Starting")
 	mongo.Init()
 	model.InitRepo()
-
-	controller.PullAll()
 }
