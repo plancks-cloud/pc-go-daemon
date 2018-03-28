@@ -102,11 +102,6 @@ func UpdateService(service *model.Service) error {
 	return err
 }
 
-//ReconServicesAsync synchronises the docker environment with the desired running contracts
-func ReconServicesAsync() {
-	go reconServices()
-}
-
 func reconServices() {
 	servicesNotYetCreated, servicesToBeDeleted := compareRunningServicesToDB()
 	createServices(servicesNotYetCreated)
