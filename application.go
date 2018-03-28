@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"time"
 
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/model"
 
@@ -42,4 +43,16 @@ func initAll() {
 	log.Info("Starting")
 	mongo.Init()
 	model.InitRepo()
+<<<<<<< HEAD
+=======
+
+	go func() {
+		for {
+			controller.PullAll()
+			controller.PushAll()
+			time.Sleep(1 * time.Minute)
+		}
+	}()
+
+>>>>>>> b3ce51c33445f4d0d07d1face30c4cffbf7e4d00
 }
