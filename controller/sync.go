@@ -25,7 +25,7 @@ func PushAll() {
 //PushAllWallets pushes all wallets to cloud
 func PushAllWallets() {
 	wallets := GetWallet()
-	var body = model.WalletSyncable{"Wallet", "_id", nil, wallets}
+	body := model.WalletSyncable{Collection: "Wallet", Index: "_id", Indexes: nil, Rows: wallets}
 	util.Post(getDbSyncURL(), body.ToJSON())
 
 }
@@ -41,7 +41,7 @@ func PushAllContracts() {
 //PushAllBids pushes all bids to cloud
 func PushAllBids() {
 	bids := GetBid()
-	var body = model.BidSyncable{"Bid", "_id", nil, bids}
+	body := model.BidSyncable{Collection: "Bid", Index: "_id", Indexes: nil, Rows: bids}
 	util.Post(getDbSyncURL(), body.ToJSON())
 
 }
@@ -49,11 +49,12 @@ func PushAllBids() {
 //PushAllWins pushes all wins to cloud
 func PushAllWins() {
 	wins := GetWin()
-	var body = model.WinSyncable{"Win", "_id", nil, wins}
+	body := model.WinSyncable{Collection: "Win", Index: "_id", Indexes: nil, Rows: wins}
 	util.Post(getDbSyncURL(), body.ToJSON())
 
 }
 
+//PullAll gets all rows in cloud DB and puts them in local DB
 func PullAll() {
 	contracts := PullAllContracts()
 	for _, contract := range contracts {
@@ -73,6 +74,7 @@ func PullAll() {
 	}
 }
 
+//PullAllContracts gets all contracts in the cloud DB
 func PullAllContracts() (contracts []model.Contract) {
 	typeName := util.GetType(model.Contract{})
 	url := fmt.Sprintf("%s?collection=%s", getDbSyncURL(), typeName)
@@ -90,6 +92,7 @@ func PullAllContracts() (contracts []model.Contract) {
 	return contracts
 }
 
+//PullAllWallets gets all wallets in the cloud DB
 func PullAllWallets() (wallets []model.Wallet) {
 	typeName := util.GetType(model.Wallet{})
 	url := fmt.Sprintf("%s?collection=%s", getDbSyncURL(), typeName)
@@ -107,6 +110,7 @@ func PullAllWallets() (wallets []model.Wallet) {
 	return wallets
 }
 
+//PullAllBids gets all bids in the cloud DB
 func PullAllBids() (bids []model.Bid) {
 	typeName := util.GetType(model.Bid{})
 	url := fmt.Sprintf("%s?collection=%s", getDbSyncURL(), typeName)
@@ -124,6 +128,7 @@ func PullAllBids() (bids []model.Bid) {
 	return bids
 }
 
+//PullAllWins gets all wins in the cloud DB
 func PullAllWins() (wins []model.Win) {
 	typeName := util.GetType(model.Win{})
 	url := fmt.Sprintf("%s?collection=%s", getDbSyncURL(), typeName)
