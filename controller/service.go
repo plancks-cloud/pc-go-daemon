@@ -67,7 +67,7 @@ func GetServiceState() []model.ServiceState {
 //GetOneService returns a single contract
 func GetOneService(id string) (model.Service, error) {
 	var service model.Service
-	err := mongo.GetCollection(&service).Find(bson.M{"_id": bson.ObjectIdHex(id)}).One(&service)
+	err := mongo.GetCollection(&service).Find(bson.M{"_id": id}).One(&service)
 	if err != nil {
 		log.Errorln(fmt.Sprintf("Error getting bid: %s", err))
 	}

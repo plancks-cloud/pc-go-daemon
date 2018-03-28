@@ -34,7 +34,7 @@ func GetWallet() []model.Wallet {
 //GetOneWallet returns a single contract
 func GetOneWallet(id string) (model.Wallet, error) {
 	var wallet model.Wallet
-	err := mongo.GetCollection(&wallet).Find(bson.M{"_id": bson.ObjectIdHex(id)}).One(&wallet)
+	err := mongo.GetCollection(&wallet).Find(bson.M{"_id": id}).One(&wallet)
 	if err != nil {
 		log.Errorln(fmt.Sprintf("Error getting wallet: %s", err))
 	}

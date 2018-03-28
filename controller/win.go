@@ -31,7 +31,7 @@ func GetWin() []model.Win {
 //GetWinsByContractID returns all wins for a contract
 func GetWinsByContractID(contractID string) []model.Win {
 	var wins []model.Win
-	mongo.GetCollection(model.Bid{}).Find(bson.M{"contractId": bson.ObjectIdHex(contractID)}).All(&wins)
+	mongo.GetCollection(model.Bid{}).Find(bson.M{"contractId": contractID}).All(&wins)
 	for _, row := range wins {
 		log.Infoln(fmt.Sprintf("Item: %s", row.ID))
 	}
@@ -41,7 +41,7 @@ func GetWinsByContractID(contractID string) []model.Win {
 //GetOneWin returns a single win
 func GetOneWin(id string) (model.Win, error) {
 	var win model.Win
-	err := mongo.GetCollection(&win).Find(bson.M{"_id": bson.ObjectIdHex(id)}).One(&win)
+	err := mongo.GetCollection(&win).Find(bson.M{"_id": id}).One(&win)
 	if err != nil {
 		log.Errorln(fmt.Sprintf("Error getting win: %s", err))
 	}
