@@ -28,3 +28,15 @@ func Post(url string, jsonBytes []byte) {
 	log.Infoln(fmt.Sprintf("Response body: %s", string(r)))
 
 }
+
+//Get sends a request to a URL and returns the response
+func Get(url string) (*http.Response, error) {
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		log.Errorln(fmt.Sprintf("Error creating request during sync: %s", err))
+		return nil, err
+	}
+	client := &http.Client{}
+
+	return client.Do(req)
+}
