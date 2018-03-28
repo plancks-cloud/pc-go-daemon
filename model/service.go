@@ -44,10 +44,7 @@ func (service *Service) Expired(contract *Contract) bool {
 	if contract.RunUntil == 0 {
 		return false
 	}
-	if now > contract.RunUntil {
-		return true
-	}
-	return true
+	return now > contract.RunUntil
 }
 
 //ServiceState models the current running state of a service
