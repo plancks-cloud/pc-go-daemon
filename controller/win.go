@@ -69,7 +69,7 @@ func CheckForWins(contract model.Contract) {
 	for _, element := range bids {
 		if element.Votes > winnerVotes {
 			winnerVotes = element.Votes
-			winnerID = element.ID
+			winnerID = element.FromAccount
 		}
 	}
 
