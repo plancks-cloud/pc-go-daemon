@@ -1,10 +1,15 @@
 package controller
 
 import (
+	"context"
 	"fmt"
 
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/model"
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/mongo"
+	"git.amabanana.com/plancks-cloud/pc-go-daemon/util"
+	"github.com/docker/docker/api/types"
+	"github.com/docker/docker/api/types/swarm"
+	"github.com/docker/docker/client"
 	"github.com/globalsign/mgo/bson"
 	log "github.com/sirupsen/logrus"
 )
@@ -30,7 +35,7 @@ func CreateServiceFromWin(win *model.Win) {
 		Name:           contract.ServiceName,
 		Image:          contract.ImageAMD64,
 		HasWorked:      false,
-		EffectiveDate:  contract.Timestamp,
+		EffectiveDate:  util.MakeTimestamp(),
 		Network:        "",
 		HealthyManaged: false,
 		Replicas:       contract.Replicas,
@@ -63,4 +68,136 @@ func GetOneService(id string) (model.Service, error) {
 func UpdateService(service *model.Service) error {
 	err := service.Upsert()
 	return err
+}
+
+//ReconServicesAsync synchronises the docker environment with the desired running contracts
+func ReconServicesAsync() {
+	go reconServices()
+}
+
+func reconServices() {
+	servicesNotYetCreated, servicesToBeDeleted := compareRunningServicesToDB()
+	createServices(servicesNotYetCreated)
+	deleteServices(servicesToBeDeleted)
+}
+
+func compareRunningServicesToDB() (
+	servicesNotYetCreated []model.Service,
+	servicesToBeDeleted []model.ServiceState) {
+
+	desiredServices := GetService()
+	existingServices := DockerListRunningServices()
+
+	for _, service := range desiredServices {
+		found := false
+		i := 0
+		for !found && i < len(existingServices) {
+			found = service.Name == existingServices[i].Name
+			i++
+		}
+		if !found {
+			contract, err := GetOneContract(service.ContractID)
+			if err != nil {
+				log.Fatalln(fmt.Sprintf("Error getting contract %s: %s", service.ContractID, err))
+			}
+			if !service.Expired(&contract) {
+				servicesNotYetCreated = append(servicesNotYetCreated, service)
+			}
+		}
+	}
+
+	for _, runningService := range existingServices {
+		for _, service := range desiredServices {
+			contract, err := GetOneContract(service.ContractID)
+			if err != nil {
+				log.Fatalln(fmt.Sprintf("Error getting contract %s: %s", service.ContractID, err))
+			}
+			if service.Name == runningService.Name {
+				if service.Expired(&contract) {
+					servicesToBeDeleted = append(servicesToBeDeleted, runningService)
+				}
+			}
+		}
+	}
+
+	return servicesNotYetCreated, servicesToBeDeleted
+}
+
+func createServices(services []model.Service) {
+	existingServices := DockerListRunningServices()
+	found := false
+
+	for _, service := range services {
+
+	SearchRunningServicesLoop:
+		for _, runningService := range existingServices {
+			if service.Name == runningService.Name {
+				found = true
+				break SearchRunningServicesLoop
+			}
+		}
+		if !found {
+			contract, err := GetOneContract(service.ContractID)
+			if err != nil {
+				log.Errorln(
+					fmt.Sprintf("Error getting contract for service with contractID %s, %s",
+						service.ContractID, err))
+			}
+			createService(&service, &contract)
+		}
+	}
+
+}
+
+func createService(service *model.Service, contract *model.Contract) {
+	cli, err := client.NewEnvClient()
+	ctx := context.Background()
+	if err != nil {
+		log.Panicln(fmt.Sprintf("Error getting docker client environment: %s", err))
+	}
+
+	replicas := uint64(contract.Replicas)
+
+	spec := swarm.ServiceSpec{
+		Annotations: swarm.Annotations{
+			Name: contract.ServiceName,
+		},
+		Mode: swarm.ServiceMode{
+			Replicated: &swarm.ReplicatedService{
+				Replicas: &replicas,
+			},
+		},
+		TaskTemplate: swarm.TaskSpec{
+			ContainerSpec: &swarm.ContainerSpec{
+				Image: service.Image,
+			},
+			Resources: &swarm.ResourceRequirements{
+				Limits: &swarm.Resources{
+					MemoryBytes: int64(contract.RequiredMBMemory * 1024 * 1024),
+				},
+			},
+		},
+	}
+
+	_, err = cli.ServiceCreate(
+		ctx,
+		spec,
+		types.ServiceCreateOptions{},
+	)
+
+	if err != nil {
+		log.Errorln(fmt.Sprintf("Error creating docker service: %s", err))
+	}
+}
+
+func deleteServices(services []model.ServiceState) {
+	cli, err := client.NewEnvClient()
+	ctx := context.Background()
+	if err != nil {
+		log.Panicln(fmt.Sprintf("Error getting docker client environment: %s", err))
+	}
+
+	for _, service := range services {
+		cli.ServiceRemove(ctx, service.ID)
+	}
 }

@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/mongo"
+	"git.amabanana.com/plancks-cloud/pc-go-daemon/util"
 	"github.com/docker/docker/api/types/swarm"
 	uuid "github.com/nu7hatch/gouuid"
 	"vbom.ml/util/sortorder"
@@ -23,7 +24,7 @@ type Service struct {
 }
 
 //Push saves a bid to MongoDB
-func (service Service) Push() error {
+func (service *Service) Push() error {
 	if len(service.ID) == 0 {
 		u, _ := uuid.NewV4()
 		service.ID = u.String()
@@ -33,8 +34,20 @@ func (service Service) Push() error {
 }
 
 //Upsert updates a document if it exists, otherwise inserts
-func (service Service) Upsert() error {
+func (service *Service) Upsert() error {
 	return mongo.UpsertWithID(service.ID, service)
+}
+
+//Expired checks if a service should still be running according to the contract it was created with
+func (service *Service) Expired(contract *Contract) bool {
+	now := util.MakeTimestamp()
+	if contract.RunUntil == 0 {
+		return false
+	}
+	if now > contract.RunUntil {
+		return true
+	}
+	return true
 }
 
 //ServiceState models the current running state of a service
