@@ -7,6 +7,7 @@ import (
 
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/controller"
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/model"
+	"git.amabanana.com/plancks-cloud/pc-go-daemon/util"
 
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/api"
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/mongo"
@@ -46,7 +47,10 @@ func initAll() {
 	model.InitRepo()
 
 	go func() {
+		//Wake up the function
+		util.Options(model.DBSyncURL)
 		for {
+			//Sync and sleep
 			controller.PullAll()
 			controller.PushAll()
 			time.Sleep(1 * time.Minute)
