@@ -57,7 +57,7 @@ func CheckForWinsLater(contract model.Contract) {
 
 //CheckForWins announces winners where relavant
 func CheckForWins(contract model.Contract) {
-
+	log.Infoln("win controller: CheckForWins")
 	twoMinutesAfterContractCreated := contract.Timestamp + (1000 * 60 * 2)
 	now := util.MakeTimestamp()
 
@@ -92,6 +92,7 @@ func CheckForWins(contract model.Contract) {
 
 //CreateWinFromContract creates win
 func CreateWinFromContract(winnerID string, contract model.Contract) {
+	log.Infoln("win controller: CreateWinFromContract")
 	uuidString, _ := uuid.NewV4()
 	win := model.Win{
 		ID:            uuidString.String(),
@@ -106,12 +107,15 @@ func CreateWinFromContract(winnerID string, contract model.Contract) {
 
 //CallbackWinAsync checks an incoming DB row to see if it is interesting
 func CallbackWinAsync(win model.Win) {
+	log.Infoln("win controller: CallbackWinAsync")
 	go CheckIfIWon(win)
 }
 
 //CheckIfIWon if I won will take the next steps if needed
 func CheckIfIWon(win model.Win) {
+	log.Infoln("win controller: Checking if I won")
 	if model.SystemWallet.ID == win.WinnerAccount {
+		log.Infoln("win controller: I won!")
 		CreateServiceFromWin(&win)
 	}
 }

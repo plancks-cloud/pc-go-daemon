@@ -28,6 +28,7 @@ func CreateService(service *model.Service) model.MessageOK {
 //is created from a win item
 func CreateServiceFromWin(win *model.Win) {
 
+	log.Infoln("Creating service from win")
 	//Check that does not exist first..
 	_, possibleError := GetOneServiceByContract(win.ContractID)
 	if possibleError != nil {
