@@ -27,6 +27,16 @@ func CreateService(service *model.Service) model.MessageOK {
 //CreateServiceFromWin creates a service instance and saves it to the local database. This service
 //is created from a win item
 func CreateServiceFromWin(win *model.Win) {
+
+	//Check that does not exist first..
+	_, possibleError := GetOneServiceByContract(win.ContractID)
+	if possibleError != nil {
+		log.Infoln(fmt.Sprintf("Could not find service for contractID: %s", win.ContractID))
+	} else {
+		log.Infoln(fmt.Sprintf("Service already exists.. dont need to create: %s", win.ID))
+		return
+	}
+
 	contract, err := GetOneContract(win.ContractID)
 	if err != nil {
 		log.Fatalln("Error getting contract of the win: %s", err)
@@ -76,6 +86,13 @@ func GetOneService(id string) (model.Service, error) {
 	if err != nil {
 		log.Errorln(fmt.Sprintf("Error getting bid: %s", err))
 	}
+	return service, err
+}
+
+//GetOneServiceByContract returns a single contract
+func GetOneServiceByContract(contractID string) (model.Service, error) {
+	var service model.Service
+	err := mongo.GetCollection(&service).Find(bson.M{"contractId": contractID}).One(&service)
 	return service, err
 }
 
