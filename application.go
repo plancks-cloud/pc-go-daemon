@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"git.amabanana.com/plancks-cloud/pc-go-daemon/controller"
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/model"
 
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/api"
@@ -41,4 +42,5 @@ func initAll() {
 	log.Info(fmt.Sprintf("Wallet: %s", model.GetEnvWallet()))
 	log.Info("Starting")
 	mongo.Init()
+	controller.DBPullDown()
 }
