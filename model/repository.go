@@ -11,6 +11,9 @@ var (
 	SystemWallet *Wallet
 )
 
+//DBSyncURL is the endpoint for the function
+const DBSyncURL = "https://us-central1-plancks-cloud.cloudfunctions.net/pc-function-db-sync-v1"
+
 //InitRepo initialises the repository and it's variables.
 func InitRepo() {
 	initWallet()
