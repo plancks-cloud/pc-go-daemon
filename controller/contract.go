@@ -102,6 +102,7 @@ func callbackContract(contract model.Contract) {
 		return
 	}
 
+	log.Infoln(fmt.Sprintf("> Going to consider bidding on this contract: %s ", contract.ID))
 	considerContract(contract)
 
 }

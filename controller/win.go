@@ -48,6 +48,7 @@ func GetOneWin(id string) (model.Win, error) {
 
 //CheckForWinsLater announces winners where relavant
 func CheckForWinsLater(contract model.Contract) {
+	log.Infoln(fmt.Sprintf("> Going to check for wins in a minute: %s ", contract.ID))
 	time.Sleep(1 * time.Minute)
 	PullAll()
 	CheckForWins(contract)
