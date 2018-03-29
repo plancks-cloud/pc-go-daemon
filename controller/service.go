@@ -54,6 +54,8 @@ func CreateServiceFromWin(win *model.Win) {
 
 	log.Infoln(fmt.Sprintf("Creating service for contractID: %s", win.ContractID))
 	CreateService(&service)
+	ReconServicesNow()
+
 }
 
 //GetService returns all services stored in the datastore

@@ -25,6 +25,11 @@ func SyncDatabase() {
 	}()
 }
 
+//ReconServicesNow runs the recon right now
+func ReconServicesNow() {
+	reconServices()
+}
+
 //ReconServices sets up scheduler to recon docker services running
 func ReconServices() {
 	go func() {
