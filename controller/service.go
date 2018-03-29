@@ -81,6 +81,26 @@ func GetServiceState() []model.ServiceState {
 
 }
 
+//GetServiceStateResult returns all services stored in the datastore
+func GetServiceStateResult() []model.ServiceStateResult {
+	services := GetService()
+	serviceStates := DockerListRunningServices()
+
+	var results = []model.ServiceStateResult{}
+	for _, service := range services {
+
+		item := model.ServiceStateResult{Service: service, ReplicasLive: 0}
+		for _, state := range serviceStates {
+			if state.Name == service.Name {
+				item.ReplicasLive = state.ReplicasRunning
+			}
+		}
+		results = append(results, item)
+	}
+	return results
+
+}
+
 //GetOneService returns a single contract
 func GetOneService(id string) (model.Service, error) {
 	var service model.Service

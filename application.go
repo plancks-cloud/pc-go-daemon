@@ -31,7 +31,7 @@ func main() {
 	router.HandleFunc("/api/setCurrentWallet", api.CorsHandler(api.SetCurrentWallet)).Methods("POST", "OPTIONS")
 	router.HandleFunc("/api/getOneContract", api.CorsHandler(api.GetOneContract)).Methods("GET", "OPTIONS")
 	router.HandleFunc("/api/getContractResult", api.CorsHandler(api.GetContractResult)).Methods("GET", "OPTIONS")
-	router.HandleFunc("/api/getServiceState", api.CorsHandler(api.GetServiceState)).Methods("GET", "OPTIONS")
+	router.HandleFunc("/api/getServiceStateResult", api.CorsHandler(api.GetServiceStateResult)).Methods("GET", "OPTIONS")
 
 	log.Info(fmt.Sprintf("READY: Listening [:%v]", port))
 	log.Fatal(http.ListenAndServe(fmt.Sprint(":", port), router))

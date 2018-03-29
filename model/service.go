@@ -55,6 +55,12 @@ type ServiceState struct {
 	ReplicasRequired uint64
 }
 
+//ServiceStateResult is a small struct for the client to visualize
+type ServiceStateResult struct {
+	Service      Service `json:"service"`
+	ReplicasLive int     `json:"replicasLive"`
+}
+
 func (service *ServiceState) String() string {
 	return fmt.Sprintf("ID: %s, Name: %s, Running: %d, Required: %d", service.ID, service.Name, service.ReplicasRunning, service.ReplicasRequired)
 }
