@@ -57,14 +57,14 @@ func CheckForWinsLater(contract model.Contract) {
 //CheckForWins announces winners where relavant
 func CheckForWins(contract model.Contract) {
 	log.Infoln("win controller: CheckForWins")
-	twoMinutesAfterContractCreated := contract.Timestamp + (1000 * 60 * 2)
+	someTimeAfterContract := contract.Timestamp + (1000 * 60 * 2.5)
 	now := util.MakeTimestamp()
 
-	if now < twoMinutesAfterContractCreated {
+	if now < someTimeAfterContract {
 		log.Infoln(fmt.Sprintf("> Too early to find a winner. Stopping: %s ", contract.ID))
 		return
 	}
-	log.Infoln(fmt.Sprintf("> Its been more than two minutes. We can announce a winner. ID: %s ", contract.ID))
+	log.Infoln(fmt.Sprintf("> Its been more than n minutes. We can announce a winner. ID: %s ", contract.ID))
 
 	bids := GetBidsByContractID(contract.ID)
 	if len(bids) == 0 {

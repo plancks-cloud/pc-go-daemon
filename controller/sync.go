@@ -20,7 +20,7 @@ func SyncDatabase() {
 			log.Infoln(fmt.Sprintf("> Time to sync"))
 			PullAll()
 			PushAll()
-			time.Sleep(1 * time.Minute)
+			time.Sleep(30 * time.Second)
 		}
 	}()
 }
