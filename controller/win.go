@@ -32,7 +32,7 @@ func GetWin() []model.Win {
 //GetWinsByContractID returns all wins for a contract
 func GetWinsByContractID(contractID string) []model.Win {
 	var wins []model.Win
-	mongo.GetCollection(model.Bid{}).Find(bson.M{"contractId": contractID}).All(&wins)
+	mongo.GetCollection(model.Win{}).Find(bson.M{"contractId": contractID}).All(&wins)
 	return wins
 }
 
