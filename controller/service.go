@@ -91,6 +91,11 @@ func GetServiceStateResult() []model.ServiceStateResult {
 	var results = []model.ServiceStateResult{}
 	for _, service := range services {
 
+		contract, _ := GetOneContract(service.ContractID)
+		if service.Expired(&contract) {
+			continue
+		}
+
 		item := model.ServiceStateResult{Service: service, ReplicasLive: 0}
 		for _, state := range serviceStates {
 			if state.Name == service.Name {
