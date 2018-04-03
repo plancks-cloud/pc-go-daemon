@@ -8,13 +8,13 @@ import (
 )
 
 //DockerListServices lists all docker services in DB
-func DockerListServices(w http.ResponseWriter, r *http.Request) {
+func DockerListServices(w http.ResponseWriter, _ *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(controller.DockerListServices())
 }
 
 //DockerListRunningServices lists all docker services running
-func DockerListRunningServices(w http.ResponseWriter, r *http.Request) {
+func DockerListRunningServices(w http.ResponseWriter, _ *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(controller.DockerListRunningServices())
 }

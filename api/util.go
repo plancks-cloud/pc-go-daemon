@@ -9,7 +9,7 @@ import (
 )
 
 //Ping perform a health check
-func Ping(w http.ResponseWriter, r *http.Request) {
+func Ping(w http.ResponseWriter, _ *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(controller.HealthCheck())
 }
@@ -31,7 +31,7 @@ func CorsHandler(f http.HandlerFunc) http.HandlerFunc {
 }
 
 //ForceSync forces a sync
-func ForceSync(w http.ResponseWriter, r *http.Request) {
+func ForceSync(w http.ResponseWriter, _ *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(controller.ForceSync())
 }

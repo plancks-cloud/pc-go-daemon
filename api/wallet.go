@@ -24,7 +24,7 @@ func CreateWallet(w http.ResponseWriter, r *http.Request) {
 }
 
 //SetCurrentWallet sets the currently used wallet
-func SetCurrentWallet(w http.ResponseWriter, r *http.Request) {
+func SetCurrentWallet(w http.ResponseWriter, _ *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(controller.SetCurrentWallet())
 }
