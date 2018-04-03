@@ -14,15 +14,13 @@ import (
 )
 
 //GetWin returns all wins stored in the datastore
-func GetWin() []model.Win {
-	var wins []model.Win
+func GetWin() (wins []model.Win) {
 	mongo.GetCollection(model.Win{}).Find(nil).All(&wins)
 	return wins
 }
 
 //GetWinsByContractID returns all wins for a contract
-func GetWinsByContractID(contractID string) []model.Win {
-	var wins []model.Win
+func GetWinsByContractID(contractID string) (wins []model.Win) {
 	mongo.GetCollection(model.Win{}).Find(bson.M{"contractId": contractID}).All(&wins)
 	return wins
 }

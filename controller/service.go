@@ -59,8 +59,7 @@ func CreateServiceFromWin(win *model.Win) {
 }
 
 //GetService returns all services stored in the datastore
-func GetService() []model.Service {
-	var services []model.Service
+func GetService() (services []model.Service) {
 	mongo.GetCollection(model.Service{}).Find(nil).All(&services)
 	for _, service := range services {
 		log.Infoln(fmt.Sprintf("Service: %s", service.ID))
@@ -69,11 +68,10 @@ func GetService() []model.Service {
 }
 
 //GetServiceStateResult returns all services stored in the datastore
-func GetServiceStateResult() []model.ServiceStateResult {
+func GetServiceStateResult() (serviceStateResults []model.ServiceStateResult) {
 	services := GetService()
 	serviceStates := DockerListRunningServices()
 
-	var results = []model.ServiceStateResult{}
 	for _, service := range services {
 
 		contract, _ := GetOneContract(service.ContractID)
@@ -87,9 +85,9 @@ func GetServiceStateResult() []model.ServiceStateResult {
 				item.ReplicasLive = state.ReplicasRunning
 			}
 		}
-		results = append(results, item)
+		serviceStateResults = append(serviceStateResults, item)
 	}
-	return results
+	return serviceStateResults
 
 }
 
