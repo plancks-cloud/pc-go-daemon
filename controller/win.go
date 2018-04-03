@@ -27,8 +27,8 @@ func GetWinsByContractID(contractID string) (wins []model.Win) {
 
 //CheckForWinsLater announces winners where relevant
 func CheckForWinsLater(contract model.Contract) {
-	log.Infoln(fmt.Sprintf("> ⏰ ⏰ ⏰  Going to check for wins in two minutes: %s ", contract.ID))
-	time.Sleep(2 * time.Minute)
+	log.Infoln(fmt.Sprintf("💤   Going to check for wins in two minutes: %s ", contract.ID))
+	time.Sleep(65 * time.Second)
 	CheckForWinsNow(contract)
 
 }
@@ -36,17 +36,18 @@ func CheckForWinsLater(contract model.Contract) {
 //CheckForWins announces winners where relevant
 func CheckForWinsNow(contract model.Contract) {
 	log.Infoln("win controller: CheckForWins")
-	someTimeAfterContract := contract.Timestamp + (1000 * 60 * 2.5)
+	ripeTime := contract.Timestamp + (1000 * 60)
 	now := util.MakeTimestamp()
-	log.Infoln("WinController: Was comparing... %s and %d", someTimeAfterContract, now)
-	log.Infoln("WinController: Now is: ", now)
-	log.Infoln("WinController: Waitin:", someTimeAfterContract, now)
 
-	//if now < someTimeAfterContract {
-	//	log.Infoln(fmt.Sprintf("> Too early to find a winner. Stopping: %s ", contract.ID))
-	//	return
-	//}
-	//log.Infoln(fmt.Sprintf("> Its been more than n minutes. We can announce a winner. ID: %s ", contract.ID))
+	//If now is before the time we need
+	if now < ripeTime {
+		log.Infoln(fmt.Sprintf("> Too early to find a winner. Stopping: %s ", contract.ID))
+		return
+	}
+	log.Infoln(fmt.Sprintf("> Its been more than n minutes. We can announce a winner. ID: %s ", contract.ID))
+
+	//TODO: check if it has been won
+	//
 
 	bids := GetBidsByContractID(contract.ID)
 	if len(bids) == 0 {
@@ -62,7 +63,7 @@ func CheckForWinsNow(contract model.Contract) {
 		CreateWinFromContract(bids[winner].FromAccount, contract)
 		winnerCount++
 	}
-	log.Infoln(fmt.Sprintf("> # of winners: %i", winnerCount))
+	log.Infoln(fmt.Sprintf("> # of winners: ", winnerCount))
 
 	if winnerCount == 0 {
 		log.Infoln(fmt.Sprintf("> This should never happen. No highest bid: %s ", contract.ID))
@@ -102,7 +103,7 @@ func CallbackWinAsync(win model.Win) {
 //CheckIfIWon if I won will take the next steps if needed
 func CheckIfIWon(win model.Win) {
 	if model.SystemWallet.ID == win.WinnerAccount {
-		log.Infoln("🏆 🏆 🏆   I'm the winner of this contract %s", win.ContractID)
+		log.Infoln("🏆  I'm the winner of this contract %s", win.ContractID)
 		CreateServiceFromWin(&win)
 	}
 }
