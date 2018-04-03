@@ -106,6 +106,7 @@ func considerContract(contract model.Contract) {
 	canHandle := true //TODO
 
 	if canHandle {
+		log.Infoln(fmt.Sprintf("> Actually voting on this contract: %s ", contract.ID))
 		CreateBidFromContract(contract)
 		//Check for wins in a minute
 		go func() {
