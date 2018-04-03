@@ -17,7 +17,7 @@ func SyncDatabase() {
 		util.Options(model.DBSyncURL)
 		for {
 			//Sync and sleep
-			log.Infoln(fmt.Sprintf("⏰    Time to sync database"))
+			log.Infoln(fmt.Sprintf("⏰  Time to sync database"))
 			PullAll()
 			PushAll()
 			time.Sleep(30 * time.Second)
@@ -35,7 +35,7 @@ func ReconServices() {
 	time.Sleep(15 * time.Second)
 	go func() {
 		for {
-			log.Infoln(fmt.Sprintf("⏰    Time to recon services"))
+			log.Infoln(fmt.Sprintf("⏰  Time to recon services"))
 			reconServices()
 			time.Sleep(30 * time.Second)
 		}
