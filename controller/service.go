@@ -176,7 +176,7 @@ func createServices(services []model.Service) {
 					fmt.Sprintf("Error getting contract for service with contractID %s, %s",
 						service.ContractID, err))
 			}
-			log.Infoln(fmt.Sprintf("GOING TO CREATE SERVICE!!!: %s", service.ID))
+			log.Infoln(fmt.Sprintf("✅ ✅ ✅   Creating a service for contractId: %s", service.ContractID))
 			createService(&service, &contract)
 		}
 	}
