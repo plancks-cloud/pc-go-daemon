@@ -14,8 +14,8 @@ func Ping(w http.ResponseWriter, _ *http.Request) {
 	json.NewEncoder(w).Encode(controller.HealthCheck())
 }
 
-//CorsHandler does cors check
-func CorsHandler(f http.HandlerFunc) http.HandlerFunc {
+//CORSHandler does CORS check
+func CORSHandler(f http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
 		w.Header().Set("Access-Control-Allow-Origin", "*")
