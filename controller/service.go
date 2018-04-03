@@ -31,9 +31,9 @@ func DoesServiceExistsFromWin(win *model.Win) bool {
 	_, possibleError := GetOneServiceByContract(win.ContractID)
 	if possibleError != nil {
 		log.Infoln(fmt.Sprintf("Could not find service for contractID: %s", win.ContractID))
-		return true
+		return false
 	}
-	return false
+	return true
 
 }
 
