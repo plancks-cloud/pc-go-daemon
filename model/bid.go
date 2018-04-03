@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/mongo"
-	uuid "github.com/nu7hatch/gouuid"
+	"github.com/nu7hatch/gouuid"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -58,3 +58,10 @@ func (bid Bid) Upsert() error {
 	err := mongo.UpsertWithID(bid.ID, bid)
 	return err
 }
+
+//ByName is a struct
+type ByVotes []Bid
+
+func (n ByVotes) Len() int           { return len(n) }
+func (n ByVotes) Swap(i, j int)      { n[i], n[j] = n[j], n[i] }
+func (n ByVotes) Less(i, j int) bool { return n[i].Votes < n[j].Votes }
