@@ -7,6 +7,7 @@ import (
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/mongo"
 	uuid "github.com/nu7hatch/gouuid"
 	log "github.com/sirupsen/logrus"
+	"git.amabanana.com/plancks-cloud/pc-go-daemon/util"
 )
 
 //Win object represents bid document in DB
@@ -49,4 +50,13 @@ func (win Win) Push() error {
 //Upsert updates a document if it exists, otherwise inserts
 func (win Win) Upsert() error {
 	return mongo.UpsertWithID(win.ID, win)
+}
+
+//Expired checks if a service should still be running according to the contract it was created with
+func (win *Win) Expired(contract *Contract) bool {
+	now := util.MakeTimestamp()
+	if contract.RunUntil == 0 {
+		return false
+	}
+	return now > contract.RunUntil
 }

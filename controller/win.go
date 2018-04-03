@@ -87,6 +87,15 @@ func CreateWinFromContract(winnerID string, contract model.Contract) {
 
 //CallbackWinAsync checks an incoming DB row to see if it is interesting
 func CallbackWinAsync(win model.Win) {
+
+	//Check if expired first.
+	contract, _  := GetOneContract(win.ContractID)
+	//Should be there... if the win is there
+	if win.Expired(&contract) {
+		//Ignore
+		return
+	}
+
 	go CheckIfIWon(win)
 }
 
