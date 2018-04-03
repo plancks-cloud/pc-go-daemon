@@ -27,7 +27,7 @@ type BidSyncable struct {
 	Rows       []Bid    `json:"rows" bson:"rows"`
 }
 
-//ToJSON converst object o json
+//ToJSON converts object o json
 func (bidSyncable BidSyncable) ToJSON() []byte {
 	jsonBytes, jsonError := json.Marshal(bidSyncable)
 	if jsonError != nil {

@@ -26,7 +26,7 @@ type WinSyncable struct {
 	Rows       []Win    `json:"rows" bson:"rows"`
 }
 
-//ToJSON converst object o json
+//ToJSON converts object o json
 func (winSyncable WinSyncable) ToJSON() []byte {
 	jsonBytes, jsonError := json.Marshal(winSyncable)
 	if jsonError != nil {
