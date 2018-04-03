@@ -5,7 +5,6 @@ import (
 
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/model"
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/mongo"
-	"github.com/globalsign/mgo/bson"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -29,14 +28,4 @@ func GetWallet() []model.Wallet {
 	var wallets []model.Wallet
 	mongo.GetCollection(model.Wallet{}).Find(nil).All(&wallets)
 	return wallets
-}
-
-//GetOneWallet returns a single contract
-func GetOneWallet(id string) (model.Wallet, error) {
-	var wallet model.Wallet
-	err := mongo.GetCollection(&wallet).Find(bson.M{"_id": id}).One(&wallet)
-	if err != nil {
-		log.Errorln(fmt.Sprintf("Error getting wallet: %s", err))
-	}
-	return wallet, err
 }

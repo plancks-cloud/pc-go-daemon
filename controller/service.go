@@ -68,21 +68,6 @@ func GetService() []model.Service {
 	return services
 }
 
-//GetServiceState returns all services stored in the datastore
-func GetServiceState() []model.ServiceState {
-	services := GetService()
-	var results = []model.ServiceState{}
-	for _, element := range services {
-		item := model.ServiceState{ID: element.ID, Name: element.Name}
-		//TODO
-		item.ReplicasRequired = 1
-		item.ReplicasRunning = 1
-		results = append(results, item)
-	}
-	return results
-
-}
-
 //GetServiceStateResult returns all services stored in the datastore
 func GetServiceStateResult() []model.ServiceStateResult {
 	services := GetService()
@@ -106,16 +91,6 @@ func GetServiceStateResult() []model.ServiceStateResult {
 	}
 	return results
 
-}
-
-//GetOneService returns a single contract
-func GetOneService(id string) (model.Service, error) {
-	var service model.Service
-	err := mongo.GetCollection(&service).Find(bson.M{"_id": id}).One(&service)
-	if err != nil {
-		log.Errorln(fmt.Sprintf("Error getting bid: %s", err))
-	}
-	return service, err
 }
 
 //GetOneServiceByContract returns a single contract
