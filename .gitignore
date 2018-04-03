@@ -1,2 +1,4 @@
 pc-go-daemon
 *.exe
+
+.idea/*
