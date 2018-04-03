@@ -67,7 +67,7 @@ func CallbackContractAsync(contract model.Contract, interesting bool) {
 }
 
 //callbackContract checks an incoming DB row to see if it is interesting
-// This method is long running and should be callled asynchronously!
+// This method is long running and should be called asynchronously!
 func callbackContract(contract model.Contract, interesting bool) {
 
 	//Check if died of old age
@@ -87,6 +87,7 @@ func callbackContract(contract model.Contract, interesting bool) {
 			if interesting {
 				log.Infoln(fmt.Sprintf(" 🍻 🍻 🍻   Thinking: I've already voted. Not voting for contract again, ID: %s", contract.ID))
 			}
+			CheckForWinsLater(contract) //This will ensure that it checks for wins that are currently not in memory
 			return //Already voted.. don't care
 		}
 	}
