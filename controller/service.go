@@ -58,12 +58,9 @@ func CreateServiceFromWin(win *model.Win) {
 
 }
 
-//GetService returns all services stored in the datastore
+//GetService returns all services stored in the DataStore
 func GetService() (services []model.Service) {
 	mongo.GetCollection(model.Service{}).Find(nil).All(&services)
-	for _, service := range services {
-		log.Infoln(fmt.Sprintf("Service: %s", service.ID))
-	}
 	return services
 }
 
