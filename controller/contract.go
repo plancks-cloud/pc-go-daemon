@@ -73,7 +73,7 @@ func callbackContract(contract model.Contract, interesting bool) {
 	//Check if died of old age
 	if contract.RunUntil != 0 && util.MakeTimestamp() > contract.RunUntil {
 		if interesting {
-			log.Infoln(fmt.Sprintf("Thinking: 🙈 🙉 🙊 Contract is ancient. Ignoring, ID: %s", contract.ID))
+			log.Infoln(fmt.Sprintf("🙈 🙉 🙊   Thinking: Contract is ancient. Ignoring, ID: %s", contract.ID))
 		}
 		return
 	}
@@ -84,8 +84,10 @@ func callbackContract(contract model.Contract, interesting bool) {
 	bids := GetBidsByContractID(contract.ID)
 	for _, b := range bids {
 		if b.FromAccount == model.SystemWallet.ID {
-			log.Infoln(fmt.Sprintf("Thinking: 🍻 🍻 🍻  I've already voted. Not voting for contract again, ID: %s", contract.ID))
-			return //Already voted..
+			if interesting {
+				log.Infoln(fmt.Sprintf(" 🍻 🍻 🍻   Thinking: I've already voted. Not voting for contract again, ID: %s", contract.ID))
+			}
+			return //Already voted.. don't care
 		}
 	}
 
@@ -94,24 +96,24 @@ func callbackContract(contract model.Contract, interesting bool) {
 
 	wins := GetWinsByContractID(contract.ID)
 	if len(wins) > 0 {
-		log.Infoln(fmt.Sprintf("Thinking: 😒 😒 😒  Contract has been won. Ignoring, ID: %s", contract.ID))
+		log.Infoln(fmt.Sprintf("😒 😒 😒   Thinking: Contract has been won. Ignoring, ID: %s", contract.ID))
 		return
 	}
 
-	log.Infoln(fmt.Sprintf("Thinking: ☺️ ☺️ ☺️  I'd like to consider bidding on this contract, ID: %s", contract.ID))
+	log.Infoln(fmt.Sprintf("☺️ ☺️ ☺️  Thinking: I'd like to consider bidding on this contract, ID: %s", contract.ID))
 	considerContract(contract)
 
 }
 
 //considerContract checks an incoming DB row to see if I can run it and vote for it
 func considerContract(contract model.Contract) {
-	log.Infoln(fmt.Sprintf("Asking: ❓ ❓ ❓  Can I run this contract: %s ", contract.ID))
+	log.Infoln(fmt.Sprintf("❓ ❓ ❓   Asking: Can I run this contract: %s ", contract.ID))
 
 	//Check if I can run this spec
 	canHandle := true //TODO
 
 	if canHandle {
-		log.Infoln(fmt.Sprintf("> 🤩 🤩 🤩  Actually bidding on this contract: %s ", contract.ID))
+		log.Infoln(fmt.Sprintf("🤩 🤩 🤩   > Actually bidding on this contract: %s ", contract.ID))
 		CreateBidFromContract(contract)
 		//Check for wins in a minute
 		go func() {
