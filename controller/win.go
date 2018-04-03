@@ -10,6 +10,7 @@ import (
 	"github.com/globalsign/mgo/bson"
 	"github.com/nu7hatch/gouuid"
 	log "github.com/sirupsen/logrus"
+	"sort"
 )
 
 //CreateWin saves a win
@@ -73,23 +74,17 @@ func CheckForWins(contract model.Contract) {
 		return
 	}
 
-	//TODO: better impl
-	winnerVotes := -1
-	winnerID := ""
-
-	for _, element := range bids {
-		if element.Votes > winnerVotes {
-			winnerVotes = element.Votes
-			winnerID = element.FromAccount
-		}
+	sort.Sort(model.ByVotes(bids))
+	winnerCount := 0
+	for winner := 1; winner <= contract.Instances; winner++ {
+		log.Infoln(fmt.Sprintf("> Going to say the winner was: %s", bids[winner].FromAccount))
+		CreateWinFromContract(bids[winner].FromAccount, contract)
+		winnerCount++
 	}
+	log.Infoln(fmt.Sprintf("> # of winners: %i", winnerCount))
 
-	if winnerVotes != -1 {
-		log.Infoln(fmt.Sprintf("> Going to say the winner was: %s", winnerID))
-		CreateWinFromContract(winnerID, contract)
-	} else {
+	if winnerCount == 0 {
 		log.Infoln(fmt.Sprintf("> This should never happen. No highest bid: %s ", contract.ID))
-
 	}
 
 }
