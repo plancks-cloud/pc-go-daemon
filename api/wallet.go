@@ -18,14 +18,14 @@ func CreateWallet(w http.ResponseWriter, r *http.Request) {
 	err := decoder.Decode(&wallet)
 	if err != nil {
 		log.Errorln(fmt.Sprintf("There was a problem decoding the post message: %s", err))
-		util.RespondWithJson(w, model.OkMessage(false, err.Error()))
+		util.RespondWithJsonError(w, err)
 		return
 	}
-	util.RespondWithJson(w, controller.CreateWallet(&wallet))
+	util.RespondWithJsonObject(w, controller.CreateWallet(&wallet))
 
 }
 
 //SetCurrentWallet sets the currently used wallet
 func SetCurrentWallet(w http.ResponseWriter, _ *http.Request) {
-	util.RespondWithJson(w, controller.SetCurrentWallet())
+	util.RespondWithJsonObject(w, controller.SetCurrentWallet())
 }
