@@ -46,7 +46,7 @@ func GetOneWin(id string) (model.Win, error) {
 	return win, err
 }
 
-//CheckForWinsLater announces winners where relavant
+//CheckForWinsLater announces winners where relevant
 func CheckForWinsLater(contract model.Contract) {
 	log.Infoln(fmt.Sprintf("> Going to check for wins in two minutes: %s ", contract.ID))
 	time.Sleep(2 * time.Minute)
@@ -54,7 +54,7 @@ func CheckForWinsLater(contract model.Contract) {
 
 }
 
-//CheckForWins announces winners where relavant
+//CheckForWins announces winners where relevant
 func CheckForWins(contract model.Contract) {
 	log.Infoln("win controller: CheckForWins")
 	someTimeAfterContract := contract.Timestamp + (1000 * 60 * 2.5)
