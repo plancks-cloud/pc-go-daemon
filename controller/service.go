@@ -159,7 +159,6 @@ func compareRunningServicesToDB() (
 }
 
 func createServices(services []model.Service) {
-	log.Infoln(fmt.Sprintf("createServices method.."))
 	existingServices := DockerListRunningServices()
 	found := false
 
