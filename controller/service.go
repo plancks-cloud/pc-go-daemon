@@ -25,18 +25,26 @@ func CreateService(service *model.Service) model.MessageOK {
 	return model.Ok(true)
 }
 
-//CreateServiceFromWin creates a service instance and saves it to the local database. This service
-//is created from a win item
-func CreateServiceFromWin(win *model.Win) {
-
-	log.Infoln("Creating service from win")
+//DoesServiceExistsFromWin checks if a service is there already
+func DoesServiceExistsFromWin(win *model.Win) bool {
 	//Check that does not exist first.. This does look wrong. It isn't 😜 😜 😜
 	_, possibleError := GetOneServiceByContract(win.ContractID)
 	if possibleError != nil {
 		log.Infoln(fmt.Sprintf("Could not find service for contractID: %s", win.ContractID))
-	} else {
+		return true
+	}
+	return false
+
+}
+
+//CreateServiceFromWin creates a service instance and saves it to the local database. This service
+//is created from a win item
+func CreateServiceFromWin(win *model.Win) {
+
+	if DoesServiceExistsFromWin(win) {
 		return
 	}
+
 
 	contract, err := GetOneContract(win.ContractID)
 	if err != nil {
