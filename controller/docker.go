@@ -17,7 +17,7 @@ import (
 func DockerListServices() []model.Service {
 	var services []model.Service
 	services = append(services, model.Service{})
-	AllDockerServices() //Bug?
+	AllDockerServices()
 	return services
 }
 
