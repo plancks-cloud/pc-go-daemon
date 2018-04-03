@@ -4,7 +4,6 @@ import (
 	"net/http"
 	"encoding/json"
 	"fmt"
-	"git.amabanana.com/plancks-cloud/pc-go-daemon/model"
 )
 
 func RespondWithJsonObject(w http.ResponseWriter, v interface{}) {
