@@ -29,21 +29,24 @@ func GetWinsByContractID(contractID string) (wins []model.Win) {
 func CheckForWinsLater(contract model.Contract) {
 	log.Infoln(fmt.Sprintf("> Going to check for wins in two minutes: %s ", contract.ID))
 	time.Sleep(2 * time.Minute)
-	CheckForWins(contract)
+	CheckForWinsNow(contract)
 
 }
 
 //CheckForWins announces winners where relevant
-func CheckForWins(contract model.Contract) {
+func CheckForWinsNow(contract model.Contract) {
 	log.Infoln("win controller: CheckForWins")
 	someTimeAfterContract := contract.Timestamp + (1000 * 60 * 2.5)
 	now := util.MakeTimestamp()
+	log.Infoln("WinController: Was comparing... %s and %d", someTimeAfterContract, now)
+	log.Infoln("WinController: Now is: ", now)
+	log.Infoln("WinController: Waitin:", someTimeAfterContract, now)
 
-	if now < someTimeAfterContract {
-		log.Infoln(fmt.Sprintf("> Too early to find a winner. Stopping: %s ", contract.ID))
-		return
-	}
-	log.Infoln(fmt.Sprintf("> Its been more than n minutes. We can announce a winner. ID: %s ", contract.ID))
+	//if now < someTimeAfterContract {
+	//	log.Infoln(fmt.Sprintf("> Too early to find a winner. Stopping: %s ", contract.ID))
+	//	return
+	//}
+	//log.Infoln(fmt.Sprintf("> Its been more than n minutes. We can announce a winner. ID: %s ", contract.ID))
 
 	bids := GetBidsByContractID(contract.ID)
 	if len(bids) == 0 {
@@ -54,7 +57,7 @@ func CheckForWins(contract model.Contract) {
 
 	sort.Sort(model.ByVotes(bids))
 	winnerCount := 0
-	for winner := 1; winner <= contract.Instances; winner++ {
+	for winner := 0; winner < contract.Instances; winner++ {
 		log.Infoln(fmt.Sprintf("> Going to say the winner was: %s", bids[winner].FromAccount))
 		CreateWinFromContract(bids[winner].FromAccount, contract)
 		winnerCount++
