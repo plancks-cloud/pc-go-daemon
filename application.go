@@ -46,17 +46,6 @@ func initAll() {
 	mongo.Init()
 	model.InitRepo()
 
-	// go func() {
-	// 	//Wake up the function
-	// 	util.Options(model.DBSyncURL)
-	// 	for {
-	// 		//Sync and sleep
-	// 		log.Infoln(fmt.Sprintf("> Time to sync"))
-	// 		controller.PullAll()
-	// 		controller.PushAll()
-	// 		time.Sleep(1 * time.Minute)
-	// 	}
-	// }()
 
 	controller.SyncDatabase()
 	controller.ReconServices()

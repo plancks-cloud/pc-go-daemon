@@ -19,7 +19,7 @@ func CreateContract(contract *model.Contract) model.MessageOK {
 		log.Errorln(fmt.Sprintf("Error saving contract: %s", err))
 		return model.OkMessage(false, err.Error())
 	}
-	log.Infoln(fmt.Sprintf("❤️ ❤️ ❤️ Contract created ID: %s", contract.ID))
+	log.Infoln(fmt.Sprintf("❤️ ❤️ ❤️   Contract created ID: %s", contract.ID))
 	return model.Ok(true)
 
 
