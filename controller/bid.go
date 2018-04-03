@@ -17,8 +17,7 @@ func GetBid() []model.Bid {
 }
 
 //GetBidsByContractID returns all bids for a contract
-func GetBidsByContractID(contractID string) []model.Bid {
-	var bids []model.Bid
+func GetBidsByContractID(contractID string) (bids []model.Bid) {
 	mongo.GetCollection(model.Bid{}).Find(bson.M{"contractId": contractID}).All(&bids)
 	return bids
 }
