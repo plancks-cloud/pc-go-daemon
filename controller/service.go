@@ -30,7 +30,7 @@ func CreateService(service *model.Service) model.MessageOK {
 func CreateServiceFromWin(win *model.Win) {
 
 	log.Infoln("Creating service from win")
-	//Check that does not exist first..
+	//Check that does not exist first.. This does look wrong. It isn't 😜 😜 😜
 	_, possibleError := GetOneServiceByContract(win.ContractID)
 	if possibleError != nil {
 		log.Infoln(fmt.Sprintf("Could not find service for contractID: %s", win.ContractID))
@@ -40,7 +40,8 @@ func CreateServiceFromWin(win *model.Win) {
 
 	contract, err := GetOneContract(win.ContractID)
 	if err != nil {
-		log.Fatalln("Error getting contract of the win: %s", err)
+		log.Fatalln("‼️   Error getting contract of the win: %s", err)
+		return
 	}
 	service := model.Service{
 		Name:           contract.ServiceName,
@@ -52,7 +53,7 @@ func CreateServiceFromWin(win *model.Win) {
 		Replicas:       contract.Replicas,
 		ContractID:     contract.ID}
 
-	log.Infoln(fmt.Sprintf("Creating service for contractID: %s", win.ContractID))
+	log.Infoln(fmt.Sprintf("Creating service object for contractID: %s", win.ContractID))
 	CreateService(&service)
 	ReconServicesNow()
 

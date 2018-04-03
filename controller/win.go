@@ -87,15 +87,13 @@ func CreateWinFromContract(winnerID string, contract model.Contract) {
 
 //CallbackWinAsync checks an incoming DB row to see if it is interesting
 func CallbackWinAsync(win model.Win) {
-	log.Infoln("win controller: CallbackWinAsync")
 	go CheckIfIWon(win)
 }
 
 //CheckIfIWon if I won will take the next steps if needed
 func CheckIfIWon(win model.Win) {
-	log.Infoln("win controller: Checking if I won")
 	if model.SystemWallet.ID == win.WinnerAccount {
-		log.Infoln("win controller: I'm the winner of this contract %s", win.ContractID)
+		log.Infoln("🏆 🏆 🏆   I'm the winner of this contract %s", win.ContractID)
 		CreateServiceFromWin(&win)
 	}
 }
