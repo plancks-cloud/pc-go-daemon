@@ -55,6 +55,16 @@ func GetOneContract(id string) (model.Contract, error) {
 	return contract, err
 }
 
+//ContractExists checks if there is a contract by that ID in the db
+func ContractExists(id string) bool {
+	var contract model.Contract
+	count, err := mongo.GetCollection(&contract).Find(bson.M{"_id": id}).Count()
+	if err != nil {
+		log.Errorln(fmt.Sprintf("Error getting contract: %s", err))
+	}
+	return count == 1
+}
+
 //UpdateContract upserts the given contract
 func UpdateContract(contract *model.Contract) error {
 	err := contract.Upsert()

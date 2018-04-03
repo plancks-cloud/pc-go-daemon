@@ -86,8 +86,12 @@ func PushAllWins() {
 func PullAll() {
 	contracts := PullAllContracts()
 	for _, contract := range contracts {
+		if ContractExists(contract.ID) {
+			//Ignore
+			continue
+		}
 		contract.Upsert()
-		CallbackContractAsync(contract, false)
+		CallbackContractAsync(contract, true)
 	}
 	wallets := PullAllWallets()
 	for _, item := range wallets {
