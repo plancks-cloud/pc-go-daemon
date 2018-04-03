@@ -32,8 +32,8 @@ func ReconServicesNow() {
 
 //ReconServices sets up scheduler to recon docker services running
 func ReconServices() {
-	time.Sleep(15 * time.Second)
 	go func() {
+		time.Sleep(15 * time.Second)
 		for {
 			log.Infoln(fmt.Sprintf("⏰  Time to recon services"))
 			reconServices()
