@@ -25,23 +25,22 @@ func CreateService(service *model.Service) model.MessageOK {
 	return model.Ok(true)
 }
 
-//DoesServiceExistsFromWin checks if a service is there already
-func DoesServiceExistsFromWin(win *model.Win) bool {
-	//Check that does not exist first.. This does look wrong. It isn't 😜 😜 😜
-	_, possibleError := GetOneServiceByContract(win.ContractID)
-	if possibleError != nil {
-		log.Infoln(fmt.Sprintf("Could not find service for contractID: %s", win.ContractID))
-		return false
+//ServiceExistsByContractId checks if there is a service for a contract
+func ServiceExistsByContractId(id string) bool {
+	var item model.Service
+	count, err := mongo.GetCollection(&item).Find(bson.M{"contractId": id}).Count()
+	if err != nil {
+		log.Errorln(fmt.Sprintf("Error getting service: %s", err))
 	}
-	return true
-
+	return count == 1
 }
+
 
 //CreateServiceFromWin creates a service instance and saves it to the local database. This service
 //is created from a win item
 func CreateServiceFromWin(win *model.Win) {
 
-	if DoesServiceExistsFromWin(win) {
+	if ServiceExistsByContractId(win.ContractID) {
 		return
 	}
 

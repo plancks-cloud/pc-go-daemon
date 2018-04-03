@@ -97,6 +97,12 @@ func CallbackWinAsync(win model.Win) {
 		return
 	}
 
+	//Check not existing service
+	if ServiceExistsByContractId(win.ContractID) {
+		//Ignore
+		return
+	}
+
 	go CheckIfIWon(win)
 }
 
