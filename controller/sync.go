@@ -127,12 +127,16 @@ func PullAll() {
 	}
 	bids := PullAllBids()
 	for _, item := range bids {
-		item.Upsert()
+		if ContractExists(item.ContractID) {
+			item.Upsert()
+		}
 	}
 	wins := PullAllWins()
 	for _, item := range wins {
-		item.Upsert()
-		CallbackWinAsync(item)
+		if ContractExists(item.ContractID) {
+			item.Upsert()
+			CallbackWinAsync(item)
+		}
 	}
 }
 
