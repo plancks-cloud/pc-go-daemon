@@ -25,7 +25,7 @@ func initWallet() {
 	//Instantiate wallet if not there - just so that there is an object in the DB
 	walletName := GetEnvWallet()
 	if len(walletName) == 0 {
-		log.Fatalln("Could not find environment varable for wallet: WALLET - restart with your wallet")
+		log.Fatalln("Could not find environment variable for wallet: WALLET - restart with your wallet")
 	}
 	wallet := Wallet{ID: walletName, PrivateKey: walletName, PublicKey: walletName, Signature: walletName}
 	wallet.Upsert()

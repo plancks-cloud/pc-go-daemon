@@ -59,7 +59,7 @@ func (bid Bid) Upsert() error {
 	return err
 }
 
-//ByName is a struct
+//ByVotes is a struct
 type ByVotes []Bid
 
 func (n ByVotes) Len() int           { return len(n) }
