@@ -15,12 +15,15 @@ func SyncDatabase() {
 	go func() {
 		//Wake up the function
 		util.Options(model.DBSyncURL)
+		util.Options(model.DBGCURL)
+
 		for {
 			//Sync and sleep
 			log.Debugln(fmt.Sprintf("⏰  Time to sync database"))
 			PullAll()
 			garbageCollectAll()
 			PushAll()
+			garbageCollectRemote()
 			time.Sleep(30 * time.Second)
 		}
 	}()
@@ -85,11 +88,14 @@ func PushAllWins() {
 
 func garbageCollectAll() {
 	contracts := GetContract()
+	log.Debugln(fmt.Sprintf("⏰  Time to GC"))
 	for _, item := range contracts {
 		//Check if ancient
+		log.Debugln(fmt.Sprintf("⏰  .. Checking %s", item.ID))
 
 		//TODO: check for cancelled contracts
 		if ExpiredContract(&item) {
+			log.Debugln(fmt.Sprintf("⏰  .. EXPIRED! %s", item.ID))
 			//Remove
 			DeleteContract(&item)
 			DeleteBidsByContractID(item.ID)
@@ -98,6 +104,10 @@ func garbageCollectAll() {
 
 		}
 	}
+}
+
+func garbageCollectRemote() {
+	go util.Get(model.DBGCURL)
 }
 
 //PullAll gets all rows in cloud DB and puts them in local DB
