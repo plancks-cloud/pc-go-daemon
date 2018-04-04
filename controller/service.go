@@ -47,7 +47,7 @@ func CreateServiceFromWin(win *model.Win) {
 
 	contract, err := GetOneContract(win.ContractID)
 	if err != nil {
-		log.Fatalln("‼️  Error getting contract of the win: %s", err)
+		log.Errorln("‼️  Error getting contract of the win: %s", err)
 		return
 	}
 	service := model.Service{

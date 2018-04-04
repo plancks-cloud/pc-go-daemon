@@ -27,7 +27,8 @@ func GetWinsByContractID(contractID string) (wins []model.Win) {
 
 //CheckForWinsLater announces winners where relevant
 func CheckForWinsLater(contract model.Contract) {
-	log.Infoln(fmt.Sprintf("💤   Going to check for wins in two minutes: %s ", contract.ID))
+	sl
+	log.Infoln(fmt.Sprintf("💤   Going to check for wins in n minutes: %s ", contract.ID))
 	time.Sleep(65 * time.Second)
 	CheckForWinsNow(contract)
 
@@ -46,8 +47,6 @@ func CheckForWinsNow(contract model.Contract) {
 	}
 	log.Debugln(fmt.Sprintf("> Its been more than n minutes. We can announce a winner. ID: %s ", contract.ID))
 
-	//TODO: check if it has been won
-	//
 	winsForContract := GetWinsByContractID(contract.ID)
 	if len(winsForContract) > 0 {
 		//Wins have already been declared..
