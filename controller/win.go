@@ -69,7 +69,7 @@ func CheckForWinsNow(contract model.Contract) {
 		CreateWinFromContract(bids[winner].FromAccount, contract)
 		winnerCount++
 	}
-	log.Debugln(fmt.Sprintf("> # of winners: ", winnerCount))
+	log.Debugln(fmt.Sprintf("> # of winners: %d ", winnerCount))
 
 	if winnerCount == 0 {
 		log.Error(fmt.Sprintf("> This should never happen. No highest bid: %s ", contract.ID))
