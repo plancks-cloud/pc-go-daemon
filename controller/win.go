@@ -59,6 +59,12 @@ func CheckForWinsNow(contract model.Contract) {
 	sort.Sort(model.ByVotes(bids))
 	winnerCount := 0
 	for winner := 0; winner < contract.Instances; winner++ {
+
+		//Ensure there are enough bids
+		if winner >= len(bids) {
+			//Out of bounds
+			continue
+		}
 		log.Debugln(fmt.Sprintf("> Going to say the winner was: %s", bids[winner].FromAccount))
 		CreateWinFromContract(bids[winner].FromAccount, contract)
 		winnerCount++
