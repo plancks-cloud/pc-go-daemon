@@ -27,7 +27,6 @@ func GetWinsByContractID(contractID string) (wins []model.Win) {
 
 //CheckForWinsLater announces winners where relevant
 func CheckForWinsLater(contract model.Contract) {
-	sl
 	log.Infoln(fmt.Sprintf("💤   Going to check for wins in n minutes: %s ", contract.ID))
 	time.Sleep(65 * time.Second)
 	CheckForWinsNow(contract)
