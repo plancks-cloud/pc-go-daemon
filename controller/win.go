@@ -35,16 +35,16 @@ func CheckForWinsLater(contract model.Contract) {
 
 //CheckForWins announces winners where relevant
 func CheckForWinsNow(contract model.Contract) {
-	log.Infoln("win controller: CheckForWins")
+	log.Debugln("win controller: CheckForWins")
 	ripeTime := contract.Timestamp + (1000 * 60)
 	now := util.MakeTimestamp()
 
 	//If now is before the time we need
 	if now < ripeTime {
-		log.Infoln(fmt.Sprintf("> Too early to find a winner. Stopping: %s ", contract.ID))
+		log.Debugln(fmt.Sprintf("> Too early to find a winner. Stopping: %s ", contract.ID))
 		return
 	}
-	log.Infoln(fmt.Sprintf("> Its been more than n minutes. We can announce a winner. ID: %s ", contract.ID))
+	log.Debugln(fmt.Sprintf("> Its been more than n minutes. We can announce a winner. ID: %s ", contract.ID))
 
 	//TODO: check if it has been won
 	//
@@ -52,28 +52,28 @@ func CheckForWinsNow(contract model.Contract) {
 	bids := GetBidsByContractID(contract.ID)
 	if len(bids) == 0 {
 		//No bids - no winner
-		log.Infoln(fmt.Sprintf("> No bids found. For now, no winner on contract, ID: %s ", contract.ID))
+		log.Debugln(fmt.Sprintf("> No bids found. For now, no winner on contract, ID: %s ", contract.ID))
 		return
 	}
 
 	sort.Sort(model.ByVotes(bids))
 	winnerCount := 0
 	for winner := 0; winner < contract.Instances; winner++ {
-		log.Infoln(fmt.Sprintf("> Going to say the winner was: %s", bids[winner].FromAccount))
+		log.Debugln(fmt.Sprintf("> Going to say the winner was: %s", bids[winner].FromAccount))
 		CreateWinFromContract(bids[winner].FromAccount, contract)
 		winnerCount++
 	}
-	log.Infoln(fmt.Sprintf("> # of winners: ", winnerCount))
+	log.Debugln(fmt.Sprintf("> # of winners: ", winnerCount))
 
 	if winnerCount == 0 {
-		log.Infoln(fmt.Sprintf("> This should never happen. No highest bid: %s ", contract.ID))
+		log.Error(fmt.Sprintf("> This should never happen. No highest bid: %s ", contract.ID))
 	}
 
 }
 
 //CreateWinFromContract creates win
 func CreateWinFromContract(winnerID string, contract model.Contract) {
-	log.Infoln("win controller: CreateWinFromContract")
+	log.Debugln("win controller: CreateWinFromContract")
 	uuidString, _ := uuid.NewV4()
 	win := model.Win{
 		ID:            uuidString.String(),

@@ -60,7 +60,7 @@ func CreateServiceFromWin(win *model.Win) {
 		Replicas:       contract.Replicas,
 		ContractID:     contract.ID}
 
-	log.Infoln(fmt.Sprintf("Creating service object for contractID: %s", win.ContractID))
+	log.Debugln(fmt.Sprintf("Creating service object for contractID: %s", win.ContractID))
 	CreateService(&service)
 	ReconServicesNow()
 
@@ -167,11 +167,11 @@ func createServices(services []model.Service) {
 		for _, runningService := range existingServices {
 			if service.Name == runningService.Name {
 				found = true
-				log.Infoln(fmt.Sprintf("> Will not need to create docker service %s", service.Name))
+				log.Debugln(fmt.Sprintf("> Will not need to create docker service %s", service.Name))
 				break SearchRunningServicesLoop
 			}
 		}
-		log.Infoln(fmt.Sprintf("createServices method.. and for %s was found? %s", service.Name, strconv.FormatBool(found)))
+		log.Debugln(fmt.Sprintf("createServices method.. and for %s was found? %s", service.Name, strconv.FormatBool(found)))
 
 		if !found {
 			contract, err := GetOneContract(service.ContractID)
@@ -188,7 +188,7 @@ func createServices(services []model.Service) {
 }
 
 func createService(service *model.Service, contract *model.Contract) {
-	log.Infoln(fmt.Sprintf("createService method!"))
+	log.Debugln(fmt.Sprintf("createService method!"))
 
 	cli, err := client.NewEnvClient()
 	ctx := context.Background()

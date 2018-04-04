@@ -33,8 +33,8 @@ func main() {
 	router.HandleFunc("/api/getContractResult", api.CORSHandler(api.GetContractResult)).Methods("GET", "OPTIONS")
 	router.HandleFunc("/api/getServiceStateResult", api.CORSHandler(api.GetServiceStateResult)).Methods("GET", "OPTIONS")
 
-	log.Info(fmt.Sprintf("READY: Listening [:%v]", port))
 	log.Fatal(http.ListenAndServe(fmt.Sprint(":", port), router))
+	log.Info(fmt.Sprintf("READY: Listening [:%v]", port))
 }
 
 func initAll() {

@@ -17,12 +17,12 @@ var (
 
 //Init connects to the mongodb and populates the Session object
 func Init() {
-	log.Infoln("Dialing mongo")
+	log.Debugln("Dialing Mongodb")
 	session, err := mgo.Dial("mongo")
 	if err != nil {
 		panic(fmt.Sprintf("Could not connect to DB: %s", err))
 	}
-	log.Infoln("Mongo connected")
+	log.Infoln("📡  Mongodb connected")
 	Session = session
 }
 

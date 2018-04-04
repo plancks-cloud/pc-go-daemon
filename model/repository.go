@@ -20,7 +20,7 @@ func InitRepo() {
 }
 
 func initWallet() {
-	log.Info(fmt.Sprintf("Wallet: %s", GetEnvWallet()))
+	log.Debugln(fmt.Sprintf("Wallet: %s", GetEnvWallet()))
 
 	//Instantiate wallet if not there - just so that there is an object in the DB
 	walletName := GetEnvWallet()
