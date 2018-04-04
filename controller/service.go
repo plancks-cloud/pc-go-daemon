@@ -238,6 +238,7 @@ func deleteServices(services []model.ServiceState) {
 	}
 
 	for _, service := range services {
+		log.Infoln(fmt.Sprintf("🔥  Removing service: %s", service.Name))
 		cli.ServiceRemove(ctx, service.ID)
 	}
 }
