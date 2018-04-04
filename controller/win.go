@@ -48,6 +48,12 @@ func CheckForWinsNow(contract model.Contract) {
 
 	//TODO: check if it has been won
 	//
+	winsForContract := GetWinsByContractID(contract.ID)
+	if len(winsForContract) > 0 {
+		//Wins have already been declared..
+		log.Debugln(fmt.Sprintf("> Looks like there are wins for this contract already. Stopping: %s ", contract.ID))
+		return
+	}
 
 	bids := GetBidsByContractID(contract.ID)
 	if len(bids) == 0 {
@@ -96,7 +102,7 @@ func CreateWinFromContract(winnerID string, contract model.Contract) {
 func CallbackWinAsync(win model.Win) {
 
 	//Check if expired first.
-	contract, _  := GetOneContract(win.ContractID)
+	contract, _ := GetOneContract(win.ContractID)
 	//Should be there... if the win is there
 	if win.Expired(&contract) {
 		//Ignore
