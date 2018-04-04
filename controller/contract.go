@@ -22,8 +22,6 @@ func CreateContract(contract *model.Contract) model.MessageOK {
 	log.Infoln(fmt.Sprintf("❤️  Contract created ID: %s", contract.ID))
 	return model.Ok(true)
 
-
-
 }
 
 //GetContract returns all contracts stored in the datastore
@@ -53,6 +51,23 @@ func GetOneContract(id string) (model.Contract, error) {
 		log.Errorln(fmt.Sprintf("Error getting contract: %s", err))
 	}
 	return contract, err
+}
+
+//ExpiredContract checks if a contract has expired
+func ExpiredContract(contract *model.Contract) bool {
+	now := util.MakeTimestamp()
+	if contract.RunUntil == 0 {
+		return false
+	}
+	return now > contract.RunUntil
+}
+
+func DeleteContract(contract *model.Contract) {
+	err := mongo.GetCollection(&contract).Remove(bson.M{"_id": contract.ID})
+	if err != nil {
+		log.Errorln(fmt.Sprintf("Error deleting contract: %s", err))
+	}
+
 }
 
 //ContractExists checks if there is a contract by that ID in the db
@@ -98,7 +113,7 @@ func callbackContract(contract model.Contract, interesting bool) {
 				log.Infoln(fmt.Sprintf("🍻  Thinking: I've already voted. Not voting for contract again, ID: %s", contract.ID))
 			}
 			CheckForWinsLater(contract) //This will ensure that it checks for wins that are currently not in memory
-			return //Already voted.. don't care
+			return                      //Already voted.. don't care
 		}
 	}
 

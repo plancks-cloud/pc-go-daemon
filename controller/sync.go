@@ -19,6 +19,7 @@ func SyncDatabase() {
 			//Sync and sleep
 			log.Debugln(fmt.Sprintf("⏰  Time to sync database"))
 			PullAll()
+			garbageCollectAll()
 			PushAll()
 			time.Sleep(30 * time.Second)
 		}
@@ -80,6 +81,23 @@ func PushAllWins() {
 	body := model.WinSyncable{Collection: "Win", Index: "_id", Indexes: nil, Rows: wins}
 	util.Post(model.DBSyncURL, body.ToJSON())
 
+}
+
+func garbageCollectAll() {
+	contracts := GetContract()
+	for _, item := range contracts {
+		//Check if ancient
+
+		//TODO: check for cancelled contracts
+		if ExpiredContract(&item) {
+			//Remove
+			DeleteContract(&item)
+			DeleteBidsByContractID(item.ID)
+			DeleteWinsByContractID(item.ID)
+			DeleteServicesByContractID(item.ID)
+
+		}
+	}
 }
 
 //PullAll gets all rows in cloud DB and puts them in local DB

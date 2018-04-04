@@ -242,3 +242,13 @@ func deleteServices(services []model.ServiceState) {
 		cli.ServiceRemove(ctx, service.ID)
 	}
 }
+
+func DeleteServicesByContractID(id string) {
+	item:= model.Service{}
+	_, err := mongo.GetCollection(&item).RemoveAll(bson.M{"contractId": id})
+	if err != nil {
+		log.Errorln(fmt.Sprintf("Error deleting wins by contractId: %s", err))
+	}
+
+}
+

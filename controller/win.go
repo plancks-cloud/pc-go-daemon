@@ -119,3 +119,12 @@ func CheckIfIWon(win model.Win) {
 		CreateServiceFromWin(&win)
 	}
 }
+
+func DeleteWinsByContractID(id string) {
+	win := model.Win{}
+	_, err := mongo.GetCollection(&win).RemoveAll(bson.M{"contractId": id})
+	if err != nil {
+		log.Errorln(fmt.Sprintf("Error deleting wins by contractId: %s", err))
+	}
+
+}

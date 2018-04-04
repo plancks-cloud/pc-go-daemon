@@ -7,6 +7,8 @@ import (
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/mongo"
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/util"
 	"github.com/globalsign/mgo/bson"
+	"fmt"
+	log "github.com/sirupsen/logrus"
 )
 
 //GetBid returns all contracts stored in the datastore
@@ -31,5 +33,14 @@ func CreateBidFromContract(contract model.Contract) {
 	bid.Timestamp = util.MakeTimestamp()
 	bid.Signature = model.SystemWallet.GetSignature()
 	bid.Push()
+
+}
+
+func DeleteBidsByContractID(id string) {
+	bid := model.Bid{}
+	_, err := mongo.GetCollection(&bid).RemoveAll(bson.M{"contractId": id})
+	if err != nil {
+		log.Errorln(fmt.Sprintf("Error deleting bids by contractId: %s", err))
+	}
 
 }
