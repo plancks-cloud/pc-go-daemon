@@ -40,12 +40,15 @@ func main() {
 func initAll() {
 	if model.GetEnvLogFormat() == "json" {
 		log.SetFormatter(&log.JSONFormatter{})
+	} else {
+		log.SetFormatter(&log.TextFormatter{})
 	}
+
+	// log.SetLevel(log.ErrorLevel)
 
 	log.Info("Starting")
 	mongo.Init()
 	model.InitRepo()
-
 
 	controller.SyncDatabase()
 	controller.ReconServices()
