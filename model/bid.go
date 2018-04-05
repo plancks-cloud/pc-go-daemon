@@ -37,14 +37,14 @@ func (bidSyncable BidSyncable) ToJSON() []byte {
 
 }
 
-//Push saves a bid to MongoDB
-func (bid Bid) Push() error {
+//Push saves a bid to Mongodb
+func (bid Bid) Push() (err error) {
 	if len(bid.ID) == 0 {
 		u, _ := uuid.NewV4()
 		bid.ID = u.String()
 	}
-	err := mongo.Push(bid)
-	return err
+	err = mongo.Push(bid)
+	return
 }
 
 //DbID returns the ID of the bid
@@ -54,9 +54,9 @@ func (bid Bid) DbID() string {
 }
 
 //Upsert ..
-func (bid Bid) Upsert() error {
-	err := mongo.UpsertWithID(bid.ID, bid)
-	return err
+func (bid Bid) Upsert() (err error) {
+	err = mongo.UpsertWithID(bid.ID, bid)
+	return
 }
 
 //ByVotes is a struct

@@ -12,16 +12,15 @@ import (
 )
 
 //GetBid returns all contracts stored in the datastore
-func GetBid() []model.Bid {
-	var bids []model.Bid
+func GetBid() (bids []model.Bid) {
 	mongo.GetCollection(model.Bid{}).Find(nil).All(&bids)
-	return bids
+	return
 }
 
 //GetBidsByContractID returns all bids for a contract
 func GetBidsByContractID(contractID string) (bids []model.Bid) {
 	mongo.GetCollection(model.Bid{}).Find(bson.M{"contractId": contractID}).All(&bids)
-	return bids
+	return
 }
 
 //CreateBidFromContract inserts a new bid for a contract

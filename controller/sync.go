@@ -155,7 +155,7 @@ func PullAllContracts() (contracts []model.Contract) {
 		log.Errorln(fmt.Sprintf("Error decoding contract during sync: %s", err))
 		return
 	}
-	return contracts
+	return
 }
 
 //PullAllWallets gets all wallets in the cloud DB
@@ -173,7 +173,7 @@ func PullAllWallets() (wallets []model.Wallet) {
 		log.Errorln(fmt.Sprintf("Error decoding wallets during sync: %s", err))
 		return
 	}
-	return wallets
+	return
 }
 
 //PullAllBids gets all bids in the cloud DB
@@ -191,7 +191,7 @@ func PullAllBids() (bids []model.Bid) {
 		log.Errorln(fmt.Sprintf("Error decoding bids during sync: %s", err))
 		return
 	}
-	return bids
+	return
 }
 
 //PullAllWins gets all wins in the cloud DB
@@ -209,5 +209,5 @@ func PullAllWins() (wins []model.Win) {
 		log.Errorln(fmt.Sprintf("Error decoding wins during sync: %s", err))
 		return
 	}
-	return wins
+	return
 }

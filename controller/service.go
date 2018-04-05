@@ -92,7 +92,7 @@ func GetServiceStateResult() (serviceStateResults []model.ServiceStateResult) {
 		}
 		serviceStateResults = append(serviceStateResults, item)
 	}
-	return serviceStateResults
+	return
 
 }
 

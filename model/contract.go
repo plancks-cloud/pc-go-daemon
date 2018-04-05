@@ -42,9 +42,9 @@ type ContractSyncable struct {
 
 //ContractResult helps the client see the state of a contract
 type ContractResult struct {
-	Contract `json:"contract"`
-	Bids     []Bid `json:"bids"`
-	Wins     []Win `json:"wins"`
+	Contract   `json:"contract"`
+	Bids []Bid `json:"bids"`
+	Wins []Win `json:"wins"`
 }
 
 //ToJSON converts an object to json
@@ -57,8 +57,8 @@ func (contractSyncable ContractSyncable) ToJSON() []byte {
 
 }
 
-//Push saves a contract to MongoDB
-func (contract Contract) Push() error {
+//Push saves a contract to Mongodb
+func (contract Contract) Push() (err error) {
 	if len(contract.ID) == 0 {
 		u, _ := uuid.NewV4()
 		contract.ID = u.String()
@@ -66,8 +66,8 @@ func (contract Contract) Push() error {
 	if len(contract.ServiceName) == 0 {
 		contract.ServiceName = contract.GetServiceName()
 	}
-	err := mongo.Push(contract)
-	return err
+	err = mongo.Push(contract)
+	return
 }
 
 //DbID returns the ID of the contract

@@ -13,6 +13,7 @@ var (
 
 //DBSyncURL is the endpoint for the function
 const DBSyncURL = "https://us-central1-plancks-cloud.cloudfunctions.net/pc-function-db-sync-v1"
+
 //DBGCURL is the endpoint for the function that performs GC remotely
 const DBGCURL = "https://us-central1-plancks-cloud.cloudfunctions.net/pc-function-db-gc-v1"
 

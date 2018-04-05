@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/mongo"
-	uuid "github.com/nu7hatch/gouuid"
+	"github.com/nu7hatch/gouuid"
 	log "github.com/sirupsen/logrus"
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/util"
 )
@@ -38,13 +38,13 @@ func (winSyncable WinSyncable) ToJSON() []byte {
 }
 
 //Push persists the win to the database
-func (win Win) Push() error {
+func (win Win) Push() (err error) {
 	if len(win.ID) == 0 {
 		u, _ := uuid.NewV4()
 		win.ID = u.String()
 	}
-	err := mongo.Push(win)
-	return err
+	err = mongo.Push(win)
+	return
 }
 
 //Upsert updates a document if it exists, otherwise inserts

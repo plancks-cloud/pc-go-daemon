@@ -16,13 +16,13 @@ import (
 //GetWin returns all wins stored in the datastore
 func GetWin() (wins []model.Win) {
 	mongo.GetCollection(model.Win{}).Find(nil).All(&wins)
-	return wins
+	return
 }
 
 //GetWinsByContractID returns all wins for a contract
 func GetWinsByContractID(contractID string) (wins []model.Win) {
 	mongo.GetCollection(model.Win{}).Find(bson.M{"contractId": contractID}).All(&wins)
-	return wins
+	return
 }
 
 //CheckForWinsLater announces winners where relevant

@@ -25,10 +25,9 @@ func CreateContract(contract *model.Contract) model.MessageOK {
 }
 
 //GetContract returns all contracts stored in the datastore
-func GetContract() []model.Contract {
-	var contracts []model.Contract
+func GetContract() (contracts []model.Contract) {
 	mongo.GetCollection(model.Contract{}).Find(nil).All(&contracts)
-	return contracts
+	return
 }
 
 //GetContractResult returns all contracts results stored in the datastore
@@ -40,17 +39,16 @@ func GetContractResult() (results []model.ContractResult) {
 		item.Wins = GetWinsByContractID(element.ID)
 		results = append(results, item)
 	}
-	return results
+	return
 }
 
 //GetOneContract returns a single contract
-func GetOneContract(id string) (model.Contract, error) {
-	var contract model.Contract
-	err := mongo.GetCollection(&contract).Find(bson.M{"_id": id}).One(&contract)
+func GetOneContract(id string) (contract model.Contract, err error) {
+	err = mongo.GetCollection(&contract).Find(bson.M{"_id": id}).One(&contract)
 	if err != nil {
 		log.Errorln(fmt.Sprintf("Error getting contract: %s", err))
 	}
-	return contract, err
+	return
 }
 
 //ExpiredContract checks if a contract has expired
@@ -81,9 +79,9 @@ func ContractExists(id string) bool {
 }
 
 //UpdateContract upserts the given contract
-func UpdateContract(contract *model.Contract) error {
-	err := contract.Upsert()
-	return err
+func UpdateContract(contract *model.Contract) (err error) {
+	err = contract.Upsert()
+	return
 }
 
 //CallbackContractAsync checks an incoming DB row to see if it is interesting

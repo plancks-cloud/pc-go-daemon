@@ -17,7 +17,7 @@ import (
 func DockerListServices() (services []model.Service) {
 	services = append(services, model.Service{})
 	AllDockerServices()
-	return services
+	return
 }
 
 //DockerListRunningServices lists all running Docker services

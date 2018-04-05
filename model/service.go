@@ -6,7 +6,7 @@ import (
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/mongo"
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/util"
 	"github.com/docker/docker/api/types/swarm"
-	uuid "github.com/nu7hatch/gouuid"
+	"github.com/nu7hatch/gouuid"
 	"vbom.ml/util/sortorder"
 )
 
@@ -23,14 +23,14 @@ type Service struct {
 	ContractID     string `json:"contractId" bson:"contractId"`
 }
 
-//Push saves a bid to MongoDB
-func (service *Service) Push() error {
+//Push saves a bid to Mongodb
+func (service *Service) Push() (err error) {
 	if len(service.ID) == 0 {
 		u, _ := uuid.NewV4()
 		service.ID = u.String()
 	}
-	err := mongo.Push(service)
-	return err
+	err = mongo.Push(service)
+	return
 }
 
 //Upsert updates a document if it exists, otherwise inserts

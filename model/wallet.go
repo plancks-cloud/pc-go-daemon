@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/mongo"
-	uuid "github.com/nu7hatch/gouuid"
+	"github.com/nu7hatch/gouuid"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -36,13 +36,13 @@ func (walletSyncable WalletSyncable) ToJSON() []byte {
 }
 
 //Push persists the wallet to the database
-func (wallet Wallet) Push() error {
+func (wallet Wallet) Push() (err error) {
 	if len(wallet.ID) == 0 {
 		u, _ := uuid.NewV4()
 		wallet.ID = u.String()
 	}
-	err := mongo.Push(wallet)
-	return err
+	err = mongo.Push(wallet)
+	return
 }
 
 //GetSignature returns the wallet ID

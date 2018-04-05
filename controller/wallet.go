@@ -24,8 +24,7 @@ func CreateWallet(wallet *model.Wallet) model.MessageOK {
 }
 
 //GetWallet returns all wallets stored in the datastore
-func GetWallet() []model.Wallet {
-	var wallets []model.Wallet
+func GetWallet() (wallets []model.Wallet) {
 	mongo.GetCollection(model.Wallet{}).Find(nil).All(&wallets)
-	return wallets
+	return
 }
