@@ -13,7 +13,7 @@ import (
 	"sort"
 )
 
-//GetWin returns all wins stored in the datastore
+//GetWin returns all wins stored in the Datastore
 func GetWin() (wins []model.Win) {
 	mongo.GetCollection(model.Win{}).Find(nil).All(&wins)
 	return

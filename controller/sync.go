@@ -65,6 +65,9 @@ func PushAllWallets() {
 //PushAllContracts pushes all contracts to cloud
 func PushAllContracts() {
 	contracts := GetContract()
+	if contracts == nil || len(contracts) == 0 {
+		return
+	}
 	body := model.ContractSyncable{Collection: "Contract", Index: "_id", Indexes: nil, Rows: contracts}
 	util.Post(model.DBSyncURL, body.ToJSON())
 
@@ -73,6 +76,9 @@ func PushAllContracts() {
 //PushAllBids pushes all bids to cloud
 func PushAllBids() {
 	bids := GetBid()
+	if bids == nil || len(bids) == 0 {
+		return
+	}
 	body := model.BidSyncable{Collection: "Bid", Index: "_id", Indexes: nil, Rows: bids}
 	util.Post(model.DBSyncURL, body.ToJSON())
 
@@ -81,6 +87,9 @@ func PushAllBids() {
 //PushAllWins pushes all wins to cloud
 func PushAllWins() {
 	wins := GetWin()
+	if wins == nil || len(wins) == 0 {
+		return
+	}
 	body := model.WinSyncable{Collection: "Win", Index: "_id", Indexes: nil, Rows: wins}
 	util.Post(model.DBSyncURL, body.ToJSON())
 
