@@ -27,7 +27,7 @@ services:
             context: "dev"
             MONGO_HOST: "pc_mongo"
             DOCKER_HOST: "unix:///var/run/docker.sock"
-            WALLET: "JUSTIN_MAC"
+            WALLET: "DEFAULT_WALLET"
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock
         deploy:

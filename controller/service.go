@@ -35,7 +35,6 @@ func ServiceExistsByContractId(id string) bool {
 	return count == 1
 }
 
-
 //CreateServiceFromWin creates a service instance and saves it to the local database. This service
 //is created from a win item
 func CreateServiceFromWin(win *model.Win) {
@@ -43,7 +42,6 @@ func CreateServiceFromWin(win *model.Win) {
 	if ServiceExistsByContractId(win.ContractID) {
 		return
 	}
-
 
 	contract, err := GetOneContract(win.ContractID)
 	if err != nil {
@@ -208,7 +206,7 @@ func createService(service *model.Service, contract *model.Contract) {
 			},
 		},
 		TaskTemplate: swarm.TaskSpec{
-			ContainerSpec: &swarm.ContainerSpec{
+			ContainerSpec: swarm.ContainerSpec{
 				Image: service.Image,
 			},
 			Resources: &swarm.ResourceRequirements{
@@ -244,11 +242,10 @@ func deleteServices(services []model.ServiceState) {
 }
 
 func DeleteServicesByContractID(id string) {
-	item:= model.Service{}
+	item := model.Service{}
 	_, err := mongo.GetCollection(&item).RemoveAll(bson.M{"contractId": id})
 	if err != nil {
 		log.Errorln(fmt.Sprintf("Error deleting wins by contractId: %s", err))
 	}
 
 }
-
