@@ -103,7 +103,7 @@ func garbageCollectAll() {
 		log.Debugln(fmt.Sprintf("⏰  .. Checking %s", item.ID))
 
 		//TODO: check for cancelled contracts
-		if ExpiredContract(&item) {
+		if ExpiredContractBy(&item, 300) {
 			log.Debugln(fmt.Sprintf("⏰  .. EXPIRED! %s", item.ID))
 			//Remove
 			DeleteContract(&item)

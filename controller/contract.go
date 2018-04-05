@@ -60,6 +60,19 @@ func ExpiredContract(contract *model.Contract) bool {
 	return now > contract.RunUntil
 }
 
+//ExpiredContractBy checks if a contract has expired
+func ExpiredContractBy(contract *model.Contract, seconds int) bool {
+	now := util.MakeTimestamp()
+	if contract.RunUntil == 0 {
+		return false
+	}
+
+	//Find the expiring time
+	newNow := int64(seconds*1000) + now
+
+	return newNow > contract.RunUntil
+}
+
 func DeleteContract(contract *model.Contract) {
 	err := mongo.GetCollection(&contract).Remove(bson.M{"_id": contract.ID})
 	if err != nil {
