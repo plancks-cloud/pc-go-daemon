@@ -67,10 +67,7 @@ func ExpiredContractBy(contract *model.Contract, seconds int) bool {
 		return false
 	}
 
-	//Find the expiring time
-	newNow := int64(seconds*1000) + now
-
-	return newNow > contract.RunUntil
+	return now > contract.RunUntil + int64(seconds*1000)
 }
 
 func DeleteContract(contract *model.Contract) {
