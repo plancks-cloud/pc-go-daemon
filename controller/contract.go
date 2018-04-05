@@ -115,9 +115,6 @@ func callbackContract(contract model.Contract, interesting bool) {
 		}
 	}
 
-	//For now sleep for 10.. this should allow wins to come through
-	time.Sleep(10 * time.Second)
-
 	wins := GetWinsByContractID(contract.ID)
 	if len(wins) > 0 {
 		log.Infoln(fmt.Sprintf("😒  Thinking: Contract has been won. Ignoring, ID: %s", contract.ID))
