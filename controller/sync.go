@@ -18,12 +18,15 @@ func SyncDatabase() {
 		util.Options(model.DBGCURL)
 
 		for {
+			start := time.Now()
 			//Sync and sleep
 			log.Debugln(fmt.Sprintf("⏰  Time to sync database"))
 			PullAll()
 			garbageCollectAll()
 			PushAll()
 			garbageCollectRemote()
+			elapsed := time.Since(start)
+			log.Infoln(fmt.Sprintf("⏰  DB Sync took: %s", elapsed))
 			time.Sleep(30 * time.Second)
 		}
 	}()
@@ -48,10 +51,14 @@ func ReconServices() {
 
 //PushAll gets all rows in DB and pushes to DB
 func PushAll() {
+	start := time.Now()
 	PushAllWallets()
 	PushAllContracts()
 	PushAllBids()
 	PushAllWins()
+	elapsed := time.Since(start)
+	log.Infoln(fmt.Sprintf("⏰  PushAll took: %s", elapsed))
+
 }
 
 //PushAllWallets pushes all wallets to cloud
@@ -96,6 +103,7 @@ func PushAllWins() {
 }
 
 func garbageCollectAll() {
+	start := time.Now()
 	contracts := GetContract()
 	log.Debugln(fmt.Sprintf("⏰  Time to GC"))
 	for _, item := range contracts {
@@ -113,6 +121,9 @@ func garbageCollectAll() {
 
 		}
 	}
+	elapsed := time.Since(start)
+	log.Infoln(fmt.Sprintf("⏰  Local GC took %s", elapsed))
+
 }
 
 func garbageCollectRemote() {
@@ -121,6 +132,9 @@ func garbageCollectRemote() {
 
 //PullAll gets all rows in cloud DB and puts them in local DB
 func PullAll() {
+	startMethod := time.Now()
+
+	start := time.Now()
 	contracts := PullAllContracts()
 	for _, contract := range contracts {
 		if ContractExists(contract.ID) {
@@ -130,16 +144,31 @@ func PullAll() {
 		contract.Upsert()
 		CallbackContractAsync(contract, true)
 	}
+	elapsed := time.Since(start)
+	log.Infoln(fmt.Sprintf("⏰  PullAll-contracts took: %s", elapsed))
+
+
+	start = time.Now()
 	wallets := PullAllWallets()
 	for _, item := range wallets {
 		item.Upsert()
 	}
+	elapsed = time.Since(start)
+	log.Infoln(fmt.Sprintf("⏰  PullAll-wallets took: %s", elapsed))
+
+
+	start = time.Now()
 	bids := PullAllBids()
 	for _, item := range bids {
 		if ContractExists(item.ContractID) {
 			item.Upsert()
 		}
 	}
+	elapsed = time.Since(start)
+	log.Infoln(fmt.Sprintf("⏰  PullAll-bids took: %s", elapsed))
+
+
+	start = time.Now()
 	wins := PullAllWins()
 	for _, item := range wins {
 		if ContractExists(item.ContractID) {
@@ -147,6 +176,12 @@ func PullAll() {
 			CallbackWinAsync(item)
 		}
 	}
+	elapsed = time.Since(start)
+	log.Infoln(fmt.Sprintf("⏰  PullAll-wins took: %s", elapsed))
+
+	elapsed = time.Since(startMethod)
+	log.Infoln(fmt.Sprintf("⏰  PullAll took: %s", elapsed))
+
 }
 
 //PullAllContracts gets all contracts in the cloud DB
