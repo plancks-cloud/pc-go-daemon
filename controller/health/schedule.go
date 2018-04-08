@@ -28,7 +28,7 @@ func waitingDoIt() {
 	var wg sync.WaitGroup
 	wg.Add(1)
 
-	log.Debugln(fmt.Sprintf("⏰  Time to recon services"))
+	log.Infoln(fmt.Sprintf("⏰  Time to recon services"))
 	healthCheckServices(wg)
 
 	wg.Wait()
