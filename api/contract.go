@@ -24,8 +24,9 @@ func CreateContract(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(db.CreateContract(&contract))
 
 	go func() {
-		//Ensure the community sync runs soon
-		model.DoorBellCommunity<-true
+		//Ensure we kick off async processes
+		model.DoorBellRemote <- true
+		model.DoorBellCommunity <- true
 	}()
 
 }
