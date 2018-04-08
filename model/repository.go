@@ -11,9 +11,8 @@ var (
 	SystemWallet *Wallet
 
 	DoorBellCommunity chan bool
-	DoorBellHealth chan bool
-	DoorBellRemote chan bool
-
+	DoorBellHealth    chan bool
+	DoorBellRemote    chan bool
 )
 
 //DBSyncURL is the endpoint for the function
@@ -21,6 +20,9 @@ const DBSyncURL = "https://us-central1-plancks-cloud.cloudfunctions.net/pc-funct
 
 //DBGCURL is the endpoint for the function that performs GC remotely
 const DBGCURL = "https://us-central1-plancks-cloud.cloudfunctions.net/pc-function-db-gc-v1"
+
+//ScheduledInterval is how often some things run
+const ScheduledInterval = 30
 
 //InitRepo initialises the repository and it's variables.
 func InitRepo() {

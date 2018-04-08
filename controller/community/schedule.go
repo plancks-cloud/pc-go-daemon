@@ -13,7 +13,7 @@ func ScheduleCommunityActivities() {
 			select {
 			case <-model.DoorBellCommunity:
 				waitingDoIt()
-			case <-time.After(30 * time.Second):
+			case <-time.After(model.ScheduledInterval * time.Second):
 				waitingDoIt()
 			}
 		}

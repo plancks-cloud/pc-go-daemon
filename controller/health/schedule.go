@@ -15,7 +15,7 @@ func ScheduleHealthCheck() {
 			select {
 			case <-model.DoorBellHealth:
 				waitingDoIt()
-			case <-time.After(30 * time.Second):
+			case <-time.After(model.ScheduledInterval * time.Second):
 				waitingDoIt()
 			}
 		}
