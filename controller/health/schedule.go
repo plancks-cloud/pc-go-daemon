@@ -5,6 +5,7 @@ import (
 	log "github.com/sirupsen/logrus"
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/model"
 	"time"
+	"git.amabanana.com/plancks-cloud/pc-go-daemon/controller/db"
 )
 
 func ScheduleHealthCheck() {
@@ -25,6 +26,6 @@ func ScheduleHealthCheck() {
 
 func waitingDoIt() {
 	log.Debugln(fmt.Sprintf("❄️  ScheduleHealthCheck: waitingDoIt"))
-	healthCheckServices()
+	db.ReconServices()
 
 }

@@ -4,10 +4,11 @@ import (
 	"fmt"
 	log "github.com/sirupsen/logrus"
 	"time"
+	"git.amabanana.com/plancks-cloud/pc-go-daemon/model"
 )
 
-const AncientAgeSeconds = 300
 
+//LocalGC cleans up the local database
 func LocalGC() {
 
 	go func() {
@@ -20,7 +21,7 @@ func LocalGC() {
 			log.Debugln(fmt.Sprintf("⏰  .. Checking %s", item.ID))
 
 			//TODO: check for cancelled contracts
-			if ExpiredContractBy(&item, AncientAgeSeconds) {
+			if ExpiredContractBy(&item, model.AncientAgeSeconds) {
 				log.Debugln(fmt.Sprintf("⏰  .. EXPIRED! %s", item.ID))
 				//Remove
 				DeleteContract(&item)

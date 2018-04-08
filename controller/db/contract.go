@@ -90,21 +90,3 @@ func UpdateContract(contract *model.Contract) (err error) {
 	err = contract.Upsert()
 	return
 }
-
-//considerContract checks an incoming DB row to see if I can run it and vote for it
-func considerContract(contract model.Contract) {
-	log.Infoln(fmt.Sprintf("❓  Asking: Can I run this contract: %s ", contract.ID))
-
-	//Check if I can run this spec
-	canHandle := true //TODO
-
-	if canHandle {
-		log.Infoln(fmt.Sprintf("🤩  > Actually bidding on this contract: %s ", contract.ID))
-		CreateBidFromContract(contract)
-		//Check for wins in a minute
-		go func() {
-			CheckForWinsLater(contract)
-		}()
-	}
-
-}

@@ -2,8 +2,6 @@ package db
 
 import (
 	"fmt"
-	"time"
-
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/model"
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/mongo"
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/util"
@@ -23,14 +21,6 @@ func GetWin() (wins []model.Win) {
 func GetWinsByContractID(contractID string) (wins []model.Win) {
 	mongo.GetCollection(model.Win{}).Find(bson.M{"contractId": contractID}).All(&wins)
 	return
-}
-
-//CheckForWinsLater announces winners where relevant
-func CheckForWinsLater(contract model.Contract) {
-	log.Infoln(fmt.Sprintf("💤   Going to check for wins in n minutes: %s ", contract.ID))
-	time.Sleep(65 * time.Second)
-	CheckForWinsNow(contract)
-
 }
 
 //CheckForWins announces winners where relevant

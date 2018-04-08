@@ -24,6 +24,9 @@ const DBGCURL = "https://us-central1-plancks-cloud.cloudfunctions.net/pc-functio
 //ScheduledInterval is how often some things run
 const ScheduledInterval = 30
 
+//AncientAgeSeconds is how long before a row can be GCd
+const AncientAgeSeconds = 300
+
 //InitRepo initialises the repository and it's variables.
 func InitRepo() {
 	initWallet()
