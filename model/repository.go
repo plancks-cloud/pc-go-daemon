@@ -9,6 +9,11 @@ import (
 var (
 	//SystemWallet is the wallet to use as the system
 	SystemWallet *Wallet
+
+	DoorBellCommunity chan bool
+	DoorBellHealth chan bool
+	DoorBellRemote chan bool
+
 )
 
 //DBSyncURL is the endpoint for the function

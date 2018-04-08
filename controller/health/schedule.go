@@ -5,21 +5,20 @@ import (
 	log "github.com/sirupsen/logrus"
 	"sync"
 	"time"
+	"git.amabanana.com/plancks-cloud/pc-go-daemon/model"
 )
-
-var Wakey = make(chan bool)
 
 func ScheduleHealthCheck() {
 
 	go func() {
-
-		select {
-		case <-Wakey:
-			waitingDoIt()
-		case <-time.After(30 * time.Second):
-			waitingDoIt()
+		for {
+			select {
+			case <-model.DoorBellHealth:
+				waitingDoIt()
+			case <-time.After(30 * time.Second):
+				waitingDoIt()
+			}
 		}
-
 	}()
 
 }

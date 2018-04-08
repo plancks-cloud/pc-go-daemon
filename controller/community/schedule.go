@@ -3,21 +3,20 @@ package community
 import (
 	"sync"
 	"time"
+	"git.amabanana.com/plancks-cloud/pc-go-daemon/model"
 )
-
-var Wakey = make(chan bool)
 
 func ScheduleCommunityActivities() {
 
 	go func() {
-
-		select {
-		case <-Wakey:
-			waitingDoIt()
-		case <-time.After(30 * time.Second):
-			waitingDoIt()
+		for {
+			select {
+			case <-model.DoorBellCommunity:
+				waitingDoIt()
+			case <-time.After(30 * time.Second):
+				waitingDoIt()
+			}
 		}
-
 	}()
 
 }
