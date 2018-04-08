@@ -1,4 +1,4 @@
-package controller
+package db
 
 import (
 	"context"
@@ -60,7 +60,7 @@ func CreateServiceFromWin(win *model.Win) {
 
 	log.Debugln(fmt.Sprintf("Creating service object for contractID: %s", win.ContractID))
 	CreateService(&service)
-	ReconServicesNow()
+	ReconServices()
 
 }
 
@@ -107,7 +107,7 @@ func UpdateService(service *model.Service) error {
 	return err
 }
 
-func reconServices() {
+func ReconServices() {
 	servicesNotYetCreated, servicesToBeDeleted := compareRunningServicesToDB()
 	createServices(servicesNotYetCreated)
 	deleteServices(servicesToBeDeleted)

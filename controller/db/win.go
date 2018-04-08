@@ -1,4 +1,4 @@
-package controller
+package db
 
 import (
 	"fmt"
@@ -96,29 +96,22 @@ func CreateWinFromContract(winnerID string, contract model.Contract) {
 
 }
 
-//CallbackWinAsync checks an incoming DB row to see if it is interesting
-func CallbackWinAsync(win model.Win) {
-
-	//Check if expired first.
-	contract, _ := GetOneContract(win.ContractID)
-	//Should be there... if the win is there
-	if win.Expired(&contract) {
-		//Ignore
-		return
+func HaveIWonFromWins(wins []model.Win) (bool, model.Win) {
+	for _, win := range wins {
+		if HaveIWonFromWin(win) {
+			return true, win
+		}
 	}
+	return false, model.Win{}
+}
+func HaveIWonFromWin(win model.Win) bool {
+	return model.SystemWallet.ID == win.WinnerAccount
 
-	//Check not existing service
-	if ServiceExistsByContractId(win.ContractID) {
-		//Ignore
-		return
-	}
-
-	go CheckIfIWon(win)
 }
 
 //CheckIfIWon if I won will take the next steps if needed
 func CheckIfIWon(win model.Win) {
-	if model.SystemWallet.ID == win.WinnerAccount {
+	if HaveIWonFromWin(win) {
 		log.Infoln("🏆  I'm the winner of this contract %s", win.ContractID)
 		CreateServiceFromWin(&win)
 	}

@@ -1,4 +1,4 @@
-package controller
+package db
 
 import (
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/model"

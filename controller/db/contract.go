@@ -1,4 +1,4 @@
-package controller
+package db
 
 import (
 	"fmt"
@@ -67,7 +67,7 @@ func ExpiredContractBy(contract *model.Contract, seconds int) bool {
 		return false
 	}
 
-	return now > contract.RunUntil + int64(seconds*1000)
+	return now > contract.RunUntil+int64(seconds*1000)
 }
 
 func DeleteContract(contract *model.Contract) {

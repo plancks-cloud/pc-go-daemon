@@ -5,13 +5,13 @@ import (
 	"fmt"
 	"net/http"
 
-	"git.amabanana.com/plancks-cloud/pc-go-daemon/controller"
+	"git.amabanana.com/plancks-cloud/pc-go-daemon/controller/db"
 )
 
 //Ping perform a health check
 func Ping(w http.ResponseWriter, _ *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(controller.HealthCheck())
+	json.NewEncoder(w).Encode(db.HealthCheck())
 }
 
 //CORSHandler does CORS check
@@ -30,8 +30,8 @@ func CORSHandler(f http.HandlerFunc) http.HandlerFunc {
 	}
 }
 
-//ForceSync forces a sync
+//ForceSync forces a remote
 func ForceSync(w http.ResponseWriter, _ *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(controller.ForceSync())
+	json.NewEncoder(w).Encode(db.ForceSync())
 }
