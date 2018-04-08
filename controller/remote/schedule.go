@@ -31,6 +31,11 @@ func waitingDoIt() {
 
 	syncPullAll(wg)
 
+	go func() {
+		//Ping the community Go routine
+		model.DoorBellCommunity <- true
+	}()
+
 	wg.Wait()
 
 }
