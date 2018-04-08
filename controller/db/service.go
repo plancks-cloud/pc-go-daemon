@@ -60,7 +60,7 @@ func CreateServiceFromWin(win *model.Win) {
 
 	log.Debugln(fmt.Sprintf("Creating service object for contractID: %s", win.ContractID))
 	CreateService(&service)
-	ReconServices()
+	ReconServices() //Maybe should not be here
 
 }
 
