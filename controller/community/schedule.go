@@ -12,7 +12,7 @@ func ScheduleCommunityActivities() {
 
 	go func() {
 		for {
-			log.Infoln(fmt.Sprintf("🍎️  ScheduleCommunityActivities"))
+			log.Debugln(fmt.Sprintf("🍎️  ScheduleCommunityActivities"))
 			select {
 			case <-time.After(model.ScheduledInterval * time.Second):
 				waitingDoIt()
