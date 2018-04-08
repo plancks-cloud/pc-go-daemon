@@ -2,19 +2,18 @@ package remote
 
 import (
 	"sync"
-	"time"
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/model"
+	"time"
 )
-
 
 func ScheduleRemoteSync() {
 
 	go func() {
 		for {
 			select {
-			case <-model.DoorBellRemote:
-				waitingDoIt()
 			case <-time.After(model.ScheduledInterval * time.Second):
+				waitingDoIt()
+			case <-model.DoorBellRemote:
 				waitingDoIt()
 			}
 		}

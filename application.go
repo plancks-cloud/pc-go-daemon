@@ -54,6 +54,7 @@ func initAll() {
 
 	remote.Init()
 	remote.ScheduleRemoteSync()
+
 	community.ScheduleCommunityActivities()
 	health.ScheduleHealthCheck()
 

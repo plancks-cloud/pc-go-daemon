@@ -1,7 +1,6 @@
 package community
 
 import (
-	"sync"
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/model"
 	"fmt"
 	log "github.com/sirupsen/logrus"
@@ -13,7 +12,7 @@ func ScheduleCommunityActivities() {
 
 	go func() {
 		for {
-			log.Debugln(fmt.Sprintf("🍎️  ScheduleCommunityActivities"))
+			log.Infoln(fmt.Sprintf("🍎️  ScheduleCommunityActivities"))
 			select {
 			case <-time.After(model.ScheduledInterval * time.Second):
 				waitingDoIt()
@@ -26,14 +25,9 @@ func ScheduleCommunityActivities() {
 }
 
 func waitingDoIt() {
-	log.Debugln(fmt.Sprintf("🍎️  ScheduleCommunityActivities: waitingDoIt"))
+	log.Infoln(fmt.Sprintf("🍎️  ScheduleCommunityActivities: waitingDoIt"))
 
-	var wg sync.WaitGroup
-	wg.Add(2)
-
-	considerContracts(wg)
-	considerWins(wg)
-
-	wg.Wait()
+	considerContracts()
+	considerWins()
 
 }
