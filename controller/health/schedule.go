@@ -3,19 +3,19 @@ package health
 import (
 	"fmt"
 	log "github.com/sirupsen/logrus"
-	"sync"
-	"time"
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/model"
+	"time"
 )
 
 func ScheduleHealthCheck() {
 
 	go func() {
 		for {
+			log.Infoln(fmt.Sprintf("❄️  ScheduleHealthCheck"))
 			select {
-			case <-model.DoorBellHealth:
-				waitingDoIt()
 			case <-time.After(model.ScheduledInterval * time.Second):
+				waitingDoIt()
+			case <-model.DoorBellHealth:
 				waitingDoIt()
 			}
 		}
@@ -24,13 +24,7 @@ func ScheduleHealthCheck() {
 }
 
 func waitingDoIt() {
-
-	var wg sync.WaitGroup
-	wg.Add(1)
-
-	log.Infoln(fmt.Sprintf("⏰  Time to recon services"))
-	healthCheckServices(wg)
-
-	wg.Wait()
+	log.Infoln(fmt.Sprintf("❄️  ScheduleHealthCheck: waitingDoIt"))
+	healthCheckServices()
 
 }
