@@ -30,4 +30,9 @@ func waitingDoIt() {
 	considerContracts()
 	considerWins()
 
+	//Ping the healing GR
+	go func() {
+		model.DoorBellHealth <- true
+	}()
+
 }
