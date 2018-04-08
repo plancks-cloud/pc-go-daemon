@@ -25,7 +25,6 @@ func CreateContract(w http.ResponseWriter, r *http.Request) {
 
 	go func() {
 		//Ensure we kick off async processes
-		model.DoorBellCommunity <- true
 		model.DoorBellRemote <- true
 	}()
 
