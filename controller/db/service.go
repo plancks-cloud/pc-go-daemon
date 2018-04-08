@@ -109,6 +109,9 @@ func UpdateService(service *model.Service) error {
 
 func ReconServices() {
 	servicesNotYetCreated, servicesToBeDeleted := compareRunningServicesToDB()
+	log.Infoln(fmt.Sprintf("❄️  Services not yet created: %z", len(servicesNotYetCreated)))
+	log.Infoln(fmt.Sprintf("❄️  Services to be deleted: %s", len(servicesToBeDeleted)))
+
 	createServices(servicesNotYetCreated)
 	deleteServices(servicesToBeDeleted)
 }
@@ -180,6 +183,7 @@ func createServices(services []model.Service) {
 			}
 			log.Infoln(fmt.Sprintf("✅  Creating a service for contractId: %s", service.ContractID))
 			createService(&service, &contract)
+			go func() { model.DoorBellHealth <- true }() //Ensure that the health check is run soon
 		}
 	}
 
