@@ -22,6 +22,12 @@ func CreateContract(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(model.OkMessage(false, err.Error()))
 	}
 	json.NewEncoder(w).Encode(db.CreateContract(&contract))
+
+	go func() {
+		//Ensure the community sync runs soon
+		model.DoorBellCommunity<-true
+	}()
+
 }
 
 //GetContract returns a contract by the ID given
