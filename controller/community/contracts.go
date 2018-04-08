@@ -30,10 +30,11 @@ func considerContracts() {
 		}
 
 		//Did I bid
-		if db.HaveIBidOnContract(contract.ID) {
-			continue
+		if !db.HaveIBidOnContract(contract.ID) {
+			db.CreateBidFromContract(contract)
 		}
-		db.CreateBidFromContract(contract)
+
+		db.CheckForWinsNow(contract)
 
 	}
 
