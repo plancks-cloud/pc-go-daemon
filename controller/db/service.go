@@ -109,8 +109,8 @@ func UpdateService(service *model.Service) error {
 
 func ReconServices() {
 	servicesNotYetCreated, servicesToBeDeleted := compareRunningServicesToDB()
-	log.Infoln(fmt.Sprintf("❄️  Services not yet created: %z", len(servicesNotYetCreated)))
-	log.Infoln(fmt.Sprintf("❄️  Services to be deleted: %s", len(servicesToBeDeleted)))
+	log.Infoln(fmt.Sprintf("❄️  Services not yet created: %d", len(servicesNotYetCreated)))
+	log.Infoln(fmt.Sprintf("❄️  Services to be deleted: %d", len(servicesToBeDeleted)))
 
 	createServices(servicesNotYetCreated)
 	deleteServices(servicesToBeDeleted)
