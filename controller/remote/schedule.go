@@ -4,12 +4,15 @@ import (
 	"sync"
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/model"
 	"time"
+	"fmt"
+	log "github.com/sirupsen/logrus"
 )
 
 func ScheduleRemoteSync() {
 
 	go func() {
 		for {
+			log.Infoln(fmt.Sprintf("❄️  ScheduleRemoteCheck"))
 			select {
 			case <-time.After(model.ScheduledInterval * time.Second):
 				waitingDoIt()
@@ -26,10 +29,10 @@ func waitingDoIt() {
 	var wg sync.WaitGroup
 	wg.Add(2)
 
-	syncPushAll(wg)
+	syncPushAll(&wg)
 	remoteGC()
 
-	syncPullAll(wg)
+	syncPullAll(&wg)
 
 	go func() {
 		//Ping the community Go routine

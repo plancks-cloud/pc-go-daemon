@@ -12,18 +12,18 @@ import (
 	"sync"
 )
 
-func syncPullAll(outerWaitGroup sync.WaitGroup) {
+func syncPullAll(outerWaitGroup *sync.WaitGroup) {
 
-	go func(outerWaitGroup sync.WaitGroup) {
+	go func(outerWaitGroup *sync.WaitGroup) {
 
 		var wg sync.WaitGroup
 		wg.Add(4)
 
 		startMethod := time.Now()
-		go pullAndStoreAllContracts(wg)
-		go pullAndStoreAllWallets(wg)
-		go pullAndStoreAllBids(wg)
-		go pullAndStoreAllWins(wg)
+		go pullAndStoreAllContracts(&wg)
+		go pullAndStoreAllWallets(&wg)
+		go pullAndStoreAllBids(&wg)
+		go pullAndStoreAllWins(&wg)
 
 		wg.Wait()
 
@@ -33,11 +33,13 @@ func syncPullAll(outerWaitGroup sync.WaitGroup) {
 		//Kick off a local GC
 		db.LocalGC()
 
+		outerWaitGroup.Done()
+
 	}(outerWaitGroup)
 
 }
 
-func pullAndStoreAllContracts(wg sync.WaitGroup) {
+func pullAndStoreAllContracts(wg *sync.WaitGroup) {
 	start := time.Now()
 	contracts := pullAllContracts()
 	for _, contract := range contracts {
@@ -68,7 +70,7 @@ func pullAllContracts() (contracts []model.Contract) {
 	return
 }
 
-func pullAndStoreAllWallets(wg sync.WaitGroup) {
+func pullAndStoreAllWallets(wg *sync.WaitGroup) {
 	start := time.Now()
 	wallets := pullAllWallets()
 	for _, item := range wallets {
@@ -95,7 +97,7 @@ func pullAllWallets() (wallets []model.Wallet) {
 	return
 }
 
-func pullAndStoreAllBids(wg sync.WaitGroup) {
+func pullAndStoreAllBids(wg *sync.WaitGroup) {
 	start := time.Now()
 	bids := pullAllBids()
 	for _, item := range bids {
@@ -124,7 +126,7 @@ func pullAllBids() (bids []model.Bid) {
 	return
 }
 
-func pullAndStoreAllWins(wg sync.WaitGroup) {
+func pullAndStoreAllWins(wg *sync.WaitGroup) {
 	start := time.Now()
 	wins := pullAllWins()
 	for _, item := range wins {
