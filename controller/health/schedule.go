@@ -12,7 +12,7 @@ func ScheduleHealthCheck() {
 
 	go func() {
 		for {
-			log.Debugln(fmt.Sprintf("❄️  ScheduleHealthCheck"))
+			log.Debugln(fmt.Sprintf("🍎️  ScheduleHealthCheck"))
 			select {
 			case <-time.After(model.ScheduledInterval * time.Second):
 				waitingDoIt()
@@ -25,7 +25,7 @@ func ScheduleHealthCheck() {
 }
 
 func waitingDoIt() {
-	log.Infoln(fmt.Sprintf("❄️  ScheduleHealthCheck: tick"))
+	log.Infoln(fmt.Sprintf("🍎️  ScheduleHealthCheck: tick"))
 	db.ReconServices()
 
 }

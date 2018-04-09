@@ -25,7 +25,7 @@ func ScheduleRemoteSync() {
 
 func waitingDoIt() {
 
-	log.Infoln(fmt.Sprintf("❄️  ScheduleRemoteCheck: tick"))
+	log.Infoln(fmt.Sprintf("📡️  ScheduleRemoteCheck: tick"))
 	var wg sync.WaitGroup
 	wg.Add(2)
 
