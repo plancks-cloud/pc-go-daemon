@@ -102,7 +102,7 @@ func HaveIWonFromWin(win model.Win) bool {
 //CheckIfIWon if I won will take the next steps if needed
 func CheckIfIWon(win model.Win) {
 	if HaveIWonFromWin(win) {
-		log.Infoln("🏆  I'm the winner of this contract %s", win.ContractID)
+		log.Debugln("🏆  I'm the winner of this contract %s", win.ContractID)
 		CreateServiceFromWin(&win)
 	}
 }

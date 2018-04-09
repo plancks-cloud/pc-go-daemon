@@ -50,21 +50,19 @@ func GetOneContract(id string) (contract model.Contract, err error) {
 
 //ExpiredContract checks if a contract has expired
 func ExpiredContract(contract *model.Contract) bool {
-	now := util.MakeTimestamp()
-	if contract.RunUntil == 0 {
-		return false
-	}
-	return now > contract.RunUntil
+	return ExpiredContractBy(contract, 0)
 }
 
 //ExpiredContractBy checks if a contract has expired
 func ExpiredContractBy(contract *model.Contract, seconds int) bool {
-	now := util.MakeTimestamp()
-	if contract.RunUntil == 0 {
+	if contract.SecondsToLive == 0 {
 		return false
 	}
 
-	return now > contract.RunUntil+int64(seconds*1000)
+	now := util.MakeTimestamp()
+	expires := contract.Timestamp + (1000 * (contract.SecondsToLive + 60 + int64(seconds)))
+
+	return now > expires
 }
 
 func DeleteContract(contract *model.Contract) {

@@ -58,9 +58,13 @@ func CreateServiceFromWin(win *model.Win) {
 		Replicas:       contract.Replicas,
 		ContractID:     contract.ID}
 
+	service.RunUntil = service.EffectiveDate + (1000 * contract.SecondsToLive)
+
 	log.Debugln(fmt.Sprintf("Creating service object for contractID: %s", win.ContractID))
 	CreateService(&service)
-	ReconServices() //Maybe should not be here
+
+	//Ensure that we check the health soon
+	go func() { model.DoorBellHealth <- true }()
 
 }
 

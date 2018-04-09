@@ -17,6 +17,7 @@ type Service struct {
 	Image          string `json:"image" bson:"image,omitempty"`
 	HasWorked      bool   `json:"hasWorked" bson:"hasWorked,omitempty"`
 	EffectiveDate  int64  `json:"effectiveDate" bson:"effectiveDate,omitempty"`
+	RunUntil       int64  `json:"runUntil" bson:"runUntil,omitempty"`
 	Network        string `json:"network" bson:"network,omitempty"`
 	HealthyManaged bool   `json:"healthyManaged" bson:"healthyManaged,omitempty"`
 	Replicas       int    `json:"replicas" bson:"replicas,omitempty"`
@@ -41,10 +42,10 @@ func (service *Service) Upsert() error {
 //Expired checks if a service should still be running according to the contract it was created with
 func (service *Service) Expired(contract *Contract) bool {
 	now := util.MakeTimestamp()
-	if contract.RunUntil == 0 {
+	if service.RunUntil == 0 {
 		return false
 	}
-	return now > contract.RunUntil
+	return now > service.RunUntil
 }
 
 //ServiceState models the current running state of a service
