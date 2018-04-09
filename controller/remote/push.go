@@ -49,6 +49,7 @@ func pushAllWallets(wg *sync.WaitGroup) {
 func pushAllContracts(wg *sync.WaitGroup) {
 	contracts := db.GetContract()
 	if contracts == nil || len(contracts) == 0 {
+		wg.Done()
 		return
 	}
 	body := model.ContractSyncable{Collection: "Contract", Index: "_id", Indexes: nil, Rows: contracts}
@@ -62,6 +63,7 @@ func pushAllContracts(wg *sync.WaitGroup) {
 func pushAllBids(wg *sync.WaitGroup) {
 	bids := db.GetBid()
 	if bids == nil || len(bids) == 0 {
+		wg.Done()
 		return
 	}
 	body := model.BidSyncable{Collection: "Bid", Index: "_id", Indexes: nil, Rows: bids}
@@ -75,6 +77,7 @@ func pushAllBids(wg *sync.WaitGroup) {
 func pushAllWins(wg *sync.WaitGroup) {
 	wins := db.GetWin()
 	if wins == nil || len(wins) == 0 {
+		wg.Done()
 		return
 	}
 	body := model.WinSyncable{Collection: "Win", Index: "_id", Indexes: nil, Rows: wins}
