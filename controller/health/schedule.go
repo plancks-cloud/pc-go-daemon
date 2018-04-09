@@ -25,7 +25,7 @@ func ScheduleHealthCheck() {
 }
 
 func waitingDoIt() {
-	log.Infoln(fmt.Sprintf("❄️  ScheduleHealthCheck: waitingDoIt"))
+	log.Infoln(fmt.Sprintf("❄️  ScheduleHealthCheck: tick"))
 	db.ReconServices()
 
 }

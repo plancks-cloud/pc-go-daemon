@@ -50,7 +50,7 @@ func pullAndStoreAllContracts(wg *sync.WaitGroup) {
 		contract.Upsert()
 	}
 	elapsed := time.Since(start)
-	log.Infoln(fmt.Sprintf("⏰  PullAll-contracts took: %s", elapsed))
+	log.Debugln(fmt.Sprintf("⏰  PullAll-contracts took: %s", elapsed))
 	wg.Done()
 }
 func pullAllContracts() (contracts []model.Contract) {
@@ -77,7 +77,7 @@ func pullAndStoreAllWallets(wg *sync.WaitGroup) {
 		item.Upsert()
 	}
 	elapsed := time.Since(start)
-	log.Infoln(fmt.Sprintf("⏰  PullAll-wallets took: %s", elapsed))
+	log.Debugln(fmt.Sprintf("⏰  PullAll-wallets took: %s", elapsed))
 	wg.Done()
 }
 func pullAllWallets() (wallets []model.Wallet) {
@@ -106,7 +106,7 @@ func pullAndStoreAllBids(wg *sync.WaitGroup) {
 		}
 	}
 	elapsed := time.Since(start)
-	log.Infoln(fmt.Sprintf("⏰  PullAll-bids took: %s", elapsed))
+	log.Debugln(fmt.Sprintf("⏰  PullAll-bids took: %s", elapsed))
 	wg.Done()
 }
 func pullAllBids() (bids []model.Bid) {
@@ -135,7 +135,7 @@ func pullAndStoreAllWins(wg *sync.WaitGroup) {
 		}
 	}
 	elapsed := time.Since(start)
-	log.Infoln(fmt.Sprintf("⏰  PullAll-wins took: %s", elapsed))
+	log.Debugln(fmt.Sprintf("⏰  PullAll-wins took: %s", elapsed))
 	wg.Done()
 
 }

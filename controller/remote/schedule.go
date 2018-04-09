@@ -12,7 +12,6 @@ func ScheduleRemoteSync() {
 
 	go func() {
 		for {
-			log.Infoln(fmt.Sprintf("❄️  ScheduleRemoteCheck"))
 			select {
 			case <-time.After(model.ScheduledInterval * time.Second):
 				waitingDoIt()
@@ -26,6 +25,7 @@ func ScheduleRemoteSync() {
 
 func waitingDoIt() {
 
+	log.Infoln(fmt.Sprintf("❄️  ScheduleRemoteCheck: tick"))
 	var wg sync.WaitGroup
 	wg.Add(2)
 

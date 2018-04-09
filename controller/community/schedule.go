@@ -25,7 +25,7 @@ func ScheduleCommunityActivities() {
 }
 
 func waitingDoIt() {
-	log.Infoln(fmt.Sprintf("🍎️  ScheduleCommunityActivities: waitingDoIt"))
+	log.Infoln(fmt.Sprintf("🍎️  ScheduleCommunityActivities: tick"))
 
 	considerContracts()
 	considerWins()
