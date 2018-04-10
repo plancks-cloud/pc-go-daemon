@@ -82,7 +82,7 @@ func CreateWinFromContract(winnerID string, contract model.Contract) {
 		ContractID:    contract.ID,
 		WinnerAccount: winnerID,
 		Timestamp:     util.MakeTimestamp(),
-		Signature:     winnerID}
+		Signature:     model.SystemWallet.GetSignature()}
 	win.Upsert()
 	CheckIfIWon(win)
 
