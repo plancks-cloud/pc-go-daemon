@@ -21,12 +21,9 @@ func considerContracts() {
 		if len(wins) > 0 {
 			isWon, win := db.HaveIWonFromWins(wins)
 			if isWon {
-				log.Infoln(fmt.Sprintf("🏆  I'm the winner of this contract %s", contract.ID))
+				log.Debugln(fmt.Sprintf("🏆  I'm the winner of this contract %s", contract.ID))
 				db.CreateServiceFromWin(&win)
 			}
-
-			//Stop processing if there is a win
-			db.CheckForWinsNow(contract) // This needs to be channelled
 			continue
 		}
 

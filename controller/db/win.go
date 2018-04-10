@@ -42,6 +42,7 @@ func CheckForWinsNow(contract model.Contract) {
 		log.Debugln(fmt.Sprintf("> Looks like there are wins for this contract already. Stopping: %s ", contract.ID))
 		return
 	}
+	log.Infoln(fmt.Sprintf("> No wins and is ripe.. Will decide winner!. ID: %s ", contract.ID))
 
 	bids := GetBidsByContractID(contract.ID)
 	if len(bids) == 0 {
@@ -49,6 +50,7 @@ func CheckForWinsNow(contract model.Contract) {
 		log.Debugln(fmt.Sprintf("> No bids found. For now, no winner on contract, ID: %s ", contract.ID))
 		return
 	}
+	log.Infoln(fmt.Sprintf("> # of votes ID: %d ", len(bids)))
 
 	sort.Sort(model.ByVotes(bids))
 	winnerCount := 0
@@ -59,11 +61,11 @@ func CheckForWinsNow(contract model.Contract) {
 			//Out of bounds
 			continue
 		}
-		log.Debugln(fmt.Sprintf("> Going to say the winner was: %s", bids[winner].FromAccount))
+		log.Infoln(fmt.Sprintf("> Going to say the winner was: %s", bids[winner].FromAccount))
 		CreateWinFromContract(bids[winner].FromAccount, contract)
 		winnerCount++
 	}
-	log.Debugln(fmt.Sprintf("> # of winners: %d ", winnerCount))
+	log.Infoln(fmt.Sprintf("> # of winners: %d ", winnerCount))
 
 	if winnerCount == 0 {
 		log.Error(fmt.Sprintf("> This should never happen. No highest bid: %s ", contract.ID))
