@@ -4,10 +4,12 @@ import (
 	"fmt"
 	"net/http"
 
-	"git.amabanana.com/plancks-cloud/pc-go-daemon/controller"
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/model"
 
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/api"
+	"git.amabanana.com/plancks-cloud/pc-go-daemon/controller/community"
+	"git.amabanana.com/plancks-cloud/pc-go-daemon/controller/health"
+	"git.amabanana.com/plancks-cloud/pc-go-daemon/controller/remote"
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/mongo"
 	"github.com/gorilla/mux"
 	log "github.com/sirupsen/logrus"
@@ -50,6 +52,9 @@ func initAll() {
 	mongo.Init()
 	model.InitRepo()
 
-	controller.SyncDatabase()
-	controller.ReconServices()
+	remote.Init()
+	remote.ScheduleRemoteSync()
+	community.ScheduleCommunityActivities()
+	health.ScheduleHealthCheck()
+
 }

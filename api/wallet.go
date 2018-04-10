@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"net/http"
 
-	"git.amabanana.com/plancks-cloud/pc-go-daemon/controller"
+	"git.amabanana.com/plancks-cloud/pc-go-daemon/controller/db"
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/model"
-	log "github.com/sirupsen/logrus"
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/util"
+	log "github.com/sirupsen/logrus"
 )
 
 //CreateWallet creates a new wallet
@@ -21,11 +21,11 @@ func CreateWallet(w http.ResponseWriter, r *http.Request) {
 		util.RespondWithJsonError(w, err)
 		return
 	}
-	util.RespondWithJsonObject(w, controller.CreateWallet(&wallet))
+	util.RespondWithJsonObject(w, db.CreateWallet(&wallet))
 
 }
 
 //SetCurrentWallet sets the currently used wallet
 func SetCurrentWallet(w http.ResponseWriter, _ *http.Request) {
-	util.RespondWithJsonObject(w, controller.SetCurrentWallet())
+	util.RespondWithJsonObject(w, db.SetCurrentWallet())
 }

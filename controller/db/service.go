@@ -1,4 +1,4 @@
-package controller
+package db
 
 import (
 	"context"
@@ -58,9 +58,13 @@ func CreateServiceFromWin(win *model.Win) {
 		Replicas:       contract.Replicas,
 		ContractID:     contract.ID}
 
+	service.RunUntil = service.EffectiveDate + (1000 * contract.SecondsToLive)
+
 	log.Debugln(fmt.Sprintf("Creating service object for contractID: %s", win.ContractID))
 	CreateService(&service)
-	ReconServicesNow()
+
+	//Ensure that we check the health soon
+	go func() { model.DoorBellHealth <- true }()
 
 }
 
@@ -107,10 +111,14 @@ func UpdateService(service *model.Service) error {
 	return err
 }
 
-func reconServices() {
+func ReconServices() {
 	servicesNotYetCreated, servicesToBeDeleted := compareRunningServicesToDB()
+	if len(servicesNotYetCreated) > 0 || len(servicesToBeDeleted) > 0 {
+		log.Infoln(fmt.Sprintf("❄️  Services to create: %d and services to delete: %d", len(servicesNotYetCreated), len(servicesToBeDeleted)))
+	}
 	createServices(servicesNotYetCreated)
 	deleteServices(servicesToBeDeleted)
+
 }
 
 func compareRunningServicesToDB() (
@@ -180,6 +188,7 @@ func createServices(services []model.Service) {
 			}
 			log.Infoln(fmt.Sprintf("✅  Creating a service for contractId: %s", service.ContractID))
 			createService(&service, &contract)
+			go func() { model.DoorBellHealth <- true }() //Ensure that the health check is run soon
 		}
 	}
 

@@ -1,4 +1,4 @@
-package controller
+package db
 
 import (
 	"context"
@@ -27,7 +27,6 @@ func DockerListRunningServices() []model.ServiceState {
 
 //AllDockerServices gets all running docker services
 func AllDockerServices() (results []model.ServiceState) {
-
 
 	cli, err := client.NewEnvClient()
 
@@ -67,7 +66,7 @@ func AllDockerServices() (results []model.ServiceState) {
 			results = append(results, item)
 		}
 	}
-	return 
+	return
 }
 
 //TotalReplicas returns the total number of replicas running for a service

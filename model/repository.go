@@ -9,6 +9,10 @@ import (
 var (
 	//SystemWallet is the wallet to use as the system
 	SystemWallet *Wallet
+
+	DoorBellCommunity chan bool
+	DoorBellHealth    chan bool
+	DoorBellRemote    chan bool
 )
 
 //DBSyncURL is the endpoint for the function
@@ -16,6 +20,15 @@ const DBSyncURL = "https://us-central1-plancks-cloud.cloudfunctions.net/pc-funct
 
 //DBGCURL is the endpoint for the function that performs GC remotely
 const DBGCURL = "https://us-central1-plancks-cloud.cloudfunctions.net/pc-function-db-gc-v1"
+
+//ScheduledInterval is how often some things run
+const ScheduledInterval = 30
+
+//AncientAgeSeconds is how long before a row can be GCd
+const AncientAgeSeconds = 300
+
+//WinnerAgeSeconds is how many seconds before a winner can be declared
+const WinnerAgeSeconds = 60
 
 //InitRepo initialises the repository and it's variables.
 func InitRepo() {

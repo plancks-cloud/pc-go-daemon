@@ -1,9 +1,7 @@
-package controller
+package db
 
 import (
 	"fmt"
-	"time"
-
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/model"
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/mongo"
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/util"
@@ -14,7 +12,6 @@ import (
 //CreateContract creates a new contract
 func CreateContract(contract *model.Contract) model.MessageOK {
 	err := contract.Push()
-	CallbackContractAsync(*contract, true)
 	if err != nil {
 		log.Errorln(fmt.Sprintf("Error saving contract: %s", err))
 		return model.OkMessage(false, err.Error())
@@ -53,21 +50,19 @@ func GetOneContract(id string) (contract model.Contract, err error) {
 
 //ExpiredContract checks if a contract has expired
 func ExpiredContract(contract *model.Contract) bool {
-	now := util.MakeTimestamp()
-	if contract.RunUntil == 0 {
-		return false
-	}
-	return now > contract.RunUntil
+	return ExpiredContractBy(contract, 0)
 }
 
 //ExpiredContractBy checks if a contract has expired
 func ExpiredContractBy(contract *model.Contract, seconds int) bool {
-	now := util.MakeTimestamp()
-	if contract.RunUntil == 0 {
+	if contract.SecondsToLive == 0 {
 		return false
 	}
 
-	return now > contract.RunUntil + int64(seconds*1000)
+	now := util.MakeTimestamp()
+	expires := contract.Timestamp + (1000 * (contract.SecondsToLive + 60 + int64(seconds)))
+
+	return now > expires
 }
 
 func DeleteContract(contract *model.Contract) {
@@ -92,64 +87,4 @@ func ContractExists(id string) bool {
 func UpdateContract(contract *model.Contract) (err error) {
 	err = contract.Upsert()
 	return
-}
-
-//CallbackContractAsync checks an incoming DB row to see if it is interesting
-func CallbackContractAsync(contract model.Contract, interesting bool) {
-	go callbackContract(contract, interesting)
-}
-
-//callbackContract checks an incoming DB row to see if it is interesting
-// This method is long running and should be called asynchronously!
-func callbackContract(contract model.Contract, interesting bool) {
-
-	//Check if died of old age
-	if contract.RunUntil != 0 && util.MakeTimestamp() > contract.RunUntil {
-		if interesting {
-			log.Infoln(fmt.Sprintf("🙈  Thinking: Contract is ancient. Ignoring, ID: %s", contract.ID))
-		}
-		return
-	}
-
-	//Sleep for 10 seconds in-case I have bid in past life
-	time.Sleep(10 * time.Second)
-
-	bids := GetBidsByContractID(contract.ID)
-	for _, b := range bids {
-		if b.FromAccount == model.SystemWallet.ID {
-			if interesting {
-				log.Infoln(fmt.Sprintf("🍻  Thinking: I've already voted. Not voting for contract again, ID: %s", contract.ID))
-			}
-			CheckForWinsLater(contract) //This will ensure that it checks for wins that are currently not in memory
-			return                      //Already voted.. don't care
-		}
-	}
-
-	wins := GetWinsByContractID(contract.ID)
-	if len(wins) > 0 {
-		log.Infoln(fmt.Sprintf("😒  Thinking: Contract has been won. Ignoring, ID: %s", contract.ID))
-		return
-	}
-
-	log.Infoln(fmt.Sprintf("☺️  Thinking: I'd like to consider bidding on this contract, ID: %s", contract.ID))
-	considerContract(contract)
-
-}
-
-//considerContract checks an incoming DB row to see if I can run it and vote for it
-func considerContract(contract model.Contract) {
-	log.Infoln(fmt.Sprintf("❓  Asking: Can I run this contract: %s ", contract.ID))
-
-	//Check if I can run this spec
-	canHandle := true //TODO
-
-	if canHandle {
-		log.Infoln(fmt.Sprintf("🤩  > Actually bidding on this contract: %s ", contract.ID))
-		CreateBidFromContract(contract)
-		//Check for wins in a minute
-		go func() {
-			CheckForWinsLater(contract)
-		}()
-	}
-
 }

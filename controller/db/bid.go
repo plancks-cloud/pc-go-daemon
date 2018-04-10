@@ -1,13 +1,13 @@
-package controller
+package db
 
 import (
 	"math/rand"
 
+	"fmt"
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/model"
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/mongo"
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/util"
 	"github.com/globalsign/mgo/bson"
-	"fmt"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -25,6 +25,7 @@ func GetBidsByContractID(contractID string) (bids []model.Bid) {
 
 //CreateBidFromContract inserts a new bid for a contract
 func CreateBidFromContract(contract model.Contract) {
+	log.Infoln("✔️  Actually bidding on: %s", contract.ID)
 	bid := model.Bid{}
 	bid.ContractID = contract.ID
 	bid.FromAccount = model.SystemWallet.ID
@@ -42,4 +43,15 @@ func DeleteBidsByContractID(id string) {
 		log.Errorln(fmt.Sprintf("Error deleting bids by contractId: %s", err))
 	}
 
+}
+
+func HaveIBidOnContract(id string) bool {
+	bids := GetBidsByContractID(id)
+	myID := model.SystemWallet.ID
+	for _, bid := range bids {
+		if bid.FromAccount == myID {
+			return true
+		}
+	}
+	return false
 }

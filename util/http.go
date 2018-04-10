@@ -35,7 +35,7 @@ func Get(url string) (*http.Response, error) {
 	start := time.Now()
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
-		log.Errorln(fmt.Sprintf("Error creating request during sync: %s", err))
+		log.Errorln(fmt.Sprintf("Error creating request during remote: %s", err))
 		return nil, err
 	}
 	client := &http.Client{}
@@ -51,7 +51,7 @@ func Options(url string) {
 	start := time.Now()
 	req, err := http.NewRequest("OPTIONS", url, nil)
 	if err != nil {
-		log.Errorln(fmt.Sprintf("Error creating request during sync: %s", err))
+		log.Errorln(fmt.Sprintf("Error creating request during remote: %s", err))
 		return
 	}
 	client := &http.Client{}

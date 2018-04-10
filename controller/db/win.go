@@ -1,9 +1,7 @@
-package controller
+package db
 
 import (
 	"fmt"
-	"time"
-
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/model"
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/mongo"
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/util"
@@ -25,18 +23,10 @@ func GetWinsByContractID(contractID string) (wins []model.Win) {
 	return
 }
 
-//CheckForWinsLater announces winners where relevant
-func CheckForWinsLater(contract model.Contract) {
-	log.Infoln(fmt.Sprintf("💤   Going to check for wins in n minutes: %s ", contract.ID))
-	time.Sleep(65 * time.Second)
-	CheckForWinsNow(contract)
-
-}
-
 //CheckForWins announces winners where relevant
 func CheckForWinsNow(contract model.Contract) {
 	log.Debugln("win controller: CheckForWins")
-	ripeTime := contract.Timestamp + (1000 * 60)
+	ripeTime := contract.Timestamp + (1000 * model.WinnerAgeSeconds)
 	now := util.MakeTimestamp()
 
 	//If now is before the time we need
@@ -96,30 +86,23 @@ func CreateWinFromContract(winnerID string, contract model.Contract) {
 
 }
 
-//CallbackWinAsync checks an incoming DB row to see if it is interesting
-func CallbackWinAsync(win model.Win) {
-
-	//Check if expired first.
-	contract, _ := GetOneContract(win.ContractID)
-	//Should be there... if the win is there
-	if win.Expired(&contract) {
-		//Ignore
-		return
+func HaveIWonFromWins(wins []model.Win) (bool, model.Win) {
+	for _, win := range wins {
+		if HaveIWonFromWin(win) {
+			return true, win
+		}
 	}
+	return false, model.Win{}
+}
+func HaveIWonFromWin(win model.Win) bool {
+	return model.SystemWallet.ID == win.WinnerAccount
 
-	//Check not existing service
-	if ServiceExistsByContractId(win.ContractID) {
-		//Ignore
-		return
-	}
-
-	go CheckIfIWon(win)
 }
 
 //CheckIfIWon if I won will take the next steps if needed
 func CheckIfIWon(win model.Win) {
-	if model.SystemWallet.ID == win.WinnerAccount {
-		log.Infoln("🏆  I'm the winner of this contract %s", win.ContractID)
+	if HaveIWonFromWin(win) {
+		log.Debugln("🏆  I'm the winner of this contract %s", win.ContractID)
 		CreateServiceFromWin(&win)
 	}
 }
