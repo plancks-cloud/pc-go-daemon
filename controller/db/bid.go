@@ -25,7 +25,7 @@ func GetBidsByContractID(contractID string) (bids []model.Bid) {
 
 //CreateBidFromContract inserts a new bid for a contract
 func CreateBidFromContract(contract model.Contract) {
-	log.Infoln("✔️  Actually bidding on: %s", contract.ID)
+	log.Infoln(fmt.Sprintf("✔️  Actually bidding on: %s", contract.ID))
 	bid := model.Bid{}
 	bid.ContractID = contract.ID
 	bid.FromAccount = model.SystemWallet.ID

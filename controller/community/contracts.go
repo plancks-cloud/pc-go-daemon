@@ -3,6 +3,7 @@ package community
 import (
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/controller/db"
 	log "github.com/sirupsen/logrus"
+	"fmt"
 )
 
 func considerContracts() {
@@ -20,7 +21,7 @@ func considerContracts() {
 		if len(wins) > 0 {
 			isWon, win := db.HaveIWonFromWins(wins)
 			if isWon {
-				log.Infoln("🏆  I'm the winner of this contract %s", contract.ID)
+				log.Infoln(fmt.Sprintf("🏆  I'm the winner of this contract %s", contract.ID))
 				db.CreateServiceFromWin(&win)
 			}
 
