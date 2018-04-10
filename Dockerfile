@@ -9,8 +9,8 @@ WORKDIR /go/src/git.amabanana.com/plancks-cloud/pc-go-daemon
 COPY . .
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o pc-go-daemon .
 
-FROM alpine:latest
-RUN apk --no-cache add ca-certificates
-WORKDIR /root/
+FROM scratch
+WORKDIR /
 COPY --from=builder /go/src/git.amabanana.com/plancks-cloud/pc-go-daemon/pc-go-daemon .
-CMD ["./pc-go-daemon"]
+COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+CMD ["/pc-go-daemon"]
