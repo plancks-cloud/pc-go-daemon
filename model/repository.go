@@ -28,7 +28,7 @@ const ScheduledInterval = 30
 const AncientAgeSeconds = 300
 
 //WinnerAgeSeconds is how many seconds before a winner can be declared
-const WinnerAgeSeconds = 60
+const WinnerAgeSeconds = 70
 
 //InitRepo initialises the repository and it's variables.
 func InitRepo() {
