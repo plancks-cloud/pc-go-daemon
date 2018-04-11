@@ -2,24 +2,47 @@ package db
 
 import (
 	"fmt"
+	"git.amabanana.com/plancks-cloud/pc-go-daemon/mem"
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/model"
-	"git.amabanana.com/plancks-cloud/pc-go-daemon/mongo"
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/util"
-	"github.com/globalsign/mgo/bson"
+	"github.com/hashicorp/go-memdb"
 	"github.com/nu7hatch/gouuid"
 	log "github.com/sirupsen/logrus"
 	"sort"
 )
 
-//GetWin returns all wins stored in the Datastore
+const name = "Win"
+const contractId = "contractId"
+
+//GetWin returns all wins stored in the data store
 func GetWin() (wins []model.Win) {
-	mongo.GetCollection(model.Win{}).Find(nil).All(&wins)
-	return
+	res, err := mem.GetAll(name)
+	return iteratorToMany(res, err)
+}
+
+func iteratorToMany(iterator memdb.ResultIterator, err error) (wins []model.Win) {
+	if err != nil {
+		log.Error(err.Error())
+		return nil
+	}
+	more := true
+	for more {
+		next := iterator.Next()
+		if next == nil {
+			more = false
+			continue
+		}
+		win := next.(*model.Win)
+		wins = append(wins, *win)
+	}
+	return wins
+
 }
 
 //GetWinsByContractID returns all wins for a contract
 func GetWinsByContractID(contractID string) (wins []model.Win) {
-	mongo.GetCollection(model.Win{}).Find(bson.M{"contractId": contractID}).All(&wins)
+	res, err := mem.GetAllByFieldAndValue(name, contractId, contractID)
+	wins = iteratorToMany(res, err)
 	return
 }
 
@@ -114,8 +137,7 @@ func CheckIfIWon(win model.Win) {
 
 //DeleteWinsByContractID deletes a row by the key contractId
 func DeleteWinsByContractID(id string) {
-	win := model.Win{}
-	_, err := mongo.GetCollection(&win).RemoveAll(bson.M{"contractId": id})
+	_, err := mem.Delete(name, "contractId", id)
 	if err != nil {
 		log.Errorln(fmt.Sprintf("Error deleting wins by contractId: %s", err))
 	}
