@@ -70,7 +70,7 @@ func ExpiredContractBy(contract *model.Contract, seconds int) bool {
 
 //DeleteContract deletes a contract from the database
 func DeleteContract(contract *model.Contract) {
-	_, err := mem.Delete(contractTable, "_id", contract.ID)
+	_, err := mem.Delete(contractTable, "id", contract.ID)
 	if err != nil {
 		log.Errorln(fmt.Sprintf("Error deleting contract: %s", err))
 	}

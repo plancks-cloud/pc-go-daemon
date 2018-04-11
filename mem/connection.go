@@ -20,70 +20,65 @@ func Init() {
 			"Contract": &memdb.TableSchema{
 				Name: "Contract",
 				Indexes: map[string]*memdb.IndexSchema{
-					"_id": &memdb.IndexSchema{
-						Name:    "_id",
+					"id": &memdb.IndexSchema{
+						Name:    "id",
 						Unique:  true,
-						Indexer: &memdb.StringFieldIndex{Field: "_id"},
+						Indexer: &memdb.StringFieldIndex{Field: "ID"},
 					},
 				},
 			},
 			"Bid": &memdb.TableSchema{
 				Name: "Bid",
 				Indexes: map[string]*memdb.IndexSchema{
-					"_id": &memdb.IndexSchema{
-						Name:    "_id",
+					"id": &memdb.IndexSchema{
+						Name:    "id",
 						Unique:  true,
-						Indexer: &memdb.StringFieldIndex{Field: "_id"},
+						Indexer: &memdb.StringFieldIndex{Field: "ID"},
 					},
 					"contractId": &memdb.IndexSchema{
 						Name:    "contractId",
 						Unique:  false,
-						Indexer: &memdb.StringFieldIndex{Field: "contractId"},
+						Indexer: &memdb.StringFieldIndex{Field: "ContractID"},
 					},
 				},
 			},
 			"Win": &memdb.TableSchema{
 				Name: "Win",
 				Indexes: map[string]*memdb.IndexSchema{
-					"_id": &memdb.IndexSchema{
-						Name:    "_id",
+					"id": &memdb.IndexSchema{
+						Name:    "id",
 						Unique:  true,
-						Indexer: &memdb.StringFieldIndex{Field: "_id"},
+						Indexer: &memdb.StringFieldIndex{Field: "ID"},
 					},
 					"contractId": &memdb.IndexSchema{
 						Name:    "contractId",
 						Unique:  false,
-						Indexer: &memdb.StringFieldIndex{Field: "contractId"},
+						Indexer: &memdb.StringFieldIndex{Field: "ContractID"},
 					},
 				},
 			},
 			"Service": &memdb.TableSchema{
 				Name: "Service",
 				Indexes: map[string]*memdb.IndexSchema{
-					"_id": &memdb.IndexSchema{
-						Name:    "_id",
+					"id": &memdb.IndexSchema{
+						Name:    "id",
 						Unique:  true,
-						Indexer: &memdb.StringFieldIndex{Field: "_id"},
+						Indexer: &memdb.StringFieldIndex{Field: "ID"},
 					},
 					"contractId": &memdb.IndexSchema{
 						Name:    "contractId",
 						Unique:  false,
-						Indexer: &memdb.StringFieldIndex{Field: "contractId"},
+						Indexer: &memdb.StringFieldIndex{Field: "ContractID"},
 					},
 				},
 			},
 			"Wallet": &memdb.TableSchema{
 				Name: "Wallet",
 				Indexes: map[string]*memdb.IndexSchema{
-					"_id": &memdb.IndexSchema{
-						Name:    "_id",
+					"id": &memdb.IndexSchema{
+						Name:    "id",
 						Unique:  true,
-						Indexer: &memdb.StringFieldIndex{Field: "_id"},
-					},
-					"contractId": &memdb.IndexSchema{
-						Name:    "contractId",
-						Unique:  false,
-						Indexer: &memdb.StringFieldIndex{Field: "contractId"},
+						Indexer: &memdb.StringFieldIndex{Field: "ID"},
 					},
 				},
 			},
@@ -91,17 +86,17 @@ func Init() {
 	}
 
 	// Create a new data base
-	var err error
-	db, err = memdb.NewMemDB(schema)
+	dbConnect, err := memdb.NewMemDB(schema)
 	if err != nil {
 		panic(err)
 	}
+	db = dbConnect
 
 }
 
 func GetUniqueById(name string, id string) (interface{}, error) {
 	txn := getTransaction(false)
-	raw, err := txn.First(name, "_id", id)
+	raw, err := txn.First(name, "id", id)
 	return raw, err
 
 }
@@ -115,7 +110,7 @@ func GetAllByFieldAndValue(name string, field string, value string) (memdb.Resul
 
 func GetAll(name string) (memdb.ResultIterator, error) {
 	txn := getTransaction(false)
-	return txn.Get(name, "_id")
+	return txn.Get(name, "id")
 
 }
 
