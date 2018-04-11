@@ -20,13 +20,13 @@ func GetWin() (wins []model.Win) {
 	return iteratorToManyWins(res, err)
 }
 
-func iteratorToManyWins(iterator memdb.ResultIterator, err error) (wins []model.Win) {
+func iteratorToManyWins(iterator memdb.ResultIterator, err error) (items []model.Win) {
 	if err != nil {
 		log.Error(err.Error())
 		return nil
 	}
 	if iterator == nil {
-		return wins
+		return items
 	}
 	more := true
 	for more {
@@ -36,9 +36,10 @@ func iteratorToManyWins(iterator memdb.ResultIterator, err error) (wins []model.
 			continue
 		}
 		win := next.(model.Win)
-		wins = append(wins, win)
+		items = append(items, win)
 	}
-	return wins
+	log.Infoln(fmt.Sprintf("Win iterator counts: %d", len(items)))
+	return items
 
 }
 
