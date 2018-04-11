@@ -4,11 +4,11 @@ import (
 	"math/rand"
 
 	"fmt"
+	"git.amabanana.com/plancks-cloud/pc-go-daemon/mem"
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/model"
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/util"
-	log "github.com/sirupsen/logrus"
-	"git.amabanana.com/plancks-cloud/pc-go-daemon/mem"
 	"github.com/hashicorp/go-memdb"
+	log "github.com/sirupsen/logrus"
 )
 
 const bidTable = "Bid"
