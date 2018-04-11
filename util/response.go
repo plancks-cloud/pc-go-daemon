@@ -6,17 +6,20 @@ import (
 	"net/http"
 )
 
+//RespondWithJsonObject is a generic json returning utility method
 func RespondWithJsonObject(w http.ResponseWriter, v interface{}) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(v)
 
 }
 
+//RespondWithJsonOk writes ok back to the http response
 func RespondWithJsonOk(w http.ResponseWriter, v interface{}) {
 	RespondWithJsonObject(w, Ok(true))
 
 }
 
+//RespondWithJsonError sends back an error
 func RespondWithJsonError(w http.ResponseWriter, e error) {
 	RespondWithJsonObject(w, OkMessage(false, e.Error()))
 
