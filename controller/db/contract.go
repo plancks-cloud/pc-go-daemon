@@ -3,11 +3,13 @@ package db
 import (
 	"fmt"
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/model"
-	"git.amabanana.com/plancks-cloud/pc-go-daemon/mongo"
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/util"
-	"github.com/globalsign/mgo/bson"
 	log "github.com/sirupsen/logrus"
+	"github.com/hashicorp/go-memdb"
+	"git.amabanana.com/plancks-cloud/pc-go-daemon/mem"
 )
+
+const contractTable = "Contract"
 
 //CreateContract creates a new contract
 func CreateContract(contract *model.Contract) model.MessageOK {
@@ -21,13 +23,13 @@ func CreateContract(contract *model.Contract) model.MessageOK {
 
 }
 
-//GetContract returns all contracts stored in the datastore
+//GetContract returns all contracts stored in the database
 func GetContract() (contracts []model.Contract) {
-	mongo.GetCollection(model.Contract{}).Find(nil).All(&contracts)
-	return
+	res, err := mem.GetAll(contractId)
+	return iteratorToManyContracts(res, err)
 }
 
-//GetContractResult returns all contracts results stored in the datastore
+//GetContractResult returns all contracts results stored in the database
 func GetContractResult() (results []model.ContractResult) {
 	contracts := GetContract()
 	for _, element := range contracts {
@@ -41,11 +43,12 @@ func GetContractResult() (results []model.ContractResult) {
 
 //GetOneContract returns a single contract
 func GetOneContract(id string) (contract model.Contract, err error) {
-	err = mongo.GetCollection(&contract).Find(bson.M{"_id": id}).One(&contract)
+	item, err := mem.GetUniqueById(contractTable, id)
 	if err != nil {
-		log.Errorln(fmt.Sprintf("Error getting contract: %s", err))
+		log.Errorln(fmt.Sprintf("Error Getting one contract: %s", err))
+		return model.Contract{}, err
 	}
-	return
+	return item.(model.Contract), nil
 }
 
 //ExpiredContract checks if a contract has expired
@@ -67,7 +70,7 @@ func ExpiredContractBy(contract *model.Contract, seconds int) bool {
 
 //DeleteContract deletes a contract from the database
 func DeleteContract(contract *model.Contract) {
-	err := mongo.GetCollection(&contract).Remove(bson.M{"_id": contract.ID})
+	_, err := mem.Delete(contractTable, "_id", contract.ID)
 	if err != nil {
 		log.Errorln(fmt.Sprintf("Error deleting contract: %s", err))
 	}
@@ -76,16 +79,37 @@ func DeleteContract(contract *model.Contract) {
 
 //ContractExists checks if there is a contract by that ID in the db
 func ContractExists(id string) bool {
-	var contract model.Contract
-	count, err := mongo.GetCollection(&contract).Find(bson.M{"_id": id}).Count()
+	res, err := mem.GetUniqueById(contractTable, id)
 	if err != nil {
-		log.Errorln(fmt.Sprintf("Error getting contract: %s", err))
+		log.Errorln(fmt.Sprintf("Error getting services: %s", err))
+		//TODO: discuss this... super hard
+		return false
 	}
-	return count == 1
+	return res != nil
+
 }
 
 //UpdateContract upserts the given contract
 func UpdateContract(contract *model.Contract) (err error) {
 	err = contract.Upsert()
 	return
+}
+
+func iteratorToManyContracts(iterator memdb.ResultIterator, err error) (items []model.Contract) {
+	if err != nil {
+		log.Error(err.Error())
+		return nil
+	}
+	more := true
+	for more {
+		next := iterator.Next()
+		if next == nil {
+			more = false
+			continue
+		}
+		item := next.(*model.Contract)
+		items = append(items, *item)
+	}
+	return items
+
 }
