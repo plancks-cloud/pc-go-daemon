@@ -81,6 +81,24 @@
 
 [[projects]]
   branch = "master"
+  name = "github.com/hashicorp/go-immutable-radix"
+  packages = ["."]
+  revision = "7f3cd4390caab3250a57f30efdb2a65dd7649ecf"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/hashicorp/go-memdb"
+  packages = ["."]
+  revision = "1289e7fffe71d8fd4d4d491ba9a412c50f244c44"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/hashicorp/golang-lru"
+  packages = ["simplelru"]
+  revision = "0fb14efe8c47ae851c0034ed7a448854d3d34cf3"
+
+[[projects]]
+  branch = "master"
   name = "github.com/nu7hatch/gouuid"
   packages = ["."]
   revision = "179d4d0c4d8d407a32af483c2354df1d2c91e6c3"
@@ -131,6 +149,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "4c23602b6008666bc5a3e3d4c450a04fbb3bef86e690e4c46ebeae64ef713bed"
+  inputs-digest = "606214d1913253725b595c78439f1036f3e3c6e65d03d15e4b0c3802c10b3fd1"
   solver-name = "gps-cdcl"
   solver-version = 1

@@ -98,19 +98,6 @@ func GetServiceStateResult() (serviceStateResults []model.ServiceStateResult) {
 
 }
 
-//GetOneServiceByContract returns a single contract
-func GetOneServiceByContract(contractID string) (model.Service, error) {
-	var service model.Service
-	err := mongo.GetCollection(&service).Find(bson.M{"contractId": contractID}).One(&service)
-	return service, err
-}
-
-//UpdateService upserts the given bid
-func UpdateService(service *model.Service) error {
-	err := service.Upsert()
-	return err
-}
-
 //ReconServices starts and removes services
 func ReconServices() {
 	servicesNotYetCreated, servicesToBeDeleted := compareRunningServicesToDB()
