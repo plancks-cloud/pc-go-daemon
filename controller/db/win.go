@@ -17,10 +17,10 @@ const contractId = "contractId"
 //GetWin returns all wins stored in the data store
 func GetWin() (wins []model.Win) {
 	res, err := mem.GetAll(winTable)
-	return iteratorToMany(res, err)
+	return iteratorToManyWins(res, err)
 }
 
-func iteratorToMany(iterator memdb.ResultIterator, err error) (wins []model.Win) {
+func iteratorToManyWins(iterator memdb.ResultIterator, err error) (wins []model.Win) {
 	if err != nil {
 		log.Error(err.Error())
 		return nil
@@ -42,7 +42,7 @@ func iteratorToMany(iterator memdb.ResultIterator, err error) (wins []model.Win)
 //GetWinsByContractID returns all wins for a contract
 func GetWinsByContractID(contractID string) (wins []model.Win) {
 	res, err := mem.GetAllByFieldAndValue(winTable, contractId, contractID)
-	wins = iteratorToMany(res, err)
+	wins = iteratorToManyWins(res, err)
 	return
 }
 
