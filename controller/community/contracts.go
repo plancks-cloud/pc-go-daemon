@@ -1,9 +1,9 @@
 package community
 
 import (
+	"fmt"
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/controller/db"
 	log "github.com/sirupsen/logrus"
-	"fmt"
 )
 
 func considerContracts() {

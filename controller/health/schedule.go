@@ -2,10 +2,10 @@ package health
 
 import (
 	"fmt"
-	log "github.com/sirupsen/logrus"
-	"git.amabanana.com/plancks-cloud/pc-go-daemon/model"
-	"time"
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/controller/db"
+	"git.amabanana.com/plancks-cloud/pc-go-daemon/model"
+	log "github.com/sirupsen/logrus"
+	"time"
 )
 
 func ScheduleHealthCheck() {

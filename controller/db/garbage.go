@@ -2,11 +2,10 @@ package db
 
 import (
 	"fmt"
+	"git.amabanana.com/plancks-cloud/pc-go-daemon/model"
 	log "github.com/sirupsen/logrus"
 	"time"
-	"git.amabanana.com/plancks-cloud/pc-go-daemon/model"
 )
-
 
 //LocalGC cleans up the local database
 func LocalGC() {

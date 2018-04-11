@@ -48,7 +48,6 @@ func (bid Bid) Push() (err error) {
 }
 
 //DbID returns the ID of the bid
-// func (bid Bid) DbID() bson.ObjectId {
 func (bid Bid) DbID() string {
 	return bid.ID
 }

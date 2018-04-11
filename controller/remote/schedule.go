@@ -1,11 +1,11 @@
 package remote
 
 import (
-	"sync"
-	"git.amabanana.com/plancks-cloud/pc-go-daemon/model"
-	"time"
 	"fmt"
+	"git.amabanana.com/plancks-cloud/pc-go-daemon/model"
 	log "github.com/sirupsen/logrus"
+	"sync"
+	"time"
 )
 
 func ScheduleRemoteSync() {

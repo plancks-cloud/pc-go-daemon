@@ -23,7 +23,7 @@ func GetWinsByContractID(contractID string) (wins []model.Win) {
 	return
 }
 
-//CheckForWins announces winners where relevant
+//CheckForWinsNow announces winners where relevant
 func CheckForWinsNow(contract model.Contract) {
 	log.Debugln("win controller: CheckForWins")
 	ripeTime := contract.Timestamp + (1000 * model.WinnerAgeSeconds)

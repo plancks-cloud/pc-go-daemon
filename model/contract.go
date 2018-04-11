@@ -26,7 +26,7 @@ type Contract struct {
 	Replicas         int    `json:"replicas" bson:"replicas,omitempty"`
 	RequiredMBMemory int    `json:"requiredMBMemory" bson:"requiredMBMemory,omitempty"`
 	RequiredCPUCores int    `json:"requiredCPUCores" bson:"requiredCPUCores,omitempty"`
-	SecondsToLive         int64  `json:"secondsToLive" bson:"secondsToLive,omitempty"`
+	SecondsToLive    int64  `json:"secondsToLive" bson:"secondsToLive,omitempty"`
 	AllowSuicide     bool   `json:"allowSuicide" bson:"allowSuicide,omitempty"`
 	StartStrategy    string `json:"startStrategy" bson:"startStrategy,omitempty"`
 	ServiceName      string `json:"serviceName" bson:"serviceName,omitempty"`
@@ -42,9 +42,9 @@ type ContractSyncable struct {
 
 //ContractResult helps the client see the state of a contract
 type ContractResult struct {
-	Contract   `json:"contract"`
-	Bids []Bid `json:"bids"`
-	Wins []Win `json:"wins"`
+	Contract `json:"contract"`
+	Bids     []Bid `json:"bids"`
+	Wins     []Win `json:"wins"`
 }
 
 //ToJSON converts an object to json
