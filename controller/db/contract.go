@@ -113,7 +113,7 @@ func iteratorToManyContracts(iterator memdb.ResultIterator, err error) (items []
 		item := next.(model.Contract)
 		items = append(items, item)
 	}
-	log.Infoln(fmt.Sprintf("Contract iterator counts: %d", len(items)))
+	log.Debugln(fmt.Sprintf("Contract iterator counts: %d", len(items)))
 	return items
 
 }

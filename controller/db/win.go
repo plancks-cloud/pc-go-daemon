@@ -38,7 +38,7 @@ func iteratorToManyWins(iterator memdb.ResultIterator, err error) (items []model
 		win := next.(model.Win)
 		items = append(items, win)
 	}
-	log.Infoln(fmt.Sprintf("Win iterator counts: %d", len(items)))
+	log.Debugln(fmt.Sprintf("Win iterator counts: %d", len(items)))
 	return items
 
 }
