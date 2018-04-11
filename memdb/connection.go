@@ -17,13 +17,13 @@ func Init() {
 	// Create the DB schema
 	schema := &memdb.DBSchema{
 		Tables: map[string]*memdb.TableSchema{
-			"person": &memdb.TableSchema{
-				Name: "person",
+			"Contract": &memdb.TableSchema{
+				Name: "Contract",
 				Indexes: map[string]*memdb.IndexSchema{
-					"id": &memdb.IndexSchema{
-						Name:    "id",
+					"_id": &memdb.IndexSchema{
+						Name:    "_id",
 						Unique:  true,
-						Indexer: &memdb.StringFieldIndex{Field: "Email"},
+						Indexer: &memdb.StringFieldIndex{Field: "_id"},
 					},
 				},
 			},
