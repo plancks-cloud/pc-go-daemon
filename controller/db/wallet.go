@@ -44,8 +44,8 @@ func iteratorToManyWallets(iterator memdb.ResultIterator, err error) (items []mo
 			more = false
 			continue
 		}
-		item := next.(*model.Wallet)
-		items = append(items, *item)
+		item := next.(model.Wallet)
+		items = append(items, item)
 	}
 	return items
 
