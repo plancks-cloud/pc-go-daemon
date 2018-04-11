@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"git.amabanana.com/plancks-cloud/pc-go-daemon/mongo"
 	"github.com/nu7hatch/gouuid"
 	log "github.com/sirupsen/logrus"
+	"git.amabanana.com/plancks-cloud/pc-go-daemon/memdb"
 )
 
 //Win object represents bid document in DB
@@ -42,11 +42,11 @@ func (win Win) Push() (err error) {
 		u, _ := uuid.NewV4()
 		win.ID = u.String()
 	}
-	err = mongo.Push(win)
+	err = memdb.Push(win)
 	return
 }
 
 //Upsert updates a document if it exists, otherwise inserts
 func (win Win) Upsert() error {
-	return mongo.UpsertWithID(win.ID, win)
+	return memdb.Push(win)
 }

@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"git.amabanana.com/plancks-cloud/pc-go-daemon/mongo"
 	"github.com/nu7hatch/gouuid"
 	log "github.com/sirupsen/logrus"
+	"git.amabanana.com/plancks-cloud/pc-go-daemon/memdb"
 )
 
 //Wallet is the issuing party, as well as a node running a container
@@ -41,7 +41,7 @@ func (wallet Wallet) Push() (err error) {
 		u, _ := uuid.NewV4()
 		wallet.ID = u.String()
 	}
-	err = mongo.Push(wallet)
+	err = memdb.Push(wallet)
 	return
 }
 
@@ -52,5 +52,5 @@ func (wallet Wallet) GetSignature() string {
 
 //Upsert updates a document if it exists, otherwise inserts
 func (wallet Wallet) Upsert() error {
-	return mongo.UpsertWithID(wallet.ID, wallet)
+	return memdb.Push(wallet)
 }

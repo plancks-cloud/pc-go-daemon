@@ -27,6 +27,46 @@ func Init() {
 					},
 				},
 			},
+			"Bid": &memdb.TableSchema{
+				Name: "Bid",
+				Indexes: map[string]*memdb.IndexSchema{
+					"contractId": &memdb.IndexSchema{
+						Name:    "contractId",
+						Unique:  false,
+						Indexer: &memdb.StringFieldIndex{Field: "contractId"},
+					},
+				},
+			},
+			"Win": &memdb.TableSchema{
+				Name: "Win",
+				Indexes: map[string]*memdb.IndexSchema{
+					"contractId": &memdb.IndexSchema{
+						Name:    "contractId",
+						Unique:  false,
+						Indexer: &memdb.StringFieldIndex{Field: "contractId"},
+					},
+				},
+			},
+			"Service": &memdb.TableSchema{
+				Name: "Service",
+				Indexes: map[string]*memdb.IndexSchema{
+					"contractId": &memdb.IndexSchema{
+						Name:    "contractId",
+						Unique:  false,
+						Indexer: &memdb.StringFieldIndex{Field: "contractId"},
+					},
+				},
+			},
+			"Wallet": &memdb.TableSchema{
+				Name: "Wallet",
+				Indexes: map[string]*memdb.IndexSchema{
+					"contractId": &memdb.IndexSchema{
+						Name:    "contractId",
+						Unique:  false,
+						Indexer: &memdb.StringFieldIndex{Field: "contractId"},
+					},
+				},
+			},
 		},
 	}
 

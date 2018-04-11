@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"git.amabanana.com/plancks-cloud/pc-go-daemon/mongo"
 	"github.com/nu7hatch/gouuid"
 	log "github.com/sirupsen/logrus"
+	"git.amabanana.com/plancks-cloud/pc-go-daemon/memdb"
 )
 
 //Bid object represents bid document in DB
@@ -43,7 +43,7 @@ func (bid Bid) Push() (err error) {
 		u, _ := uuid.NewV4()
 		bid.ID = u.String()
 	}
-	err = mongo.Push(bid)
+	err = memdb.Push(bid)
 	return
 }
 
@@ -54,7 +54,7 @@ func (bid Bid) DbID() string {
 
 //Upsert ..
 func (bid Bid) Upsert() (err error) {
-	err = mongo.UpsertWithID(bid.ID, bid)
+	err = memdb.Push(bid)
 	return
 }
 
