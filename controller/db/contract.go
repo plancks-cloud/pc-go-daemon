@@ -2,11 +2,11 @@ package db
 
 import (
 	"fmt"
+	"git.amabanana.com/plancks-cloud/pc-go-daemon/mem"
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/model"
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/util"
-	log "github.com/sirupsen/logrus"
 	"github.com/hashicorp/go-memdb"
-	"git.amabanana.com/plancks-cloud/pc-go-daemon/mem"
+	log "github.com/sirupsen/logrus"
 )
 
 const contractTable = "Contract"

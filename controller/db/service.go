@@ -5,14 +5,14 @@ import (
 	"fmt"
 	"strconv"
 
+	"git.amabanana.com/plancks-cloud/pc-go-daemon/mem"
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/model"
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/util"
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/swarm"
 	"github.com/docker/docker/client"
-	log "github.com/sirupsen/logrus"
 	"github.com/hashicorp/go-memdb"
-	"git.amabanana.com/plancks-cloud/pc-go-daemon/mem"
+	log "github.com/sirupsen/logrus"
 )
 
 const serviceTable = "Service"
