@@ -121,6 +121,7 @@ func getTransaction(write bool) *memdb.Txn {
 //Push stores an object
 func Push(obj interface{}) error {
 	name := util.GetType(obj)
+	log.Infoln(fmt.Sprintf("Trying to insert a: %s", name))
 	txn := db.Txn(true)
 	if err := txn.Insert(name, obj); err != nil {
 		log.Errorln(fmt.Sprintf("Error pushing to mem: %s", err))

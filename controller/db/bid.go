@@ -77,6 +77,7 @@ func iteratorToManyBids(iterator memdb.ResultIterator, err error) (items []model
 		item := next.(model.Bid)
 		items = append(items, item)
 	}
+	log.Infoln(fmt.Sprintf("Bid iterator counts: %d", len(items)))
 	return items
 
 }

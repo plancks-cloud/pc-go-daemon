@@ -266,9 +266,10 @@ func iteratorToManyServices(iterator memdb.ResultIterator, err error) (items []m
 			more = false
 			continue
 		}
-		item := next.(model.Service)
-		items = append(items, item)
+		item := next.(*model.Service)
+		items = append(items, *item)
 	}
+	log.Infoln(fmt.Sprintf("Service iterator counts: %d", len(items)))
 	return items
 
 }
