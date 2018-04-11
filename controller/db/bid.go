@@ -71,8 +71,8 @@ func iteratorToManyBids(iterator memdb.ResultIterator, err error) (items []model
 			more = false
 			continue
 		}
-		item := next.(*model.Bid)
-		items = append(items, *item)
+		item := next.(model.Bid)
+		items = append(items, item)
 	}
 	return items
 

@@ -32,8 +32,8 @@ func iteratorToManyWins(iterator memdb.ResultIterator, err error) (wins []model.
 			more = false
 			continue
 		}
-		win := next.(*model.Win)
-		wins = append(wins, *win)
+		win := next.(model.Win)
+		wins = append(wins, win)
 	}
 	return wins
 

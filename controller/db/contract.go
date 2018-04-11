@@ -107,8 +107,8 @@ func iteratorToManyContracts(iterator memdb.ResultIterator, err error) (items []
 			more = false
 			continue
 		}
-		item := next.(*model.Contract)
-		items = append(items, *item)
+		item := next.(model.Contract)
+		items = append(items, item)
 	}
 	return items
 

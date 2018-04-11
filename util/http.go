@@ -19,7 +19,7 @@ func Post(url string, jsonBytes []byte) {
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		log.Errorln(fmt.Sprintf("Error doing http post: %s", err))
+		log.Errorln(fmt.Sprintf("Error doing http post: %s trying for %s", err, url))
 		panic(err)
 	}
 	defer resp.Body.Close()
