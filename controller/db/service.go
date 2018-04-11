@@ -178,6 +178,13 @@ func createServices(services []model.Service) {
 					fmt.Sprintf("Error getting contract for service with contractID %s, %s",
 						service.ContractID, err))
 			}
+
+			//Check again not ancient
+			if ExpiredContract(&contract) {
+				log.Debugln(fmt.Sprintf("createServices method.. and for %s was ancient", service.Name))
+				continue
+			}
+
 			log.Infoln(fmt.Sprintf("✅  Creating a service for contractId: %s", service.ContractID))
 			createService(&service, &contract)
 			go func() { model.DoorBellHealth <- true }() //Ensure that the health check is run soon
