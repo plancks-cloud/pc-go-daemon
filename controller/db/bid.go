@@ -5,22 +5,24 @@ import (
 
 	"fmt"
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/model"
-	"git.amabanana.com/plancks-cloud/pc-go-daemon/mongo"
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/util"
-	"github.com/globalsign/mgo/bson"
 	log "github.com/sirupsen/logrus"
+	"git.amabanana.com/plancks-cloud/pc-go-daemon/mem"
+	"github.com/hashicorp/go-memdb"
 )
+
+const bidTable = "Bid"
 
 //GetBid returns all contracts stored in the datastore
 func GetBid() (bids []model.Bid) {
-	mongo.GetCollection(model.Bid{}).Find(nil).All(&bids)
-	return
+	res, err := mem.GetAll(bidTable)
+	return iteratorToManyBids(res, err)
 }
 
 //GetBidsByContractID returns all bids for a contract
 func GetBidsByContractID(contractID string) (bids []model.Bid) {
-	mongo.GetCollection(model.Bid{}).Find(bson.M{"contractId": contractID}).All(&bids)
-	return
+	res, err := mem.GetAllByFieldAndValue(bidTable, contractId, contractID)
+	return iteratorToManyBids(res, err)
 }
 
 //CreateBidFromContract inserts a new bid for a contract
@@ -38,8 +40,7 @@ func CreateBidFromContract(contract model.Contract) {
 
 //DeleteBidsByContractID deletes a contract with an ID
 func DeleteBidsByContractID(id string) {
-	bid := model.Bid{}
-	_, err := mongo.GetCollection(&bid).RemoveAll(bson.M{"contractId": id})
+	_, err := mem.Delete(bidTable, contractId, id)
 	if err != nil {
 		log.Errorln(fmt.Sprintf("Error deleting bids by contractId: %s", err))
 	}
@@ -56,4 +57,23 @@ func HaveIBidOnContract(id string) bool {
 		}
 	}
 	return false
+}
+
+func iteratorToManyBids(iterator memdb.ResultIterator, err error) (items []model.Bid) {
+	if err != nil {
+		log.Error(err.Error())
+		return nil
+	}
+	more := true
+	for more {
+		next := iterator.Next()
+		if next == nil {
+			more = false
+			continue
+		}
+		item := next.(*model.Bid)
+		items = append(items, *item)
+	}
+	return items
+
 }
