@@ -4,9 +4,12 @@ import (
 	"fmt"
 
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/model"
-	"git.amabanana.com/plancks-cloud/pc-go-daemon/mongo"
 	log "github.com/sirupsen/logrus"
+	"git.amabanana.com/plancks-cloud/pc-go-daemon/mem"
+	"github.com/hashicorp/go-memdb"
 )
+
+const walletTable = "Wallet"
 
 //SetCurrentWallet takes a wallet id, and marks it as the current wallet to use
 func SetCurrentWallet() model.MessageOK {
@@ -23,8 +26,27 @@ func CreateWallet(wallet *model.Wallet) model.MessageOK {
 	return model.Ok(true)
 }
 
-//GetWallet returns all wallets stored in the datastore
+//GetWallet returns all wallets stored in the database
 func GetWallet() (wallets []model.Wallet) {
-	mongo.GetCollection(model.Wallet{}).Find(nil).All(&wallets)
-	return
+	res, err := mem.GetAll(walletTable)
+	return iteratorToManyWallets(res, err)
+}
+
+func iteratorToManyWallets(iterator memdb.ResultIterator, err error) (items []model.Wallet) {
+	if err != nil {
+		log.Error(err.Error())
+		return nil
+	}
+	more := true
+	for more {
+		next := iterator.Next()
+		if next == nil {
+			more = false
+			continue
+		}
+		item := next.(*model.Wallet)
+		items = append(items, *item)
+	}
+	return items
+
 }
