@@ -88,6 +88,7 @@ func CreateWinFromContract(winnerID string, contract model.Contract) {
 
 }
 
+//HaveIWonFromWins checks n wins to see if I'm one of them
 func HaveIWonFromWins(wins []model.Win) (bool, model.Win) {
 	for _, win := range wins {
 		if HaveIWonFromWin(win) {
@@ -96,6 +97,8 @@ func HaveIWonFromWins(wins []model.Win) (bool, model.Win) {
 	}
 	return false, model.Win{}
 }
+
+//HaveIWonFromWin checks 1 win to see if I won
 func HaveIWonFromWin(win model.Win) bool {
 	return model.SystemWallet.ID == win.WinnerAccount
 
@@ -109,6 +112,7 @@ func CheckIfIWon(win model.Win) {
 	}
 }
 
+//DeleteWinsByContractID deletes a row by the key contractId
 func DeleteWinsByContractID(id string) {
 	win := model.Win{}
 	_, err := mongo.GetCollection(&win).RemoveAll(bson.M{"contractId": id})

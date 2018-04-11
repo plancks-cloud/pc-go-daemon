@@ -111,6 +111,7 @@ func UpdateService(service *model.Service) error {
 	return err
 }
 
+//ReconServices starts and removes services
 func ReconServices() {
 	servicesNotYetCreated, servicesToBeDeleted := compareRunningServicesToDB()
 	if len(servicesNotYetCreated) > 0 || len(servicesToBeDeleted) > 0 {
@@ -250,6 +251,7 @@ func deleteServices(services []model.ServiceState) {
 	}
 }
 
+//DeleteServicesByContractID deletes a service
 func DeleteServicesByContractID(id string) {
 	item := model.Service{}
 	_, err := mongo.GetCollection(&item).RemoveAll(bson.M{"contractId": id})

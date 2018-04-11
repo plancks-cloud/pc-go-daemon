@@ -8,6 +8,7 @@ import (
 	"time"
 )
 
+//ScheduleRemoteSync checks for remote database changes
 func ScheduleRemoteSync() {
 
 	go func() {

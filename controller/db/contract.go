@@ -65,6 +65,7 @@ func ExpiredContractBy(contract *model.Contract, seconds int) bool {
 	return now > expires
 }
 
+//DeleteContract deletes a contract from the database
 func DeleteContract(contract *model.Contract) {
 	err := mongo.GetCollection(&contract).Remove(bson.M{"_id": contract.ID})
 	if err != nil {

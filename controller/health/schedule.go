@@ -8,6 +8,7 @@ import (
 	"time"
 )
 
+//ScheduleHealthCheck checks the service vs database health
 func ScheduleHealthCheck() {
 
 	go func() {

@@ -10,9 +10,12 @@ var (
 	//SystemWallet is the wallet to use as the system
 	SystemWallet *Wallet
 
+	//DoorBellCommunity can be used to start the Community checks in controller/community/schedule.go
 	DoorBellCommunity chan bool
-	DoorBellHealth    chan bool
-	DoorBellRemote    chan bool
+	//DoorBellHealth can be used to start the Health checks in controller/health/schedule.go
+	DoorBellHealth chan bool
+	//DoorBellRemote can be used to start the Remote database sync in controller/remote/schedule.go
+	DoorBellRemote chan bool
 )
 
 //DBSyncURL is the endpoint for the function

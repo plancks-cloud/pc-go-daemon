@@ -8,6 +8,7 @@ import (
 	"time"
 )
 
+//ScheduleCommunityActivities checks for bids and wins
 func ScheduleCommunityActivities() {
 
 	go func() {

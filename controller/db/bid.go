@@ -36,6 +36,7 @@ func CreateBidFromContract(contract model.Contract) {
 
 }
 
+//DeleteBidsByContractID deletes a contract with an ID
 func DeleteBidsByContractID(id string) {
 	bid := model.Bid{}
 	_, err := mongo.GetCollection(&bid).RemoveAll(bson.M{"contractId": id})
@@ -45,6 +46,7 @@ func DeleteBidsByContractID(id string) {
 
 }
 
+//HaveIBidOnContract checks if a wallet has bid 
 func HaveIBidOnContract(id string) bool {
 	bids := GetBidsByContractID(id)
 	myID := model.SystemWallet.ID
