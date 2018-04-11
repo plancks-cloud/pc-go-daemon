@@ -37,6 +37,9 @@ func iteratorToManyWallets(iterator memdb.ResultIterator, err error) (items []mo
 		log.Error(err.Error())
 		return nil
 	}
+	if iterator == nil {
+		return items
+	}
 	more := true
 	for more {
 		next := iterator.Next()

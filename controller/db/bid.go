@@ -64,6 +64,9 @@ func iteratorToManyBids(iterator memdb.ResultIterator, err error) (items []model
 		log.Error(err.Error())
 		return nil
 	}
+	if iterator == nil {
+		return items
+	}
 	more := true
 	for more {
 		next := iterator.Next()

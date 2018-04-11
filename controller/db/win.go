@@ -25,6 +25,9 @@ func iteratorToManyWins(iterator memdb.ResultIterator, err error) (wins []model.
 		log.Error(err.Error())
 		return nil
 	}
+	if iterator == nil {
+		return wins
+	}
 	more := true
 	for more {
 		next := iterator.Next()
