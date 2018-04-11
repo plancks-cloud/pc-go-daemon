@@ -22,7 +22,7 @@ const DBSyncURL = "https://us-central1-plancks-cloud.cloudfunctions.net/pc-funct
 const DBGCURL = "https://us-central1-plancks-cloud.cloudfunctions.net/pc-function-db-gc-v1"
 
 //ScheduledInterval is how often some things run
-const ScheduledInterval = 30
+const ScheduledInterval = 25
 
 //AncientAgeSeconds is how long before a row can be GCd
 const AncientAgeSeconds = 300
