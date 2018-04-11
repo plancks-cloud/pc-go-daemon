@@ -10,9 +10,9 @@ import (
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/controller/community"
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/controller/health"
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/controller/remote"
+	"git.amabanana.com/plancks-cloud/pc-go-daemon/mem"
 	"github.com/gorilla/mux"
 	log "github.com/sirupsen/logrus"
-	"git.amabanana.com/plancks-cloud/pc-go-daemon/memdb"
 )
 
 const port = 8080
@@ -49,7 +49,7 @@ func initAll() {
 	// log.SetLevel(log.ErrorLevel)
 
 	log.Info("Starting")
-	memdb.Init()
+	mem.Init()
 	model.InitRepo()
 
 	remote.Init()
