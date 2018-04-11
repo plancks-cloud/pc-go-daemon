@@ -6,14 +6,16 @@ import (
 	"strconv"
 
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/model"
-	"git.amabanana.com/plancks-cloud/pc-go-daemon/mongo"
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/util"
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/swarm"
 	"github.com/docker/docker/client"
-	"github.com/globalsign/mgo/bson"
 	log "github.com/sirupsen/logrus"
+	"github.com/hashicorp/go-memdb"
+	"git.amabanana.com/plancks-cloud/pc-go-daemon/mem"
 )
+
+const serviceTable = "Service"
 
 //CreateService creates a new service
 func CreateService(service *model.Service) model.MessageOK {
@@ -27,12 +29,14 @@ func CreateService(service *model.Service) model.MessageOK {
 
 //ServiceExistsByContractId checks if there is a service for a contract
 func ServiceExistsByContractId(id string) bool {
-	var item model.Service
-	count, err := mongo.GetCollection(&item).Find(bson.M{"contractId": id}).Count()
+	res, err := mem.GetAllByFieldAndValue(serviceTable, contractId, id)
 	if err != nil {
-		log.Errorln(fmt.Sprintf("Error getting service: %s", err))
+		log.Errorln(fmt.Sprintf("Error getting services: %s", err))
+		//TODO: discuss this... super hard
+		return false
 	}
-	return count == 1
+	items := iteratorToManyServices(res, err)
+	return len(items) == 1
 }
 
 //CreateServiceFromWin creates a service instance and saves it to the local database. This service
@@ -70,8 +74,8 @@ func CreateServiceFromWin(win *model.Win) {
 
 //GetService returns all services stored in the DataStore
 func GetService() (services []model.Service) {
-	mongo.GetCollection(model.Service{}).Find(nil).All(&services)
-	return services
+	res, err := mem.GetAll(serviceTable)
+	return iteratorToManyServices(res, err)
 }
 
 //GetServiceStateResult returns all services stored in the datastore
@@ -240,10 +244,28 @@ func deleteServices(services []model.ServiceState) {
 
 //DeleteServicesByContractID deletes a service
 func DeleteServicesByContractID(id string) {
-	item := model.Service{}
-	_, err := mongo.GetCollection(&item).RemoveAll(bson.M{"contractId": id})
+	_, err := mem.Delete(serviceTable, contractId, id)
 	if err != nil {
 		log.Errorln(fmt.Sprintf("Error deleting wins by contractId: %s", err))
 	}
+
+}
+
+func iteratorToManyServices(iterator memdb.ResultIterator, err error) (items []model.Service) {
+	if err != nil {
+		log.Error(err.Error())
+		return nil
+	}
+	more := true
+	for more {
+		next := iterator.Next()
+		if next == nil {
+			more = false
+			continue
+		}
+		item := next.(*model.Service)
+		items = append(items, *item)
+	}
+	return items
 
 }
