@@ -46,7 +46,7 @@ func DeleteBidsByContractID(id string) {
 
 }
 
-//HaveIBidOnContract checks if a wallet has bid 
+//HaveIBidOnContract checks if a wallet has bid
 func HaveIBidOnContract(id string) bool {
 	bids := GetBidsByContractID(id)
 	myID := model.SystemWallet.ID
