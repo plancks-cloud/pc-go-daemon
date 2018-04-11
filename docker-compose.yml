@@ -1,31 +1,31 @@
 version: "3.3"
 services:
-    mongo:
-        ports:
-            - 27017:27017
-        image: mongo
-        networks:
-            - plancknet
-        deploy:
-            resources:
-                limits:
-                    memory: 128M
-            restart_policy:
-                condition: on-failure
-                delay: 5s
-                max_attempts: 20
-                window: 380s
+#    mongo:
+#        ports:
+#            - 27017:27017
+#        image: mongo
+#        networks:
+#            - plancknet
+#        deploy:
+#            resources:
+#                limits:
+#                    memory: 128M
+#            restart_policy:
+#                condition: on-failure
+#                delay: 5s
+#                max_attempts: 20
+#                window: 380s
     daemon:
         ports:
             - 6109:8080
         image: daemony:latest
-        depends_on:
-            - "pc_mongo"
+#        depends_on:
+#            - "pc_mongo"
         networks:
             - plancknet
         environment:
             context: "dev"
-            MONGO_HOST: "pc_mongo"
+#            MONGO_HOST: "pc_mongo"
             DOCKER_HOST: "unix:///var/run/docker.sock"
             WALLET: "DEFAULT_WALLET"
         volumes:
