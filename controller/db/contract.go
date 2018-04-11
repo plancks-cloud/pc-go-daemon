@@ -25,7 +25,7 @@ func CreateContract(contract *model.Contract) model.MessageOK {
 
 //GetContract returns all contracts stored in the database
 func GetContract() (contracts []model.Contract) {
-	res, err := mem.GetAll(contractId)
+	res, err := mem.GetAll(contractTable)
 	return iteratorToManyContracts(res, err)
 }
 
