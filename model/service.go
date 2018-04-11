@@ -3,11 +3,11 @@ package model
 import (
 	"fmt"
 
+	"git.amabanana.com/plancks-cloud/pc-go-daemon/mem"
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/util"
 	"github.com/docker/docker/api/types/swarm"
 	"github.com/nu7hatch/gouuid"
 	"vbom.ml/util/sortorder"
-	"git.amabanana.com/plancks-cloud/pc-go-daemon/memdb"
 )
 
 //Service represents a Docker service
@@ -30,13 +30,13 @@ func (service *Service) Push() (err error) {
 		u, _ := uuid.NewV4()
 		service.ID = u.String()
 	}
-	err = memdb.Push(service)
+	err = mem.Push(service)
 	return
 }
 
 //Upsert updates a document if it exists, otherwise inserts
 func (service *Service) Upsert() error {
-	return memdb.Push(service)
+	return mem.Push(service)
 }
 
 //Expired checks if a service should still be running according to the contract it was created with

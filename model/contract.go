@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"strings"
 
+	"git.amabanana.com/plancks-cloud/pc-go-daemon/mem"
 	"github.com/nu7hatch/gouuid"
 	log "github.com/sirupsen/logrus"
-	"git.amabanana.com/plancks-cloud/pc-go-daemon/memdb"
 )
 
 //Contract represents a contract issued to run a container
@@ -41,9 +41,9 @@ type ContractSyncable struct {
 
 //ContractResult helps the client see the state of a contract
 type ContractResult struct {
-	Contract   `json:"contract"`
-	Bids []Bid `json:"bids"`
-	Wins []Win `json:"wins"`
+	Contract `json:"contract"`
+	Bids     []Bid `json:"bids"`
+	Wins     []Win `json:"wins"`
 }
 
 //ToJSON converts an object to json
@@ -65,7 +65,7 @@ func (contract Contract) Push() (err error) {
 	if len(contract.ServiceName) == 0 {
 		contract.ServiceName = contract.GetServiceName()
 	}
-	err = memdb.Push(contract)
+	err = mem.Push(contract)
 	return
 }
 
@@ -76,7 +76,7 @@ func (contract Contract) DbID() string {
 
 //Upsert ..
 func (contract Contract) Upsert() error {
-	err := memdb.Push(contract)
+	err := mem.Push(contract)
 	return err
 }
 
