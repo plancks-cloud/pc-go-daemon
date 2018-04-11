@@ -11,12 +11,12 @@ import (
 	"sort"
 )
 
-const name = "Win"
+const winTable = "Win"
 const contractId = "contractId"
 
 //GetWin returns all wins stored in the data store
 func GetWin() (wins []model.Win) {
-	res, err := mem.GetAll(name)
+	res, err := mem.GetAll(winTable)
 	return iteratorToMany(res, err)
 }
 
@@ -41,7 +41,7 @@ func iteratorToMany(iterator memdb.ResultIterator, err error) (wins []model.Win)
 
 //GetWinsByContractID returns all wins for a contract
 func GetWinsByContractID(contractID string) (wins []model.Win) {
-	res, err := mem.GetAllByFieldAndValue(name, contractId, contractID)
+	res, err := mem.GetAllByFieldAndValue(winTable, contractId, contractID)
 	wins = iteratorToMany(res, err)
 	return
 }
@@ -137,7 +137,7 @@ func CheckIfIWon(win model.Win) {
 
 //DeleteWinsByContractID deletes a row by the key contractId
 func DeleteWinsByContractID(id string) {
-	_, err := mem.Delete(name, "contractId", id)
+	_, err := mem.Delete(winTable, "contractId", id)
 	if err != nil {
 		log.Errorln(fmt.Sprintf("Error deleting wins by contractId: %s", err))
 	}
