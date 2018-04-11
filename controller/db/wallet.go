@@ -50,7 +50,7 @@ func iteratorToManyWallets(iterator memdb.ResultIterator, err error) (items []mo
 		item := next.(model.Wallet)
 		items = append(items, item)
 	}
-	log.Infoln(fmt.Sprintf("Wallet iterator counts: %d", len(items)))
+	log.Debugln(fmt.Sprintf("Wallet iterator counts: %d", len(items)))
 	return items
 
 }
