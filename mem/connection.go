@@ -14,77 +14,6 @@ var (
 //Init sets up the database
 func Init() {
 
-	// Create the DB schema
-	schema := &memdb.DBSchema{
-		Tables: map[string]*memdb.TableSchema{
-			"Contract": &memdb.TableSchema{
-				Name: "Contract",
-				Indexes: map[string]*memdb.IndexSchema{
-					"id": &memdb.IndexSchema{
-						Name:    "id",
-						Unique:  true,
-						Indexer: &memdb.StringFieldIndex{Field: "ID"},
-					},
-				},
-			},
-			"Bid": &memdb.TableSchema{
-				Name: "Bid",
-				Indexes: map[string]*memdb.IndexSchema{
-					"id": &memdb.IndexSchema{
-						Name:    "id",
-						Unique:  true,
-						Indexer: &memdb.StringFieldIndex{Field: "ID"},
-					},
-					"contractId": &memdb.IndexSchema{
-						Name:    "contractId",
-						Unique:  false,
-						Indexer: &memdb.StringFieldIndex{Field: "ContractID"},
-					},
-				},
-			},
-			"Win": &memdb.TableSchema{
-				Name: "Win",
-				Indexes: map[string]*memdb.IndexSchema{
-					"id": &memdb.IndexSchema{
-						Name:    "id",
-						Unique:  true,
-						Indexer: &memdb.StringFieldIndex{Field: "ID"},
-					},
-					"contractId": &memdb.IndexSchema{
-						Name:    "contractId",
-						Unique:  false,
-						Indexer: &memdb.StringFieldIndex{Field: "ContractID"},
-					},
-				},
-			},
-			"Service": &memdb.TableSchema{
-				Name: "Service",
-				Indexes: map[string]*memdb.IndexSchema{
-					"id": &memdb.IndexSchema{
-						Name:    "id",
-						Unique:  true,
-						Indexer: &memdb.StringFieldIndex{Field: "ID"},
-					},
-					"contractId": &memdb.IndexSchema{
-						Name:    "contractId",
-						Unique:  false,
-						Indexer: &memdb.StringFieldIndex{Field: "ContractID"},
-					},
-				},
-			},
-			"Wallet": &memdb.TableSchema{
-				Name: "Wallet",
-				Indexes: map[string]*memdb.IndexSchema{
-					"id": &memdb.IndexSchema{
-						Name:    "id",
-						Unique:  true,
-						Indexer: &memdb.StringFieldIndex{Field: "ID"},
-					},
-				},
-			},
-		},
-	}
-
 	// Create a new data base
 	dbConnect, err := memdb.NewMemDB(schema)
 	if err != nil {
@@ -94,6 +23,7 @@ func Init() {
 
 }
 
+//GetUniqueById gets one row by unique ID field
 func GetUniqueById(name string, id string) (interface{}, error) {
 	txn := getTransaction(false)
 	defer txn.Abort()
@@ -102,6 +32,7 @@ func GetUniqueById(name string, id string) (interface{}, error) {
 
 }
 
+//GetAllByFieldAndValue gets rows in a table with a where clause for an index
 func GetAllByFieldAndValue(name string, field string, value string) (memdb.ResultIterator, error) {
 	txn := getTransaction(false)
 	defer txn.Abort()
@@ -110,6 +41,7 @@ func GetAllByFieldAndValue(name string, field string, value string) (memdb.Resul
 
 }
 
+//GetAll retrieves a whole table
 func GetAll(name string) (memdb.ResultIterator, error) {
 	txn := getTransaction(false)
 	defer txn.Abort()
@@ -136,6 +68,7 @@ func Push(obj interface{}) error {
 	return nil
 }
 
+//Delete removes all rows with a value for an index
 func Delete(name string, field string, id string) (int, error) {
 	txn := getTransaction(true)
 	i, err := txn.DeleteAll(name, field, id)
