@@ -37,60 +37,64 @@ func syncPushAll(outerWaitGroup *sync.WaitGroup) {
 
 //PushAllWallets pushes all wallets to cloud
 func pushAllWallets(wg *sync.WaitGroup) {
+	start := time.Now()
 	ch := db.GetWallet()
 	var wallets []model.Wallet
-	for w := range ch {
+	for _, w := range ch {
 		wallets = append(wallets, w)
 	}
-	if wallets == nil || len(wallets) == 0 {
-		wg.Done()
-		return
+	if len(wallets) > 0 {
+		body := model.WalletSyncable{Collection: "Wallet", Index: "_id", Indexes: nil, Rows: wallets}
+		util.Post(model.DBSyncURL, body.ToJSON())
 	}
-	body := model.WalletSyncable{Collection: "Wallet", Index: "_id", Indexes: nil, Rows: wallets}
-	util.Post(model.DBSyncURL, body.ToJSON())
 
+	elapsed := time.Since(start)
+	log.Debugln(fmt.Sprintf("⏰  PushAll-wallets took: %s", elapsed))
 	wg.Done()
 
 }
 
 //PushAllContracts pushes all contracts to cloud
 func pushAllContracts(wg *sync.WaitGroup) {
+	start := time.Now()
 	contracts := db.GetContract()
-	if contracts == nil || len(contracts) == 0 {
-		wg.Done()
-		return
+	if len(contracts) > 0 {
+		body := model.ContractSyncable{Collection: "Contract", Index: "_id", Indexes: nil, Rows: contracts}
+		util.Post(model.DBSyncURL, body.ToJSON())
 	}
-	body := model.ContractSyncable{Collection: "Contract", Index: "_id", Indexes: nil, Rows: contracts}
-	util.Post(model.DBSyncURL, body.ToJSON())
 
+	elapsed := time.Since(start)
+	log.Debugln(fmt.Sprintf("⏰  PushAll-contracts took: %s", elapsed))
 	wg.Done()
 
 }
 
 //PushAllBids pushes all bids to cloud
 func pushAllBids(wg *sync.WaitGroup) {
+	start := time.Now()
 	bids := db.GetBid()
-	if bids == nil || len(bids) == 0 {
-		wg.Done()
-		return
+	if len(bids) > 0 {
+		body := model.BidSyncable{Collection: "Bid", Index: "_id", Indexes: nil, Rows: bids}
+		util.Post(model.DBSyncURL, body.ToJSON())
 	}
-	body := model.BidSyncable{Collection: "Bid", Index: "_id", Indexes: nil, Rows: bids}
-	util.Post(model.DBSyncURL, body.ToJSON())
 
+	elapsed := time.Since(start)
+	log.Debugln(fmt.Sprintf("⏰  PushAll-bids took: %s", elapsed))
 	wg.Done()
 
 }
 
 //PushAllWins pushes all wins to cloud
 func pushAllWins(wg *sync.WaitGroup) {
+	start := time.Now()
 	wins := db.GetWin()
-	if wins == nil || len(wins) == 0 {
-		wg.Done()
-		return
+	if len(wins) > 0 {
+		body := model.WinSyncable{Collection: "Win", Index: "_id", Indexes: nil, Rows: wins}
+		util.Post(model.DBSyncURL, body.ToJSON())
 	}
-	body := model.WinSyncable{Collection: "Win", Index: "_id", Indexes: nil, Rows: wins}
-	util.Post(model.DBSyncURL, body.ToJSON())
 
+	elapsed := time.Since(start)
+	log.Debugln(fmt.Sprintf("⏰  PushAll-wins took: %s", elapsed))
 	wg.Done()
 
 }
