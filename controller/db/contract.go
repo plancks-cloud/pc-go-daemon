@@ -96,24 +96,10 @@ func UpdateContract(contract *model.Contract) (err error) {
 }
 
 func iteratorToManyContracts(iterator memdb.ResultIterator, err error) (items []model.Contract) {
-	if err != nil {
-		log.Error(err.Error())
-		return nil
+	c := mem.IteratorToChannel(iterator, err)
+	for i := range c {
+		items = append(items, i.(model.Contract))
 	}
-	if iterator == nil {
-		return items
-	}
-	more := true
-	for more {
-		next := iterator.Next()
-		if next == nil {
-			more = false
-			continue
-		}
-		item := next.(model.Contract)
-		items = append(items, item)
-	}
-	log.Debugln(fmt.Sprintf("Contract iterator counts: %d", len(items)))
 	return items
 
 }
