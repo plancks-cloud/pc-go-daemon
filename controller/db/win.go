@@ -89,7 +89,7 @@ func CheckForWinsNow(contract model.Contract) {
 			continue
 		}
 		log.Infoln(fmt.Sprintf("> Going to say the winner was: %s", bids[winner].FromAccount))
-		CreateWinFromContract(bids[winner].FromAccount, contract)
+		createWinFromContract(bids[winner].FromAccount, contract)
 		winnerCount++
 	}
 	log.Infoln(fmt.Sprintf("> # of winners: %d ", winnerCount))
@@ -100,9 +100,8 @@ func CheckForWinsNow(contract model.Contract) {
 
 }
 
-//CreateWinFromContract creates win
-func CreateWinFromContract(winnerID string, contract model.Contract) {
-	log.Debugln("win controller: CreateWinFromContract")
+func createWinFromContract(winnerID string, contract model.Contract) {
+	log.Debugln("win controller: createWinFromContract")
 	uuidString, _ := uuid.NewV4()
 	win := model.Win{
 		ID:            uuidString.String(),
@@ -111,36 +110,34 @@ func CreateWinFromContract(winnerID string, contract model.Contract) {
 		Timestamp:     util.MakeTimestamp(),
 		Signature:     model.SystemWallet.GetSignature()}
 	win.Upsert()
-	CheckIfIWon(win)
+	checkIfIWon(win)
 
 }
 
 //HaveIWonFromWins checks n wins to see if I'm one of them
 func HaveIWonFromWins(wins []model.Win) (bool, model.Win) {
 	for _, win := range wins {
-		if HaveIWonFromWin(win) {
+		if haveIWonFromWin(win) {
 			return true, win
 		}
 	}
 	return false, model.Win{}
 }
 
-//HaveIWonFromWin checks 1 win to see if I won
-func HaveIWonFromWin(win model.Win) bool {
+func haveIWonFromWin(win model.Win) bool {
 	return model.SystemWallet.ID == win.WinnerAccount
 
 }
 
-//CheckIfIWon if I won will take the next steps if needed
-func CheckIfIWon(win model.Win) {
-	if HaveIWonFromWin(win) {
+func checkIfIWon(win model.Win) {
+	if haveIWonFromWin(win) {
 		log.Debugln(fmt.Sprintf("🏆  I'm the winner of this contract %s", win.ContractID))
 		CreateServiceFromWin(&win)
 	}
 }
 
-//DeleteWinsByContractID deletes a row by the key contractId
-func DeleteWinsByContractID(id string) {
+//deleteWinsByContractID deletes a row by the key contractId
+func deleteWinsByContractID(id string) {
 	_, err := mem.Delete(winTable, "contractId", id)
 	if err != nil {
 		log.Errorln(fmt.Sprintf("Error deleting wins by contractId: %s", err))

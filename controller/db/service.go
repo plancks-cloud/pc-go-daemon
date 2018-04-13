@@ -72,15 +72,14 @@ func CreateServiceFromWin(win *model.Win) {
 
 }
 
-//GetService returns all services stored in the DataStore
-func GetService() (services []model.Service) {
+func getService() (services []model.Service) {
 	res, err := mem.GetAll(serviceTable)
 	return iteratorToManyServices(res, err)
 }
 
 //GetServiceStateResult returns all services stored in the datastore
 func GetServiceStateResult() (serviceStateResults []model.ServiceStateResult) {
-	services := GetService()
+	services := getService()
 	serviceStates := DockerListRunningServices()
 
 	for _, service := range services {
@@ -117,7 +116,7 @@ func compareRunningServicesToDB() (
 	servicesNotYetCreated []model.Service,
 	servicesToBeDeleted []model.ServiceState) {
 
-	desiredServices := GetService()
+	desiredServices := getService()
 	existingServices := DockerListRunningServices()
 
 	for _, service := range desiredServices {

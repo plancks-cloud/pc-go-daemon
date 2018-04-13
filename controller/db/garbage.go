@@ -25,7 +25,7 @@ func LocalGC() {
 				//Remove
 				DeleteContract(&item)
 				DeleteBidsByContractID(item.ID)
-				DeleteWinsByContractID(item.ID)
+				deleteWinsByContractID(item.ID)
 				DeleteServicesByContractID(item.ID)
 
 			}
