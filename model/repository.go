@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	log "github.com/sirupsen/logrus"
+	"time"
 )
 
 var (
@@ -16,6 +17,9 @@ var (
 	DoorBellHealth chan bool
 	//DoorBellRemote can be used to start the Remote database sync in controller/remote/schedule.go
 	DoorBellRemote chan bool
+
+	//StartupTime records when the system came up
+	StartupTime = time.Now()
 )
 
 //DBSyncURL is the endpoint for the function
@@ -32,6 +36,9 @@ const AncientAgeSeconds = 300
 
 //WinnerAgeSeconds is how many seconds before a winner can be declared
 const WinnerAgeSeconds = 70
+
+//SecondsBeforeWinDeclarer is how many seconds before this machine will think about who won
+const SecondsBeforeWinDeclarer = ScheduledInterval * 2
 
 //InitRepo initialises the repository and it's variables.
 func InitRepo() {
