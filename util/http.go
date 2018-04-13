@@ -13,7 +13,6 @@ import (
 const defaultGetTimeout = 10
 const timeout = time.Duration(defaultGetTimeout * time.Second)
 
-
 //Post sends byte payload to an endpoint
 func Post(url string, jsonBytes []byte) {
 	start := time.Now()
@@ -21,6 +20,8 @@ func Post(url string, jsonBytes []byte) {
 	req.Header.Set("Content-Type", "application/json")
 
 	client := &http.Client{}
+	client.Timeout = timeout
+
 	resp, err := client.Do(req)
 	if err != nil {
 		log.Errorln(fmt.Sprintf("Error doing http post: %s trying for %s", err, url))
@@ -36,7 +37,6 @@ func Post(url string, jsonBytes []byte) {
 
 //Get sends a request to a URL and returns the response
 func Get(url string) (*http.Response, error) {
-
 
 	start := time.Now()
 	req, err := http.NewRequest("GET", url, nil)
@@ -62,6 +62,7 @@ func Options(url string) {
 		return
 	}
 	client := &http.Client{}
+	client.Timeout = timeout
 	client.Do(req)
 	elapsed := time.Since(start)
 	log.Debugln(fmt.Sprintf("⏰  Http options @ %s took %s", url, elapsed))
