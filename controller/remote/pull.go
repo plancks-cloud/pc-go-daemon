@@ -47,10 +47,13 @@ func pullAndStoreAllContracts(wg *sync.WaitGroup) {
 			//Ignore
 			continue
 		}
-		contract.Upsert()
+		err := contract.Upsert()
+		if err != nil {
+			log.Errorln(fmt.Sprintf("⏰  PullAll-contracts error: %s", err.Error()))
+		}
 	}
 	elapsed := time.Since(start)
-	log.Debugln(fmt.Sprintf("⏰  PullAll-contracts took: %s", elapsed))
+	log.Infoln(fmt.Sprintf("⏰  PullAll-contracts took: %s", elapsed))
 	wg.Done()
 }
 func pullAllContracts() (contracts []model.Contract) {
@@ -74,10 +77,13 @@ func pullAndStoreAllWallets(wg *sync.WaitGroup) {
 	start := time.Now()
 	wallets := pullAllWallets()
 	for _, item := range wallets {
-		item.Upsert()
+		err := item.Upsert()
+		if err != nil {
+			log.Errorln(fmt.Sprintf("⏰  PullAll-wallets error: %s", err.Error()))
+		}
 	}
 	elapsed := time.Since(start)
-	log.Debugln(fmt.Sprintf("⏰  PullAll-wallets took: %s", elapsed))
+	log.Infoln(fmt.Sprintf("⏰  PullAll-wallets took: %s", elapsed))
 	wg.Done()
 }
 func pullAllWallets() (wallets []model.Wallet) {
@@ -102,11 +108,14 @@ func pullAndStoreAllBids(wg *sync.WaitGroup) {
 	bids := pullAllBids()
 	for _, item := range bids {
 		if db.ContractExists(item.ContractID) {
-			item.Upsert()
+			err := item.Upsert()
+			if err != nil {
+				log.Errorln(fmt.Sprintf("⏰  PullAll-bids error: %s", err.Error()))
+			}
 		}
 	}
 	elapsed := time.Since(start)
-	log.Debugln(fmt.Sprintf("⏰  PullAll-bids took: %s", elapsed))
+	log.Infoln(fmt.Sprintf("⏰  PullAll-bids took: %s", elapsed))
 	wg.Done()
 }
 func pullAllBids() (bids []model.Bid) {
@@ -131,11 +140,14 @@ func pullAndStoreAllWins(wg *sync.WaitGroup) {
 	wins := pullAllWins()
 	for _, item := range wins {
 		if db.ContractExists(item.ContractID) {
-			item.Upsert()
+			err := item.Upsert()
+			if err != nil {
+				log.Errorln(fmt.Sprintf("⏰  PullAll-wins error: %s", err.Error()))
+			}
 		}
 	}
 	elapsed := time.Since(start)
-	log.Debugln(fmt.Sprintf("⏰  PullAll-wins took: %s", elapsed))
+	log.Infoln(fmt.Sprintf("⏰  PullAll-wins took: %s", elapsed))
 	wg.Done()
 
 }
