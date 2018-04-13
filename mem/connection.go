@@ -96,7 +96,7 @@ func Init() {
 
 func GetUniqueById(name string, id string) (interface{}, error) {
 	txn := getTransaction(false)
-	txn.Abort()
+	defer txn.Abort()
 	raw, err := txn.First(name, "id", id)
 	return raw, err
 
@@ -104,7 +104,7 @@ func GetUniqueById(name string, id string) (interface{}, error) {
 
 func GetAllByFieldAndValue(name string, field string, value string) (memdb.ResultIterator, error) {
 	txn := getTransaction(false)
-	txn.Abort()
+	defer txn.Abort()
 	raw, err := txn.Get(name, field, value)
 	return raw, err
 
@@ -112,7 +112,7 @@ func GetAllByFieldAndValue(name string, field string, value string) (memdb.Resul
 
 func GetAll(name string) (memdb.ResultIterator, error) {
 	txn := getTransaction(false)
-	txn.Abort()
+	defer txn.Abort()
 	return txn.Get(name, "id")
 
 }
@@ -126,10 +126,10 @@ func Push(obj interface{}) error {
 	name := util.GetType(obj)
 	log.Debugln(fmt.Sprintf("Trying to insert a: %s", name))
 	txn := db.Txn(true)
-	txn.Abort()
+	defer txn.Abort()
 	if err := txn.Insert(name, obj); err != nil {
 		log.Errorln(fmt.Sprintf("Error pushing to mem: %s", err))
-		txn.Abort()
+		defer txn.Abort()
 		return err
 	}
 	txn.Commit()
@@ -142,5 +142,6 @@ func Delete(name string, field string, id string) (int, error) {
 	if err != nil {
 		txn.Abort()
 	}
+	txn.Commit()
 	return i, err
 }
