@@ -6,68 +6,83 @@ var (
 	// Create the DB schema
 	schema = &memdb.DBSchema{
 		Tables: map[string]*memdb.TableSchema{
-			"Contract": &memdb.TableSchema{
+			"Contract": {
 				Name: "Contract",
 				Indexes: map[string]*memdb.IndexSchema{
-					"id": &memdb.IndexSchema{
+					"id": {
 						Name:    "id",
 						Unique:  true,
 						Indexer: &memdb.StringFieldIndex{Field: "ID"},
 					},
 				},
 			},
-			"Bid": &memdb.TableSchema{
+			"Bid": {
 				Name: "Bid",
 				Indexes: map[string]*memdb.IndexSchema{
-					"id": &memdb.IndexSchema{
+					"id": {
 						Name:    "id",
 						Unique:  true,
 						Indexer: &memdb.StringFieldIndex{Field: "ID"},
 					},
-					"contractId": &memdb.IndexSchema{
+					"contractId": {
 						Name:    "contractId",
 						Unique:  false,
 						Indexer: &memdb.StringFieldIndex{Field: "ContractID"},
 					},
 				},
 			},
-			"Win": &memdb.TableSchema{
+			"Win": {
 				Name: "Win",
 				Indexes: map[string]*memdb.IndexSchema{
-					"id": &memdb.IndexSchema{
+					"id": {
 						Name:    "id",
 						Unique:  true,
 						Indexer: &memdb.StringFieldIndex{Field: "ID"},
 					},
-					"contractId": &memdb.IndexSchema{
+					"contractId": {
 						Name:    "contractId",
 						Unique:  false,
 						Indexer: &memdb.StringFieldIndex{Field: "ContractID"},
 					},
 				},
 			},
-			"Service": &memdb.TableSchema{
+			"Service": {
 				Name: "Service",
 				Indexes: map[string]*memdb.IndexSchema{
-					"id": &memdb.IndexSchema{
+					"id": {
 						Name:    "id",
 						Unique:  true,
 						Indexer: &memdb.StringFieldIndex{Field: "ID"},
 					},
-					"contractId": &memdb.IndexSchema{
+					"contractId": {
 						Name:    "contractId",
 						Unique:  false,
 						Indexer: &memdb.StringFieldIndex{Field: "ContractID"},
 					},
 				},
 			},
-			"Wallet": &memdb.TableSchema{
+			"Wallet": {
 				Name: "Wallet",
 				Indexes: map[string]*memdb.IndexSchema{
-					"id": &memdb.IndexSchema{
+					"id": {
 						Name:    "id",
 						Unique:  true,
 						Indexer: &memdb.StringFieldIndex{Field: "ID"},
+					},
+				},
+			},
+			"CancelContract": {
+				Name: "CancelContract",
+				Indexes: map[string]*memdb.IndexSchema{
+					"id": {
+						Name:    "id",
+						Unique:  true,
+						Indexer: &memdb.StringFieldIndex{Field: "ID"},
+					},
+					"contractId": {
+						Name:    "contractId",
+						Unique:  false,
+						Indexer: &memdb.StringFieldIndex{Field: "ContractID"},
 					},
 				},
 			},
