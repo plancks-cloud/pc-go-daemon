@@ -33,7 +33,7 @@ services:
         deploy:
             resources:
                 limits:
-                    memory: 16M
+                    memory: 32M
             restart_policy:
                 condition: on-failure
                 delay: 5s
