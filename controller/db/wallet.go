@@ -27,30 +27,21 @@ func CreateWallet(wallet *model.Wallet) model.MessageOK {
 }
 
 //GetWallet returns all wallets stored in the database
-func GetWallet() (wallets []model.Wallet) {
+func GetWallet() chan model.Wallet {
 	res, err := mem.GetAll(walletTable)
 	return iteratorToManyWallets(res, err)
 }
 
-func iteratorToManyWallets(iterator memdb.ResultIterator, err error) (items []model.Wallet) {
-	if err != nil {
-		log.Error(err.Error())
-		return nil
-	}
-	if iterator == nil {
-		return items
-	}
-	more := true
-	for more {
-		next := iterator.Next()
-		if next == nil {
-			more = false
-			continue
+func iteratorToManyWallets(iterator memdb.ResultIterator, err error) (res chan model.Wallet) {
+	c := mem.IteratorToChannel(iterator, err)
+	go func() {
+		for i := range c {
+			item := i.(model.Wallet)
+			res <- item
 		}
-		item := next.(model.Wallet)
-		items = append(items, item)
-	}
-	log.Debugln(fmt.Sprintf("Wallet iterator counts: %d", len(items)))
-	return items
+		close(c)
+
+	}()
+	return res
 
 }

@@ -37,7 +37,11 @@ func syncPushAll(outerWaitGroup *sync.WaitGroup) {
 
 //PushAllWallets pushes all wallets to cloud
 func pushAllWallets(wg *sync.WaitGroup) {
-	wallets := db.GetWallet()
+	ch := db.GetWallet()
+	var wallets []model.Wallet
+	for w := range ch {
+		wallets = append(wallets, w)
+	}
 	if wallets == nil || len(wallets) == 0 {
 		wg.Done()
 		return
