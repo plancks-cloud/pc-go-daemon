@@ -16,6 +16,12 @@ func considerContracts() {
 			continue
 		}
 
+		//Ignore cancelled contracts
+		cancels := db.GetCancelContractsByContractID(contract.ID)
+		if len(cancels) > 0 {
+			continue
+		}
+
 		//Look at the wins
 		wins := db.GetWinsByContractID(contract.ID)
 		if len(wins) > 0 {

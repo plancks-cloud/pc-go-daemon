@@ -21,6 +21,13 @@ func considerWins() {
 	}
 
 	for _, contract := range contracts {
+
+		//Ignore cancelled contracts
+		cancels := db.GetCancelContractsByContractID(contract.ID)
+		if len(cancels) > 0 {
+			continue
+		}
+
 		wins := db.GetWinsByContractID(contract.ID)
 		haveIWon, win := db.HaveIWonFromWins(wins)
 		if !haveIWon {
