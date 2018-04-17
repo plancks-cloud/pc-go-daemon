@@ -36,6 +36,7 @@ func GetContractResult() (results []model.ContractResult) {
 		item := model.ContractResult{Contract: element}
 		item.Bids = GetBidsByContractID(element.ID)
 		item.Wins = GetWinsByContractID(element.ID)
+		item.CancelContracts = GetCancelContractsByContractID(element.ID)
 		results = append(results, item)
 	}
 	return

@@ -41,9 +41,10 @@ type ContractSyncable struct {
 
 //ContractResult helps the client see the state of a contract
 type ContractResult struct {
-	Contract `json:"contract"`
-	Bids     []Bid `json:"bids"`
-	Wins     []Win `json:"wins"`
+	Contract                         `json:"contract"`
+	Bids            []Bid            `json:"bids"`
+	Wins            []Win            `json:"wins"`
+	CancelContracts []CancelContract `json:"cancelContracts"`
 }
 
 //ToJSON converts an object to json
