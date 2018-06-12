@@ -8,6 +8,27 @@
   version = "v0.4.7"
 
 [[projects]]
+  branch = "master"
+  name = "github.com/btcsuite/btcd"
+  packages = [
+    "btcec",
+    "chaincfg",
+    "chaincfg/chainhash",
+    "wire"
+  ]
+  revision = "86fed781132ac890ee03e906e4ecd5d6fa180c64"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/btcsuite/btcutil"
+  packages = [
+    ".",
+    "base58",
+    "bech32"
+  ]
+  revision = "d4cc87b860166d00d6b5b9e0d3b3d71d6088d4d4"
+
+[[projects]]
   name = "github.com/docker/distribution"
   packages = [
     "digest",
@@ -106,7 +127,10 @@
 [[projects]]
   branch = "master"
   name = "golang.org/x/crypto"
-  packages = ["ssh/terminal"]
+  packages = [
+    "ripemd160",
+    "ssh/terminal"
+  ]
   revision = "b2aa35443fbc700ab74c586ae79b81c171851023"
 
 [[projects]]
@@ -137,6 +161,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "d453d6042e9244e8cc0baa783e5cc0b5ebc807071f46d6c4a8c7671491a0ef5c"
+  inputs-digest = "ae07eada206e6c50a1f95784a8f745f106a7b177d16f21f506b3e5dafc58d359"
   solver-name = "gps-cdcl"
   solver-version = 1
