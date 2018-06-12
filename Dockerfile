@@ -7,10 +7,10 @@ RUN dep ensure -v -vendor-only
 FROM pcdeper as builder
 WORKDIR /go/src/git.amabanana.com/plancks-cloud/pc-go-daemon
 COPY . .
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o pc-go-daemon .
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o plancks-cloud .
 
 FROM scratch
 WORKDIR /
-COPY --from=builder /go/src/git.amabanana.com/plancks-cloud/pc-go-daemon/pc-go-daemon .
+COPY --from=builder /go/src/git.amabanana.com/plancks-cloud/pc-go-daemon/plancks-cloud .
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
-CMD ["/pc-go-daemon"]
+CMD ["/plancks-cloud"]
