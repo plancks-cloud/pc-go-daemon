@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-//GetServiceStateResult returns a service with its health
+//GetPrivatePublicKey generates a cryptographically secure key pair
 func GetPrivatePublicKey(w http.ResponseWriter, _ *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
