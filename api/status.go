@@ -1,10 +1,10 @@
 package api
 
 import (
-	"net/http"
 	"encoding/json"
-	"git.amabanana.com/plancks-cloud/pc-go-daemon/model"
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/controller/db"
+	"git.amabanana.com/plancks-cloud/pc-go-daemon/model"
+	"net/http"
 )
 
 //CheckStatus shows if all is ok
