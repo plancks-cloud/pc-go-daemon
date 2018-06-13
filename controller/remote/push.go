@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/controller/db"
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/model"
-	"git.amabanana.com/plancks-cloud/pc-go-daemon/util"
 	"sync"
 	"time"
 
 	log "github.com/sirupsen/logrus"
+	"git.amabanana.com/plancks-cloud/pc-go-daemon/util/http"
 )
 
 func syncPushAll(outerWaitGroup *sync.WaitGroup) {
@@ -45,7 +45,7 @@ func pushAllWallets(wg *sync.WaitGroup) {
 	}
 	if len(wallets) > 0 {
 		body := model.WalletSyncable{Collection: "Wallet", Index: "_id", Indexes: nil, Rows: wallets}
-		util.Post(model.DBSyncURL, body.ToJSON())
+		http.Post(model.DBSyncURL, body.ToJSON())
 	}
 
 	elapsed := time.Since(start)
@@ -60,7 +60,7 @@ func pushAllContracts(wg *sync.WaitGroup) {
 	contracts := db.GetContract()
 	if len(contracts) > 0 {
 		body := model.ContractSyncable{Collection: "Contract", Index: "_id", Indexes: nil, Rows: contracts}
-		util.Post(model.DBSyncURL, body.ToJSON())
+		http.Post(model.DBSyncURL, body.ToJSON())
 	}
 
 	elapsed := time.Since(start)
@@ -75,7 +75,7 @@ func pushAllBids(wg *sync.WaitGroup) {
 	bids := db.GetBid()
 	if len(bids) > 0 {
 		body := model.BidSyncable{Collection: "Bid", Index: "_id", Indexes: nil, Rows: bids}
-		util.Post(model.DBSyncURL, body.ToJSON())
+		http.Post(model.DBSyncURL, body.ToJSON())
 	}
 
 	elapsed := time.Since(start)
@@ -90,7 +90,7 @@ func pushAllWins(wg *sync.WaitGroup) {
 	wins := db.GetWin()
 	if len(wins) > 0 {
 		body := model.WinSyncable{Collection: "Win", Index: "_id", Indexes: nil, Rows: wins}
-		util.Post(model.DBSyncURL, body.ToJSON())
+		http.Post(model.DBSyncURL, body.ToJSON())
 	}
 
 	elapsed := time.Since(start)

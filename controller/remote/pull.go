@@ -7,9 +7,10 @@ import (
 
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/controller/db"
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/model"
-	"git.amabanana.com/plancks-cloud/pc-go-daemon/util"
+	"git.amabanana.com/plancks-cloud/pc-go-daemon/util/http"
 	log "github.com/sirupsen/logrus"
 	"sync"
+	"git.amabanana.com/plancks-cloud/pc-go-daemon/util"
 )
 
 func syncPullAll(outerWaitGroup *sync.WaitGroup) {
@@ -59,7 +60,7 @@ func pullAndStoreAllContracts(wg *sync.WaitGroup) {
 func pullAllContracts() (contracts []model.Contract) {
 	typeName := util.GetType(model.Contract{})
 	url := fmt.Sprintf("%s?collection=%s", model.DBSyncURL, typeName)
-	resp, err := util.Get(url)
+	resp, err := http.Get(url)
 	if err != nil {
 		log.Errorln(fmt.Sprintf("Error getting contacts during remote: %s", err))
 		return
@@ -89,7 +90,7 @@ func pullAndStoreAllWallets(wg *sync.WaitGroup) {
 func pullAllWallets() (wallets []model.Wallet) {
 	typeName := util.GetType(model.Wallet{})
 	url := fmt.Sprintf("%s?collection=%s", model.DBSyncURL, typeName)
-	resp, err := util.Get(url)
+	resp, err := http.Get(url)
 	if err != nil {
 		log.Errorln(fmt.Sprintf("Error getting wallets during remote: %s", err))
 		return
@@ -121,7 +122,7 @@ func pullAndStoreAllBids(wg *sync.WaitGroup) {
 func pullAllBids() (bids []model.Bid) {
 	typeName := util.GetType(model.Bid{})
 	url := fmt.Sprintf("%s?collection=%s", model.DBSyncURL, typeName)
-	resp, err := util.Get(url)
+	resp, err := http.Get(url)
 	if err != nil {
 		log.Errorln(fmt.Sprintf("Error getting bids during remote: %s", err))
 		return
@@ -154,7 +155,7 @@ func pullAndStoreAllWins(wg *sync.WaitGroup) {
 func pullAllWins() (wins []model.Win) {
 	typeName := util.GetType(model.Win{})
 	url := fmt.Sprintf("%s?collection=%s", model.DBSyncURL, typeName)
-	resp, err := util.Get(url)
+	resp, err := http.Get(url)
 	if err != nil {
 		log.Errorln(fmt.Sprintf("Error getting wins during remote: %s", err))
 		return
