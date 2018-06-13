@@ -8,7 +8,7 @@ import (
 	"github.com/btcsuite/btcutil"
 )
 
-func GetPublicPrivateKey() (privateKey string, publicKey string) {
+func GeneratePrivatePublicKeys() (privateKey string, publicKey string) {
 	//fmt.Println("Starting the application...")
 	wif, _ := Networks["btc"].CreatePrivateKey()
 	address, _ := Networks["btc"].GetAddress(wif)

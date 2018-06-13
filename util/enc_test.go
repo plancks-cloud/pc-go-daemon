@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func TestGetPublicPrivateKey(t *testing.T) {
+func TestGeneratePrivatePublicKeys(t *testing.T) {
 	private, public := GeneratePrivatePublicKeys()
 	assert.NotNil(t, private, "The private key should not be nil")
 	assert.NotEmpty(t, private, "The private key should not be empty")
