@@ -12,7 +12,6 @@ import (
 
 func GeneratePrivatePublicKeys() (privateKey string, publicKey string) {
 	wif, _ := networks["btc"].createPrivateKey()
-	//address, _ := networks["btc"].getAddress(wif)
 	return wif.String(), string(wif.PrivKey.PubKey().SerializeCompressed())
 
 }
@@ -29,8 +28,6 @@ func SignMessage(message string, privateKey *btcec.PrivateKey) (result []byte) {
 		fmt.Println(err)
 		return
 	}
-	// Serialize and display the signature.
-	//result = fmt.Sprintf("%x", signature.Serialize())
 	result = signature.Serialize()
 	return
 }
