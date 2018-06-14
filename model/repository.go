@@ -40,6 +40,12 @@ const WinnerAgeSeconds = 70
 //SecondsBeforeWinDeclarer is how many seconds before this machine will think about who won
 const SecondsBeforeWinDeclarer = ScheduledInterval * 2
 
+//MaxBidMultiplier helps prevent too many votes
+const MaxBidMultiplier = 1.5
+
+//MaxBidConstant also helps prevent too many votes
+const MaxBidConstant = 10
+
 //InitRepo initialises the repository and it's variables.
 func InitRepo() {
 	initWallet()

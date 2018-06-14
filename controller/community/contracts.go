@@ -3,6 +3,7 @@ package community
 import (
 	"fmt"
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/controller/db"
+	"git.amabanana.com/plancks-cloud/pc-go-daemon/model"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -35,11 +36,20 @@ func considerContracts() {
 
 		//Did I bid
 		if !db.HaveIBidOnContract(contract.ID) {
+
+			//Avert thy gaze, for yonder lies heresy
+			bids := float64(len(db.GetBidsByContractID(contract.ID)))
+			var maxBids float64
+			maxBids = model.MaxBidConstant
+			maxBids += float64(contract.Instances) * float64(model.MaxBidMultiplier)
+			//Vote if there are not too many votes
+			if bids > maxBids {
+				log.Debugln(fmt.Sprintf("Too many bids on contract %s. Not bidding!", contract.ID))
+				continue
+			}
 			db.CreateBidFromContract(contract)
 		}
-
 		db.CheckForWinsNow(contract)
-
 	}
 
 }
