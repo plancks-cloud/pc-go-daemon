@@ -40,8 +40,7 @@ func considerContracts() {
 			//Avert thy gaze, for yonder lies heresy
 			bids := float64(len(db.GetBidsByContractID(contract.ID)))
 			var maxBids float64
-			maxBids = model.MaxBidConstant
-			maxBids += float64(contract.Instances) * float64(model.MaxBidMultiplier)
+			maxBids = model.MaxBidConstant + float64(contract.Instances)*model.MaxBidMultiplier
 			//Vote if there are not too many votes
 			if bids > maxBids {
 				log.Debugln(fmt.Sprintf("Too many bids on contract %s. Not bidding!", contract.ID))
