@@ -7,10 +7,10 @@ import (
 
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/controller/db"
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/model"
+	"git.amabanana.com/plancks-cloud/pc-go-daemon/util"
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/util/http"
 	log "github.com/sirupsen/logrus"
 	"sync"
-	"git.amabanana.com/plancks-cloud/pc-go-daemon/util"
 )
 
 func syncPullAll(outerWaitGroup *sync.WaitGroup) {

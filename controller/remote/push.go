@@ -7,8 +7,8 @@ import (
 	"sync"
 	"time"
 
-	log "github.com/sirupsen/logrus"
 	"git.amabanana.com/plancks-cloud/pc-go-daemon/util/http"
+	log "github.com/sirupsen/logrus"
 )
 
 func syncPushAll(outerWaitGroup *sync.WaitGroup) {
