@@ -43,6 +43,7 @@ func TestSignMessage(t *testing.T) {
 	assert.Nil(t, err, "The err should be nil")
 	assert.NotNil(t, signature, "The signature should not be nil")
 
+	//Looks like this isn't working...
 	//ok := VerifySignature(signature, hash, public.PubKey())
 	//assert.True(t, ok, "The signature should be verified with the public key")
 
