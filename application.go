@@ -36,6 +36,7 @@ func main() {
 	router.HandleFunc("/api/getContractResult", api.CORSHandler(api.GetContractResult)).Methods("GET", "OPTIONS")
 	router.HandleFunc("/api/getServiceStateResult", api.CORSHandler(api.GetServiceStateResult)).Methods("GET", "OPTIONS")
 	router.HandleFunc("/api/🦖", api.CORSHandler(api.CheckStatus)).Methods("GET", "OPTIONS")
+	router.HandleFunc("/api/generate-key-pair", api.CORSHandler(api.GetPrivatePublicKey)).Methods("GET", "OPTIONS")
 
 	log.Fatal(http.ListenAndServe(fmt.Sprint(":", port), router))
 	log.Info(fmt.Sprintf("READY: Listening [:%v]", port))
