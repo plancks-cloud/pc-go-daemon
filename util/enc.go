@@ -3,16 +3,40 @@ package util
 import (
 	"errors"
 
+	"fmt"
 	"github.com/btcsuite/btcd/btcec"
 	"github.com/btcsuite/btcd/chaincfg"
+	"github.com/btcsuite/btcd/chaincfg/chainhash"
 	"github.com/btcsuite/btcutil"
 )
 
 func GeneratePrivatePublicKeys() (privateKey string, publicKey string) {
 	wif, _ := networks["btc"].createPrivateKey()
-	address, _ := networks["btc"].getAddress(wif)
-	return wif.String(), address.EncodeAddress()
+	//address, _ := networks["btc"].getAddress(wif)
+	return wif.String(), string(wif.PrivKey.PubKey().SerializeCompressed())
 
+}
+
+func privateKeyToWif(privateKey string) (wif *btcutil.WIF, err error) {
+	wif, err = networks["btc"].importWIF(privateKey)
+	return
+}
+
+func SignMessage(message string, privateKey *btcec.PrivateKey) (result []byte) {
+	messageHash := chainhash.DoubleHashB([]byte(message))
+	signature, err := privateKey.Sign(messageHash)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	// Serialize and display the signature.
+	//result = fmt.Sprintf("%x", signature.Serialize())
+	result = signature.Serialize()
+	return
+}
+
+func VerifySignature(signature *btcec.Signature, hash []byte, publicKey *btcec.PublicKey) bool {
+	return signature.Verify(hash, publicKey)
 }
 
 type network struct {
