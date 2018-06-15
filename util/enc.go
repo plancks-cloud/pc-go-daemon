@@ -3,11 +3,13 @@ package util
 import (
 	"errors"
 
+	"encoding/hex"
 	"fmt"
 	"github.com/btcsuite/btcd/btcec"
 	"github.com/btcsuite/btcd/chaincfg"
 	"github.com/btcsuite/btcd/chaincfg/chainhash"
 	"github.com/btcsuite/btcutil"
+	"github.com/sirupsen/logrus"
 )
 
 func GeneratePrivatePublicKeys() (privateKey string, publicKey string) {
@@ -21,19 +23,36 @@ func privateKeyToWif(privateKey string) (wif *btcutil.WIF, err error) {
 	return
 }
 
-func SignMessage(message string, privateKey *btcec.PrivateKey) (result []byte) {
+func SignMessage(message string, privateKey *btcec.PrivateKey) (result string) {
 	messageHash := chainhash.DoubleHashB([]byte(message))
 	signature, err := privateKey.Sign(messageHash)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-	result = signature.Serialize()
+	result = hex.EncodeToString(signature.Serialize())
 	return
 }
 
-func VerifySignature(signature *btcec.Signature, hash []byte, publicKey *btcec.PublicKey) bool {
-	return signature.Verify(hash, publicKey)
+func VerifySignature(pubKey *btcec.PublicKey, sigStr string, message string) bool {
+
+	sigBytes, err := hex.DecodeString(sigStr)
+
+	if err != nil {
+		logrus.Error("Error decoding")
+		logrus.Error(err)
+		return false
+	}
+	signature, err := btcec.ParseSignature(sigBytes, btcec.S256())
+	if err != nil {
+		logrus.Error("Error parsing signature bytes")
+		logrus.Error(err)
+		return false
+	}
+
+	messageHash := chainhash.DoubleHashB([]byte(message))
+	verified := signature.Verify(messageHash, pubKey)
+	return verified
 }
 
 type network struct {

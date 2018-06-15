@@ -1,7 +1,6 @@
 package util
 
 import (
-	"github.com/btcsuite/btcd/btcec"
 	"github.com/btcsuite/btcutil"
 	"github.com/stretchr/testify/assert"
 	"testing"
@@ -28,9 +27,22 @@ func TestPrivateKeyToWif(t *testing.T) {
 
 func TestSignMessage(t *testing.T) {
 
-	publicKeyString, hash := setupSignature()
+	//Go sign a message.
+	/*
+		This is being done in another method to ensure we don't mix  things.
+		When we verify a signature for a message we will only have access to a few things
+		1. The message
+		2. The signature
+		3. The public key
+
+		By doing the call in another method we ensure that only those particulars
+		can be used in testing the VerifySignature method. This ensures a
+		test that is valid in the real world.
+	*/
+	publicKeyString, hashString, messageStr := setupSignature()
+
 	assert.NotNil(t, publicKeyString, "The public key generated should not be nil")
-	assert.NotNil(t, hash, "The message hash generated should not be nil")
+	assert.NotNil(t, hashString, "The message hash generated should not be nil")
 
 	publicKeyBytes := []byte(publicKeyString)
 
@@ -39,22 +51,17 @@ func TestSignMessage(t *testing.T) {
 	assert.Nil(t, err, "The err should be nil")
 	assert.NotNil(t, public, "The publicKey creation should not throw an error")
 
-	signature, err := btcec.ParseSignature(hash, public.PubKey().Curve)
-	assert.Nil(t, err, "The err should be nil")
-	assert.NotNil(t, signature, "The signature should not be nil")
-
-	//Looks like this isn't working...
-	//ok := VerifySignature(signature, hash, public.PubKey())
-	//assert.True(t, ok, "The signature should be verified with the public key")
+	ok := VerifySignature(public.PubKey(), hashString, messageStr)
+	assert.True(t, ok, "The message signature should verify to true")
 
 }
 
-func setupSignature() (publicKey string, hash []byte) {
+func setupSignature() (publicKey string, signature string, message string) {
 	var private string
 	private, publicKey = GeneratePrivatePublicKeys()
 	wif, _ := privateKeyToWif(private)
-	message := "Hi there!"
-	hash = SignMessage(message, wif.PrivKey)
+	message = "Hi there!"
+	signature = SignMessage(message, wif.PrivKey)
 	return
 
 }
